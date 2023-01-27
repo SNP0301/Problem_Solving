@@ -39,8 +39,6 @@ void merge(int arr[], int l, int m, int r){
         k++;
     }
 }
-
-
 void mergeSort(int arr[], int l, int r){
     if (l <r){
         int m = l + (r-l)/2;
@@ -51,21 +49,31 @@ void mergeSort(int arr[], int l, int r){
     }
 }
 
+typedef struct point{
+    int x;
+    int y;
+} point;
 
 int main(){
-    int arr[5];
-    int i;
-    int avg = 0;
-    int arr_size = 20;
-    for(i=0; i<5; i++){
-        scanf("%d", &arr[i]);
-        avg += arr[i];
+    int N,i;
+    scanf("%d", &N);
+
+    point* point_arr = malloc(sizeof(point)*N);
+    int* x_arr = malloc(sizeof(int)*N);
+    int* y_arr = malloc(sizeof(int)*N);
+
+    for(i=0; i<N; i++){
+        scanf("%d %d", &point_arr[i].x, &point_arr[i].y);
+    }
+
+    for(i=0; i<N; i++){
+        x_arr[i] = point_arr[i].x;
     }
     
 
-    mergeSort(arr, 0, arr_size - 1);
-
-    printf("%d\n%d",avg/5, arr[2]);
+    free(point_arr);
+    free(x_arr);
+    free(y_arr);
 
     return 0;
 }
