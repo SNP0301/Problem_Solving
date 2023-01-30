@@ -1,23 +1,32 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+int cnt;
 
-struct point{
-    int x;
-    int y;
-};
+int recursion(const char *s, int l, int r){
+	cnt += 1;
+    if(l >= r) return 1;
+    else if(s[l] != s[r]) return 0;
+    else return recursion(s, l+1, r-1);
+}
+
+int isPalindrome(const char *s){
+    return recursion(s, 0, strlen(s)-1);
+}
 
 int main(){
+	int T,i;
+	char S[1002];
+	char buffer;
+	scanf("%d", &T);
 
-    int N, i;
-    scanf("%d", &N);
+	for(i=0;i<T;i++){
+		cnt = 0;
+		scanf("%s", S);
+		printf("%d", isPalindrome(S));
+        printf(" %d\n", cnt);
+	}
 
-    struct point* pnt = malloc(sizeof(struct point)*N);
-
-    for(i=0; i<N; i++){
-        scanf("%d %d", &pnt[i].x, &pnt[i].y);
-    }
-
-    
-
-    return 0;
+	
+	
+	return 0;
 }
