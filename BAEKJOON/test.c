@@ -1,32 +1,30 @@
 #include <stdio.h>
-#include <string.h>
-int cnt;
+#include <stdlib.h>
 
-int recursion(const char *s, int l, int r){
-	cnt += 1;
-    if(l >= r) return 1;
-    else if(s[l] != s[r]) return 0;
-    else return recursion(s, l+1, r-1);
-}
 
-int isPalindrome(const char *s){
-    return recursion(s, 0, strlen(s)-1);
-}
+int main (){
+    int N, M, i, j;
+    scanf("%d %d", &N, &M);
 
-int main(){
-	int T,i;
-	char S[1002];
-	char buffer;
-	scanf("%d", &T);
+    char** board;
+    board = (char**)malloc(sizeof(char*)*N);
+    for(i=0; i<N; i++){
+        board[i] = (char*)malloc(sizeof(char)*M);
+    }
 
-	for(i=0;i<T;i++){
-		cnt = 0;
-		scanf("%s", S);
-		printf("%d", isPalindrome(S));
-        printf(" %d\n", cnt);
-	}
+    for (i=0; i<N; i++){
+        for (j=0; j<M; j++){
+            scanf("%c", &board[i][j]);
+        }
+    }
 
-	
-	
-	return 0;
+    printf("\n==========\n");
+    for (i=0; i<N; i++){
+        for (j=0; j<M; j++){
+            printf("%c", board[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
 }
