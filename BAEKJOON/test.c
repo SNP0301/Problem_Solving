@@ -1,30 +1,73 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+
+bool is_apocalypse(int num);
+int get_num_size(int num);
+
+int main(){
+    int N;
+    int cnt = 0;
+    int num = 665;
+    scanf("%d", &N);
 
 
-int main (){
-    int N, M, i, j;
-    scanf("%d %d", &N, &M);
+    while(1){
+        if(is_apocalypse(num) == true) cnt += 1;
 
-    char** board;
-    board = (char**)malloc(sizeof(char*)*N);
-    for(i=0; i<N; i++){
-        board[i] = (char*)malloc(sizeof(char)*M);
-    }
-
-    for (i=0; i<N; i++){
-        for (j=0; j<M; j++){
-            scanf("%c", &board[i][j]);
+        if(cnt == N){
+            printf("%d", num);
+            break;
         }
+        else num += 1;
     }
+    
 
-    printf("\n==========\n");
-    for (i=0; i<N; i++){
-        for (j=0; j<M; j++){
-            printf("%c", board[i][j]);
-        }
-        printf("\n");
-    }
+    
 
     return 0;
+}
+
+int get_num_size(int num){
+    int size = 1;
+
+    while (num / 10 >= 1){
+            size += 1;
+            num /= 10;
+    }
+
+    return size;
+}
+
+bool is_apocalypse(int num){
+    int size,i;
+    int life;
+    int denum = 10;
+    int tmp = num;
+
+    if (num < 666) return false;
+    else if (num == 666) return true;
+    else {
+        size = get_num_size(num);
+        life = size-2;
+        int* arr;
+        arr = (int*)malloc(sizeof(int)*size);
+
+        for(i=size-1; i>=0; i--){
+            arr[i] = tmp % 10;
+            tmp /= 10;
+            //printf("[%d] ", arr[i]);
+        }
+        tmp = num;
+
+        for(i=0; i<life; i++){
+            if(arr[i] == 6){
+                if (arr[i+1] == 6){
+                    if (arr[i+2] == 6) return true;
+                }
+            }
+        }
+
+    }
+    return false;
 }
