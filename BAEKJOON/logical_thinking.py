@@ -1,11 +1,13 @@
-x = int(input())
-y = int(input())
+H, M = map(int,input().split())
 
-if((x>0)and(y>0)):
-    print(1)
-elif((x<0)and(y>0)):
-    print(2)
-elif((x<0)and(y<0)):
-    print(3)
-else:
-    print(4)
+if(M-45<0):
+    if(H-1<0):
+        H = 23
+        M = 60 - (45 - M)
+    elif(H-1>=0):
+        H = H - 1
+        M = 60 - (45 - M)
+elif(M-45>=0):
+    M = M - 45
+
+print(H,M)
