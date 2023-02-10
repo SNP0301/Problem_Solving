@@ -1,12 +1,11 @@
-s = int(input())
+x = int(input())
+y = int(input())
 
-if(s>=90):
-    print('A')
-elif(s>=80):
-    print('B')
-elif(s>=70):
-    print('C')
-elif(s>=60):
-    print('D')
+if((x>0)and(y>0)):
+    print(1)
+elif((x<0)and(y>0)):
+    print(2)
+elif((x<0)and(y<0)):
+    print(3)
 else:
-    print('F')
+    print(4)
