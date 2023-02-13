@@ -1,6 +1,7 @@
-while(1):
-    a, b = map(int,input().split())
-    if((a==0)and(b==0)):
-        break
-    else:
+import sys
+while True:
+    try:
+        a, b = map(int,input().split())
         print(a+b)
+    except:
+        break
