@@ -1,11 +1,8 @@
-X = int(input())
-N = int(input())
-cnt = 0
-for i in range(1, N+1):
-    a,b = map(int,input().split())
-    cnt = cnt + (a*b)
+import sys
 
-if (cnt==X):
-    print("Yes")
-else:
-    print("No")
+t = int(input())
+for i in range(1, t+1):
+    a,b = map(int,sys.stdin.readline().rstrip().split())
+    print(a+b)
+
+print(a)
