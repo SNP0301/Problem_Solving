@@ -1,7 +1,11 @@
-n = int(input())
+X = int(input())
+N = int(input())
 cnt = 0
+for i in range(1, N+1):
+    a,b = map(int,input().split())
+    cnt = cnt + (a*b)
 
-for i in range(1, n+1):
-    cnt = cnt + i
-
-print(cnt)
+if (cnt==X):
+    print("Yes")
+else:
+    print("No")
