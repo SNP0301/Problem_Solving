@@ -1,11 +1,10 @@
 n = int(input())
-new_n = (n%10)*10 + ((n//10)+(n%10))%10
+list = list(map(int,input().split()))
+v = int(input())
 cnt = 0
 
-while True:
-    if (n!=new_n):
+for i in range(0, n):
+    if(list[i]==v):
         cnt += 1
-        new_n = (new_n%10)*10 + ((new_n//10)+(new_n%10))%10
-    else:
-        print(cnt+1)
-        break
+
+print(cnt)
