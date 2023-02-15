@@ -1,8 +1,6 @@
-n,x = map(int,input().split())
-list = list(map(int,input().split()))
-
-
-
-for i in range(0, n):
-    if(list[i]<x):
-        print(list[i],end=" ")
+list = []
+for i in range(9):
+    list.append(int(input()))
+    
+print(max(list))
+print(list.index(max(list))+1)
