@@ -1,11 +1,18 @@
-n = int(input())
-list = list(map(int,input().split()))
-min = 9999999
-max = -9999999
-for i in range(0,n):
-    if (list[i]>=max):
-        max = list[i]
-    if (list[i]<=min):
-        min = list[i]
+check_list = []
+for i in range(0,31):
+    check_list.append(0)
+    
+##name_list = []
+for i in range(0,28):
+    ##name_list.append(int(input()))
+    new_number = int(input())
+    check_list[new_number]=1
 
-print('%d %d'%(min, max))
+
+no_submit = []
+for i in range(1,31):
+    if(check_list[i]==0):
+        no_submit.append(i)
+
+print(min(no_submit))
+print(max(no_submit))
