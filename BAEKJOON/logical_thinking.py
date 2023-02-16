@@ -1,13 +1,12 @@
-n = int(input())
+c = int(input())
 
-for i in range(n):
-    accum = 0
-    score = 0
-    arr = input()
-    for i in range(len(arr)):
-        if(arr[i]=='O'):
-            accum += 1
-            score += accum
-        else:
-            accum = 0
-    print(score)
+for i in range(c):
+    arr = list(map(int,input().split()))
+    for j in range(arr[0]):
+        cnt = 0
+        length = len(arr)-1
+        avg = (sum(arr)-arr[0])/length
+        for k in range(1,length+1):
+            if (arr[k]>avg):
+                cnt += 1
+    print('%.3f%c'%(cnt*100/length,"%"))
