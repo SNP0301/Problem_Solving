@@ -1,12 +1,14 @@
-c = int(input())
+N = int(input())
+cnt = 0
 
-for i in range(c):
-    arr = list(map(int,input().split()))
-    for j in range(arr[0]):
-        cnt = 0
-        length = len(arr)-1
-        avg = (sum(arr)-arr[0])/length
-        for k in range(1,length+1):
-            if (arr[k]>avg):
-                cnt += 1
-    print('%.3f%c'%(cnt*100/length,"%"))
+for i in range(1,N+1):
+    if(i<100):
+        cnt += 1
+    else:
+        c = i//100
+        t = (i//10)%10
+        o = i%10
+        if((c-t)==(t-o)):
+            cnt += 1
+
+print(cnt)
