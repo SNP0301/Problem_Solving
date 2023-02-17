@@ -1,14 +1,22 @@
-N = int(input())
-cnt = 0
+def Kaprekar(n:int):
+    value = n
+    while(n>0):
+        value += n%10
+        n = n//10
+        
+    return value
 
-for i in range(1,N+1):
-    if(i<100):
-        cnt += 1
-    else:
-        c = i//100
-        t = (i//10)%10
-        o = i%10
-        if((c-t)==(t-o)):
-            cnt += 1
+arr = []
 
-print(cnt)
+for i in range(10001):
+    arr.append(0)
+
+for i in range(1,10001):
+    value = i
+    while(Kaprekar(value)<=10000):
+        arr[Kaprekar(value)] = 1
+        value = Kaprekar(value)
+
+for i in range(1,10001):
+    if(arr[i]==0):
+        print(i)
