@@ -1,3 +1,6 @@
-A,B,C = map(int,input().split())
+N = int(input())
 
-print(A+B+C)
+for i in range(N//4):
+    print("long ",end="")
+
+print("int")
