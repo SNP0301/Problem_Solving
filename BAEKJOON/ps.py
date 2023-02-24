@@ -1,1 +1,3 @@
-print(ord(input()))
+s = input()
+
+print(len(s))
