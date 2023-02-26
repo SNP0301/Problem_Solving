@@ -1,16 +1,8 @@
-S = input()
-arr = []
+t = int(input())
 
-for i in range(26):
-    arr.append("-1")
-
-print(ord(S[0])-97)
-
-for i in range(len(S)):
-    if(arr[ord(S[i])-97] == "-1"):
-        arr[ord(S[i])-97] = i
-
-
-for i in range(26):
-    print(arr[i],end=" ")
-
+for i in range(t):
+    r, s = map(str,input().split())
+    for j in range(len(s)):
+        for k in range(int(r)):
+            print("%c"%(s[j]),end="")
+    print()
