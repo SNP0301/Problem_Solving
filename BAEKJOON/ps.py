@@ -1,5 +1,8 @@
 n = int(input())
+num = input()
+cnt = 0
 
-for i in range(n):
-    s = input()
-    print("%c %c"%(s[0],s[len(s)-1]))
+for i in range(len(num)):
+    cnt += int(num[i])
+
+print(cnt)
