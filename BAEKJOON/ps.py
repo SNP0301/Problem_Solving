@@ -1,8 +1,16 @@
-n = int(input())
-num = input()
-cnt = 0
+S = input()
+arr = []
 
-for i in range(len(num)):
-    cnt += int(num[i])
+for i in range(26):
+    arr.append("-1")
 
-print(cnt)
+print(ord(S[0])-97)
+
+for i in range(len(S)):
+    if(arr[ord(S[i])-97] == "-1"):
+        arr[ord(S[i])-97] = i
+
+
+for i in range(26):
+    print(arr[i],end=" ")
+
