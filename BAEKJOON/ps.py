@@ -1,5 +1,2 @@
-while True :
-    try : 
-        print(input())
-    except EOFError:
-        break
+
+print(input([int(input())-1]))
