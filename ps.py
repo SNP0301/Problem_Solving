@@ -1,19 +1,14 @@
 import sys
 input = sys.stdin.readline
 
-for _ in range(3):
-    cnt = 0
-    arr = [int(x) for x in input().split()]
-    print(arr)
-    for i in range(4):
-        cnt += arr[i]
-    if(cnt==4):
-        print("E")
-    elif(cnt==3):
-        print("A")
-    elif(cnt==2):
-        print("B")
-    elif(cnt==1):
-        print("C")
-    else:
-        print("D")
+n = int(input())
+arr = []
+for i in range(n):
+    arr.append(list(map(int,input().split())))
+
+
+arr.sort(key=lambda x: (x[0], x[1]))
+
+
+for i in range(n):
+    print(arr[i][0],arr[i][1])
