@@ -1,35 +1,23 @@
-import math
+import sys
+input = sys.stdin.readline
 
-primeArr = []
-primeArr.append(False)
-primeArr.append(False)
-primeArr.append(True)
-for i in range(3,100005):
-    isPrime = True
-    for j in range(2,math.ceil(math.sqrt(i)+1)):
-        if (i%j==0):
-            primeArr.append(False)
-            isPrime = False
-            break
-    if(isPrime==True):
-        primeArr.append(True)
+primeArr = [True]*1000005
 
+for i in range(3,1000005,2):
+    if primeArr[i]:
+        for j in range(i*i, 1000001, 2*i):
+            primeArr[j] = False
+
+
+def findFactor(n):
+    for i in range(3, n, 2):
+        if primeArr[i] and primeArr[n-i]:
+            return "{0} = {1} + {2}".format(n, i, n-i)
+    return "Goldbach\'s conjecture is wrong."
 
 while True:
-    n = int(input())
+    n = int(input().rstrip())
     if(n==0):
         break
-    a = 3
-    b = n-3
-    isWrong = True
-    while(a<=b):
-        #print("for [%d, %d]: %r %r"%(a,b,primeArr[a],primeArr[b]))
-        if((primeArr[a]==True)and(primeArr[b]==True)):
-            print("%d = %d + %d"%(n,a,b))
-            isWrong = False
-            break
-        else:
-            a += 2
-            b -= 2
-    if(isWrong==True):
-        print("Goldbach's conjecture is wrong.")
+    else:
+        print(findFactor(n))
