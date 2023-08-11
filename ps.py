@@ -1,16 +1,19 @@
-import sys
-input = sys.stdin.readline
+from itertools import product
 
-n = input()
-m = int(input())
+arr = list()
+n, m = map(int,list(input().split()))
+for i in range(n):
+    arr.append(str(i+1))
 
-n_size = len(n)-1
-n = int(n)
-ans = 0
+pro_arr = product(arr,repeat=m)
 
-button = [True]*10
-
-mal = [int(x) for x in input().split()]
-
-button[i] = False for i in mal
+for i in pro_arr:
+    printable = True
+    for j in range(len(i)-1):
+        if(i[j] > i[j+1]):
+            printable = False
+            break
+    if (printable==True):
+        print(" ".join(i))
+    
 
