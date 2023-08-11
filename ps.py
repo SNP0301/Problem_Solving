@@ -1,14 +1,16 @@
-from itertools import permutations
 import sys
+from collections import Counter
 input = sys.stdin.readline
+arr = []
+accum = 0
 
-n, m = map(int, input().split())
+for _ in range(10):
+    num  = int(input())
+    arr.append(num)
+    accum += num
 
-arr = list()
-
-for i in range(1,n+1):
-    arr.append(str(i))
+var = Counter(arr).most_common()
 
 
-for e in list(permutations(arr,m)):
-    print(" ".join(e))
+print(accum/10)
+print(var)
