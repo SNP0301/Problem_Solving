@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import permutations
 import sys
 input = sys.stdin.readline
 
@@ -10,5 +10,5 @@ for i in range(1,n+1):
     arr.append(str(i))
 
 
-for e in list(combinations(arr,m)):
+for e in list(permutations(arr,m)):
     print(" ".join(e))
