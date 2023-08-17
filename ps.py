@@ -1,24 +1,20 @@
-import sys, heapq
+from itertools import product
+import sys
 input = sys.stdin.readline
-plusHeap = []
-minusHeap = []
 
-for i in range(int(input())):
-    n = int(input())
-    if(n==0):
-        if(not(plusHeap) and not(minusHeap)):
-            print(0)
-        else:
-            if(plusHeap and not(minusHeap)):
-                print(heapq.heappop(plusHeap))
-            elif (not(plusHeap) and minusHeap):
-                print(heapq.heappop(minusHeap)*-1)
-            elif minusHeap and plusHeap and minusHeap[0] <= plusHeap[0]:
-                print(heapq.heappop(minusHeap)*-1)
-            else:
-                print(heapq.heappop(plusHeap))
-    else: ## push
-        if(n<0):
-            heapq.heappush(minusHeap, n*-1)
-        else:
-            heapq.heappush(plusHeap, n)
+n,m = map(int,input().split())
+arr =[]
+
+for i in range(1,n+1):
+    arr.append(str(i))
+
+pro_arr = product(arr,repeat=m)
+
+for i in pro_arr:
+    printable = True
+    for j in range(len(i)-1):
+        if(i[j] > i[j+1]):
+            printable = False
+            break
+    if(printable == True):
+        print(" ".join(i))
