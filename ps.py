@@ -1,20 +1,19 @@
-from itertools import product
+'''
+[BOJ] 14500. 테트로미노
+
+1. Blue: 2가지
+2. Yellow: 1가지
+3. Orange: 8가지
+4. Green: 4가지
+5. Pink: 4가지
+'''
+
 import sys
 input = sys.stdin.readline
 
-n,m = map(int,input().split())
-arr =[]
+n,m= map(int,input().split())
+arr= []
+for i in range(n):
+    arr.append([int(x) for x in input().split()])
 
-for i in range(1,n+1):
-    arr.append(str(i))
-
-pro_arr = product(arr,repeat=m)
-
-for i in pro_arr:
-    printable = True
-    for j in range(len(i)-1):
-        if(i[j] > i[j+1]):
-            printable = False
-            break
-    if(printable == True):
-        print(" ".join(i))
+print(arr)
