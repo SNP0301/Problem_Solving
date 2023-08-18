@@ -1,24 +1,12 @@
-from itertools import product
-import sys
-input = sys.stdin.readline
+from collections import deque
 
-n,m = map(int,input().split())
+n = int(input())
 
-preArr = list(map(int,input().split()))
-preArr.sort()
+deq = deque([i for i in range(1,n+1)])
 
-postArr = list(map(str,preArr))
+while(len(deq)!=1):
+    deq.popleft()
+    deq.append(deq.popleft())
 
-perTuple = product(postArr,repeat=m)
-
-printedArr = []
-
-for i in perTuple:
-    iList = sorted(list(i))
-    ##print(iList)
-    if iList not in printedArr:
-        printedArr.append(iList)
-        i = tuple(iList)
-        print(" ".join(i))
-
+print(deq.pop())
 
