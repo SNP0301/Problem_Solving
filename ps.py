@@ -1,30 +1,37 @@
 '''
-[BOJ] 24479. 알고리즘 수업 - 깊이 우선 탐색 1
+[BOJ] 2606. 바이러스
 '''
 
 import sys
 input = sys.stdin.readline
+sys.setrecursionlimit(10**5)
 
-n,m,r = map(int,input().split())
+C = int(input()) ### # of computers
+P = int(input()) ### # of pair of computer connections
 
-graph = [[False]*(n+1) for _ in range(n+1)]
-visitedDfs = [False]*(n+1)
+graph = [[]for _ in range(C+1)]
+visitedDfs = [0 for _ in range(C+1)]
+answer = 0
 
-
-for _ in range(m):
+for _ in range(P):
     u,v = map(int,input().split())
-    graph[u][v] = True
-    graph[v][u] = True
+    graph[u].append(v)
+    graph[v].append(u)
 
-def dfs(R):
-    visitedDfs[R] = True
-    print(R)
-    for i in range(1, n+1):
-        if not visitedDfs[i] and graph[R][i]:
+
+for i in graph:
+    i.sort()
+
+def dfs(n):
+    global answer
+    visitedDfs[n] = 1
+
+    for i in graph[n]:
+        if not visitedDfs[i]:
             dfs(i)
+            answer += 1
 
 
-dfs(r)
-for i in range(1,len(visitedDfs)):
-    if not visitedDfs[i]:
-        print(0)
+dfs(1)
+
+print(answer)
