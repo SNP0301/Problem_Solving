@@ -1,42 +1,30 @@
 '''
-[BOJ] 1260. DFS와 BFS
+[BOJ] 24479. 알고리즘 수업 - 깊이 우선 탐색 1
 '''
 
+import sys
+input = sys.stdin.readline
 
-from collections import deque
+n,m,r = map(int,input().split())
 
-N,M,V = map(int, input().split())
+graph = [[False]*(n+1) for _ in range(n+1)]
+visitedDfs = [False]*(n+1)
 
-graph = [[False]*(N+1) for _ in range(N+1)]
 
-for _ in range(M):
-    a,b = map(int,input().split())
-    graph[a][b] = True
-    graph[b][a] = True
+for _ in range(m):
+    u,v = map(int,input().split())
+    graph[u][v] = True
+    graph[v][u] = True
 
-visitedDfs = [False]*(N+1)
-visitedBfs = [False]*(N+1)
-
-def dfs(V): 
-    visitedDfs[V] = True
-    print(V,end=" ")
-    for i in range(1,N+1):
-        if not visitedDfs[i] and graph[V][i]:
+def dfs(R):
+    visitedDfs[R] = True
+    print(R)
+    for i in range(1, n+1):
+        if not visitedDfs[i] and graph[R][i]:
             dfs(i)
 
 
-def bfs(V):
-    q = deque([V])
-    visitedBfs[V] = True
-    while q:
-        V = q.popleft()
-        print(V,end=" ")
-        for i in range(1, N+1):
-            if not visitedBfs[i] and graph[V][i]:
-                q.append(i)
-                visitedBfs[i] = True
-
-
-dfs(V)
-print()
-bfs(V)
+dfs(r)
+for i in range(1,len(visitedDfs)):
+    if not visitedDfs[i]:
+        print(0)
