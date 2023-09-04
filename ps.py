@@ -1,39 +1,43 @@
 import sys
-sys.setrecursionlimit(10**8)
 input = sys.stdin.readline
+sys.setrecursionlimit(10**7)
 
-w = -1
-h = -1
-dx = [-1,-1,-1,0,0,1,1,1]
-dy = [-1,0,1,1,-1,-1,0,1]
+t = int(input())
+
+dx = [-2,-2,-1,-1,1,1,2,2]
+dy = [1,-1,2,-2,2,-2,1,-1]
+
 
 def dfs(x,y):
+    global cnt
+    global cntArr
+
     visited[x][y] = True
 
-    for i in range(8):
-        nextX = x + dx[i]
-        nextY = y + dy[i]
-        if nextX >= h or nextY >= w or nextX < 0 or nextY < 0:
+    for j in range(8):
+        nextX = x + dx[j]
+        nextY = y + dy[j]
+
+        if nextX < 0 or nextY < 0 or nextX >= i or nextY >= i:
             continue
-        if visited[nextX][nextY] == False and graph[x][y] == graph[nextX][nextY]:
-            dfs(nextX,nextY)
+        if x == endX and y == endY:
+            cntArr.append(cnt)
+            cnt = 0
+        if visited[nextX][nextY] == False:
+            dfs(nextX, nextY)
+            cnt += 1
+            
+            
 
+for _ in range(t):
+    i = int(input())
+    cnt = 0
+    cntArr = list()
+    graph = [[0]*i for _ in range(i)]
+    visited = [[False]*i for _ in range(i)]
+    startX, startY = map(int,input().split())
+    endX, endY = map(int,input().split())
 
-
-while w!=0 and h!= 0:
-    w,h = map(int,input().split())
-    if(w==0 and h==0):
-        break
-    graph = list()
-    visited = [[False]*w for _ in range(h)]
-    answer = 0
-
-    for i in range(h):
-        graph.append(input().split())
-
-    for i in range(h):
-        for j in range(w):
-            if visited[i][j] == False and graph[i][j] == '1':
-                dfs(i,j)
-                answer += 1
-    print(answer)
+    dfs(startX, startY)
+    print(cntArr)
+    
