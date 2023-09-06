@@ -1,43 +1,68 @@
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**7)
+sys.setrecursionlimit(10**8)
 
-t = int(input())
+n = int(input())
+graph = list()
+areaArr = list()
+visitedDfs = [[False]*n for _ in range(n)]
+accum = 1
+cnt = 1
 
-dx = [-2,-2,-1,-1,1,1,2,2]
-dy = [1,-1,2,-2,2,-2,1,-1]
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
 
+for _ in range(n):
+    graph.append(input().split())
 
 def dfs(x,y):
-    global cnt
-    global cntArr
+    visitedDfs[x][y] = True
 
-    visited[x][y] = True
+    for i in range(4):
+        nextX = x + dx[i]
+        nextY = y + dy[i]
 
-    for j in range(8):
-        nextX = x + dx[j]
-        nextY = y + dy[j]
-
-        if nextX < 0 or nextY < 0 or nextX >= i or nextY >= i:
+        if nextX >= n or nextY >= n or nextX < 0 or nextY < 0:
             continue
-        if x == endX and y == endY:
-            cntArr.append(cnt)
-            cnt = 0
-        if visited[nextX][nextY] == False:
+        if visitedDfs[nextX][nextY] == False and newGraph[x][y] == 1:
             dfs(nextX, nextY)
-            cnt += 1
-            
-            
-
-for _ in range(t):
-    i = int(input())
-    cnt = 0
-    cntArr = list()
-    graph = [[0]*i for _ in range(i)]
-    visited = [[False]*i for _ in range(i)]
-    startX, startY = map(int,input().split())
-    endX, endY = map(int,input().split())
-
-    dfs(startX, startY)
-    print(cntArr)
     
+while True:
+    searched = False
+
+    area = 0
+    visitedDfs = [[False]*n for _ in range(n)]
+    line = list()
+    newGraph = list()
+
+    ##print(accum)
+    ### Create a new graph with the current graph
+    for a in range(n):
+        for b in range(n):
+            if int(graph[a][b]) > accum:
+                line.append(1)
+            else:
+                line.append(0)
+        newGraph.append(line)
+        line = list()
+
+    ##print(newGraph)
+
+    ### DFS
+    a = 0
+    b = 0
+    for a in range(n):
+        for b in range(n):
+            if not visitedDfs[a][b] and newGraph[a][b] == 1:
+                dfs(a,b)
+                area += 1
+                searched = True
+
+    if searched:
+        areaArr.append(area)
+        accum += 1
+        cnt += 1
+
+    else:
+        print(max(areaArr))
+        break
