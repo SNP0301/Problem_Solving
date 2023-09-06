@@ -63,6 +63,9 @@ while True:
         accum += 1
         cnt += 1
 
-    else:
+    elif not searched and len(areaArr) != 0:
         print(max(areaArr))
+        break
+    else:
+        print(1)
         break
