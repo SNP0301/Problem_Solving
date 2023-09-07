@@ -1,44 +1,46 @@
+from collections import deque
 import sys
 input = sys.stdin.readline
-from collections import deque
 
-n, k = map(int,input().split())
-lastIndex = 100000
 
-graph = [0 for i in range(lastIndex+1)]
+t = int(input())
 
-def bfs(x):
-    q = deque()
+dx = [-2,-2,-1,-1,1,1,2,2]
+dy = [1,-1,2,-2,2,-2,1,-1]
+
+
+def bfs(x,y):
     cnt = 1
-    q.append(x)
-    graph[x] = 1
-
-
+    q = deque()
+    q.append((x,y))
+    
     while q:
-        x = q.popleft()
-        dx = [x-1, x+1, x*2]
-        ##print("[%d]: (%d, %d, %d)"%(x,dx[0],dx[1],dx[2]))
-        for i in range(3):
-            nextX = dx[i]
+        x,y = q.popleft()
+        graph[x][y] = cnt
 
-            if nextX < 0 or nextX >= lastIndex+1:
+        for k in range(8):
+            nextX = x + dx[k]
+            nextY = y + dy[k]
+
+            if nextX < 0 or nextY < 0 or nextX >= i or nextY >= i:
                 continue
-                
-            if graph[nextX]==0:
-                q.append(nextX)
-                graph[nextX] = graph[x]+1
-                ##print("from %d, graph[%d] is now %d"%(x,nextX,cnt)) 
-        ##print(q)
+            if x == endX and y == endY:
+                print(graph[endX][endY])
+                return
+            if graph[nextX][nextY] == 0:
+                q.append((nextX,nextY))
+                graph[nextX][nextY] = cnt
+                cnt += 1
 
-        if(graph[k]!=0):
-            print(graph[k]-1)
-            break
-        else:
-            cnt += 1
+for _ in range(t):
+    i = int(input())
+    cnt = 1
+    graph = [[0]*i for _ in range(i)]
+    startX, startY = map(int,input().split())
+    endX, endY = map(int,input().split())
 
-
-bfs(n)
-
-
-
-
+    if(startX == endX and startY == endY):
+        print(0)
+    else:
+        bfs(startX, startY)
+    
