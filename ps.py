@@ -11,6 +11,8 @@ input = sys.stdin.readline
 m,n = map(int,input().split())
 graph = list()
 q = deque()
+answer = 1
+possible = True
 
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
@@ -30,10 +32,6 @@ def bfs(x,y):
                 if graph[nextX][nextY] == 0:
                     q.append((nextX,nextY))
                     graph[nextX][nextY] = graph[x][y] + 1
-        for k in graph:
-            print(k)
-        print("\n")
-
 
 
 for _ in range(n):
@@ -46,3 +44,12 @@ for a in range(n):
 
 bfs(q[0][0],q[0][1])
 
+for k in graph:
+    answer = max(answer,max(k))
+    if 0 in k:
+        possible =  False
+
+if possible:
+    print(answer-1)
+else:
+    print(-1)
