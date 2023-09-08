@@ -1,44 +1,42 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
+from collections import deque
 
-m,n = map(int,input().split())
-graph = list()
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
-cnt = 0
+t = int(input())
 
-for i in range(n):
-    graph.append(list(map(int,input().split())))
+dx = [-2,-2,-1,-1,1,1,2,2]
+dy = [1,-1,2,-2,2,-2,1,-1]
 
 def bfs(x,y):
+    cnt = 0
     q = deque()
     q.append((x,y))
     graph[x][y] = 1
-    global cnt
-    answer = 0
-    while q:
-        x,y = q.popleft() 
+
+    while q: 
+        x,y = q.popleft()
         
-        cnt += 1
+        
+        for j in range(8):
+            nextX = x + dx[j]
+            nextY = y + dy[j]
 
-        for i in range(4):
-
-            nextX = x + dx[i]
-            nextY = y + dy[i]
-            if nextX < 0 or nextY < 0 or nextX >= n or nextY >= m:
+            if nextX < 0 or nextY < 0 or nextX >= i or nextY >= i:
                 continue
             if graph[nextX][nextY] == 0:
                 q.append((nextX,nextY))
                 graph[nextX][nextY] = graph[x][y] + 1
+        
+        if(graph[endX][endY] != 0):
+            print(graph[endX][endY]-1)
+            break
 
-    print(graph)
 
+for _ in range(t):
+    i = int(input())
+    graph = [[0]*i for _ in range(i)]
+    visited = [[False]*i for _ in range(i)]
+    startX, startY = map(int,input().split())
+    endX, endY = map(int,input().split())
 
-for a in range(n):
-    for b in range(m):
-        if graph[a][b] == 1:
-            bfs(a,b)
-print(cnt)
-
-               
+    bfs(startX,startY)
