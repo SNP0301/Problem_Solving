@@ -1,23 +1,14 @@
-22
-front
-back
-pop_front
-pop_back
-push_front 1
-front
-pop_back
-push_back 2
-back
-pop_front
-push_front 10
-push_front 333
-front
-back
-pop_back
-pop_back
-push_back 20
-push_back 1234
-front
-back
-pop_back
-pop_back
+4 9
+8 52
+6 80
+26 42
+2 72
+51 19
+39 11
+37 29
+81 3
+59 5
+79 23
+53 7
+43 33
+77 21
