@@ -1,43 +1,77 @@
 '''
-[BOJ] 2206. 벽 부수고 이동하기
+[BOJ] 3085. N과 M (4)
 T: 1초
-M: 512MB
+M: 128MB
 '''
-
 import sys
 input = sys.stdin.readline
-from collections import deque
 
-n,m = map(int,input().split())
-graph = list()
-q = deque
-q.append((0,0))
-breakable = True
+n = int(input())
+arr = list()
+answer = 0
+
+for _ in range(n):
+    arr.append(list(map(str,input().strip())))
+    
+
+
+def swap_y_forward(x,y):
+    if y+1 >= n:
+        return
+    else:
+        arr[x][y], arr[x][y+1] = arr[x][y+1], arr[x][y]
+
+def swap_y_backward(x,y):
+    if y+1 >= n:
+        return
+    else:
+        arr[x][y+1], arr[x][y] = arr[x][y], arr[x][y+1]
+
+def swap_x_forward(x,y):
+     if x+1 >= n:
+         return
+     else:
+         arr[x][y], arr[x+1][y] = arr[x+1][y], arr[x][y]
+
+def swap_x_backward(x,y):
+    if x+1 >= n:
+        return
+    else:
+        arr[x+1][y], arr[x][y] = arr[x][y], arr[x+1][y]
+
+def check_row(x):
+    x_max = 0
+    current = 1
+    for k in range(n-1):
+        if arr[x][k] == arr[x][k+1]:
+            current += 1
+        else:
+            current = 1
+        x_max = max(x_max,current)
+    return x_max
+
+def check_column(y):
+    y_max = 0
+    current = 1
+    for k in range(n-1):
+        if arr[k][y] == arr[k+1][y]:
+            current += 1
+        else:
+            current = 1
+        y_max = max(y_max,current)
+    return y_max
 
 for i in range(n):
-    graph.append(list(map(int,input().strip())))
+    for j in range(n):
+        swap_y_forward(i,j)
+        answer = max(answer, check_row(i))
+        answer = max(answer,check_column(j))
 
+        swap_y_backward(i,j)
 
+        swap_x_forward(i,j)
+        answer = max(answer,check_column(j))
+        answer = max(answer, check_row(i))
+        swap_x_backward(i,j)
 
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
-
-while q:
-    x,y = q.popleft()
-    
-    for i in range(4):
-        nextX = x + dx[i]
-        nextY = y + dy[i]
-        
-        if nextX < 0 or nextY < 0 or nextX >= n or nextY >= m:
-            continue
-        if graph[nextX][nextY] == 0:
-            
-
-
-
-def check_graph():
-    for i in graph:
-        print(i)
-
-check_graph()
+print(answer)
