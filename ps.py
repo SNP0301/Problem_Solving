@@ -66,12 +66,16 @@ for i in range(n):
         swap_y_forward(i,j)
         answer = max(answer, check_row(i))
         answer = max(answer,check_column(j))
+        if j+1 < n:
+            answer = max(answer,check_column(j+1))
 
         swap_y_backward(i,j)
 
         swap_x_forward(i,j)
         answer = max(answer,check_column(j))
         answer = max(answer, check_row(i))
+        if i+1 < n:
+            answer = max(answer, check_row(i+1))
         swap_x_backward(i,j)
 
 print(answer)
