@@ -1,59 +1,20 @@
 '''
-[BOJ] 13023. ABCDE
+[BOJ] 2193. 이친수
 T: 2s
-M: 512MB
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
-from collections import deque
+sys.setrecursionlimit(1000000)
 
+n = int(input())
 
-n, k = map(int,input().split())
-lastIndex = 100000
+pinary_number = [0,1,1,2]+[0 for _ in range(87)]
+i = 3
 
-graph = [0 for i in range(lastIndex+1)]
-from_graph = [0 for i in range(lastIndex+1)]
+while i <= n:
+    pinary_number[i] = pinary_number[i-1]+pinary_number[i-2]
+    i += 1
 
-def bfs(x):
-    q = deque()
-    cnt = 1
-    q.append(x)
-    graph[x] = 1
-
-
-    while q:
-        x = q.popleft()
-        dx = [x-1, x+1, x*2]
-        ##print("[%d]: (%d, %d, %d)"%(x,dx[0],dx[1],dx[2]))
-        for i in range(3):
-            nextX = dx[i]
-
-            if nextX < 0 or nextX >= lastIndex+1:
-                continue
-                
-            if graph[nextX]==0:
-                q.append(nextX)
-                graph[nextX] = graph[x]+1
-                from_graph[nextX] = x
-
-        if(graph[k]!=0):
-            print(graph[k]-1)
-            break
-        else:
-            cnt += 1
-
-
-bfs(n)
-z = k
-answer = [k]
-while z != n:
-    answer.append(from_graph[z])
-    z = from_graph[z]
-
-for i in range(len(answer)-1,-1,-1):
-    print(answer[i],end=" ")
-
-
-
-
+print(pinary_number[n])
 
