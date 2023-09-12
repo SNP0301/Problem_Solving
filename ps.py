@@ -1,20 +1,27 @@
 '''
-[BOJ] 2193. 이친수
+[BOJ] 16967. 배열 복원하기
 T: 2s
-M: 128MB
+M: 512MB
 '''
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(1000000)
 
-n = int(input())
+h,w,x,y = map(int,input().split())
 
-pinary_number = [0,1,1,2]+[0 for _ in range(87)]
-i = 3
+original_array = list()
+modified_array = list()
 
-while i <= n:
-    pinary_number[i] = pinary_number[i-1]+pinary_number[i-2]
-    i += 1
+for i in range(x+h):
+    modified_array.append(list(map(int,input().split())))
 
-print(pinary_number[n])
+def check_array(array):
+    for i in array:
+        print(i)
 
+check_array(modified_array)
+
+for i in range(x):
+    original_array.append(modified_array[i][:w])
+
+
+check_array(original_array)
