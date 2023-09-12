@@ -1,27 +1,25 @@
 '''
-[BOJ] 15657. N과 M (8)
-T: 1s
-M: 512MB
+[BOJ] 2193. 이친수
+T: 2s
+M: 128MB
 '''
-
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(1000000)
 
-n,m = map(int,input().split())
-arr = list(map(int,input().split()))
-arr = sorted(arr)
-ans = list()
+n = int(input())
+num_array = list()
 
-def back():
-    if (len(ans) == m) and ans==sorted(ans):
-        print(*ans)
+def get_pinary_number(x):
+    if(len(x)>=n):
+        num_array.append(x)
         return
-    if ans != sorted(ans):
-        return
-    for i in range(n):
-        ans.append(arr[i])
-        back()
-        ans.pop()
+    if(x[-1]=='0'):
+        get_pinary_number(x+'1')
+        get_pinary_number(x+'0')
+    elif(x[-1]=='1'):
+        get_pinary_number(x+'0')
+    
 
-back()
+get_pinary_number('1')
+print(len(num_array))
