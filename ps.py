@@ -1,5 +1,5 @@
 '''
-[BOJ] 15652. N과 M (4)
+[BOJ] 15657. N과 M (8)
 T: 1s
 M: 512MB
 '''
@@ -9,6 +9,8 @@ input = sys.stdin.readline
 sys.setrecursionlimit(1000000)
 
 n,m = map(int,input().split())
+arr = list(map(int,input().split()))
+arr = sorted(arr)
 ans = list()
 
 def back():
@@ -17,8 +19,8 @@ def back():
         return
     if ans != sorted(ans):
         return
-    for i in range(1,n+1):
-        ans.append(i)
+    for i in range(n):
+        ans.append(arr[i])
         back()
         ans.pop()
 
