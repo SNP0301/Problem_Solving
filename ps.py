@@ -1,19 +1,23 @@
 '''
-[BOJ] 10815. 숫자 카드
-T: 2초
+[BOJ] 1620. 이모티콘
+T: 1초
 M: 256MB
 '''
-
 import sys
 input = sys.stdin.readline
 
 n = int(input())
-sg_deque = set(input().split())
-m = int(input())
-check_deque = list(input().split())
+company = set()
 
-for i in check_deque:
-    if i in sg_deque:
-        print(1, end=" ")
+for _ in range(n):
+    company_log = input().split()
+    if(company_log[1] == 'enter'):
+        company.add(company_log[0])
     else:
-        print(0, end=" ")
+        company.remove(company_log[0])
+
+company = list(company)
+company.sort(reverse=True)
+
+for i in company:
+    print(i)
