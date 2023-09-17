@@ -1,20 +1,20 @@
 '''
-[BOJ] 11651. 좌표 정렬하기 2
+[BOJ] 10773. 제로
 T: 1초
 M: 256MB
 '''
 import sys
 input = sys.stdin.readline
 
-n = int(input())
+k = int(input())
 
-arr = list()
+jb = list()
 
-for _ in range(n):
-    arr.append(list(map(int,input().split())))
+for _ in range(k):
+    num = int(input())
+    if num == 0:
+        jb = jb[:-1]
+    else:
+        jb.append(num)
 
-
-arr.sort(key = lambda x: (x[1],x[0]))
-
-for i in arr:
-    print(i[0],i[1])
+print(sum(jb))
