@@ -1,42 +1,51 @@
 '''
-[BOJ] 13023. ABCDE
+[BOJ] 13549. 숨바꼭질 3
 T: 2초
 M: 512MB
 '''
 import sys
 input = sys.stdin.readline
+from collections import deque
 
-n,m = map(int,input().split())
+n, k = map(int,input().split())
+lastIndex = 20
+graph = [0 for i in range(lastIndex+1)]
+has_been_teleported = [0 for i in range(lastIndex+1)]
 
-graph = [[] for _ in range(n+1)]
-visited = [0 for _ in range(n+1)]
-is_it_possible = False
+def bfs(x):
+    q = deque()
+    q.append(x)
 
-for _ in range(m):
-    u,v = map(int,input().split())
-    graph[u].append(v)
-    graph[v].append(u)
+    while q:
+        if(graph[k]!=0):
+            print(graph[k])
+            break
+        cnt = 2
+        x = q.popleft()
+        dx = [x-1, x+1, x*2]
+        
+        for i in range(3):
+            nextX = dx[i]
+        
+            if nextX < 0 or nextX >= lastIndex+1:
+                continue
+            if graph[nextX]==0 and i!=2:
+                graph[nextX] = graph[x]+1
+                q.append(nextX)
+            elif i == 2:
+                graph[nextX] = graph[x]
+                q.append(nextX)
+                has_been_teleported[nextX] = True
 
-##print(graph)
+                while nextX*2**(cnt) < lastIndex+1 and has_been_teleported[nextX*2**(cnt)] == False:
+                    has_been_teleported[nextX*2**(cnt)] = True
+                    graph[nextX*2**(cnt)] = graph[x]
+                    q.append(nextX*2**(cnt))
 
-def dfs(x,length):
-    global is_it_possible
-    if length == 5:
-        is_it_possible = True
-        return
-    visited[x] = 1
-    for i in graph[x]:
-        if not visited[i]:
-            dfs(i,length+1)
-    visited[x] = 0
 
-    
-for i in range(n):
-    dfs(i,1)
-    if is_it_possible:
-        break
 
-if is_it_possible:
-    print(1)
-else:
-    print(0)
+
+
+
+bfs(n)
+print(graph)
