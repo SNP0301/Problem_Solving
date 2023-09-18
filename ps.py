@@ -1,28 +1,42 @@
 '''
-[BOJ] 14226. 이모티콘
+[BOJ] 13023. ABCDE
 T: 2초
 M: 512MB
 '''
 import sys
 input = sys.stdin.readline
-from collections import deque
 
-n = int(input())
-q = deque()
+n,m = map(int,input().split())
 
-check_array = [i for i in range(10000)]
-time_array = [i for i in range(10000)] ## time_array[n]: n개 이모티콘을 만드는 데에 걸리는 최소 시간
-time = 1
+graph = [[] for _ in range(n+1)]
+visited = [0 for _ in range(n+1)]
+is_it_possible = False
 
-i = 2
-for j in range(n):
-    for i in range(j,2*n+1,i):
-        time_array[2*i] = time_array[i]+1 ## [4]는 [2]에서 2초, #
-        print("%d takes %d"%(2*i,time_array[2*i]))
+for _ in range(m):
+    u,v = map(int,input().split())
+    graph[u].append(v)
+    graph[v].append(u)
 
-i = 2
-for i in range(2,2*n):
-    time_array[i] = min(time_array[i+1]+1, time_array[i])
+##print(graph)
 
-print("\n")
-print(time_array[n])
+def dfs(x,length):
+    global is_it_possible
+    if length == 5:
+        is_it_possible = True
+        return
+    visited[x] = 1
+    for i in graph[x]:
+        if not visited[i]:
+            dfs(i,length+1)
+    visited[x] = 0
+
+    
+for i in range(n):
+    dfs(i,1)
+    if is_it_possible:
+        break
+
+if is_it_possible:
+    print(1)
+else:
+    print(0)
