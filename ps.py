@@ -1,51 +1,34 @@
 '''
-[BOJ] 13549. 숨바꼭질 3
-T: 2초
+[BOJ] 16931. 겉넓이 구하기
+T: 1초
 M: 512MB
 '''
 import sys
 input = sys.stdin.readline
-from collections import deque
 
-n, k = map(int,input().split())
-lastIndex = 20
-graph = [0 for i in range(lastIndex+1)]
-has_been_teleported = [0 for i in range(lastIndex+1)]
+n,m = map(int,input().split())
+paper = list()
+answer = 2*n*m ## 위 + 아래
+column_max = 0
+print(answer)
 
-def bfs(x):
-    q = deque()
-    q.append(x)
+for i in range(n):
+    paper.append(list(map(int,input().split())))
 
-    while q:
-        if(graph[k]!=0):
-            print(graph[k])
-            break
-        cnt = 2
-        x = q.popleft()
-        dx = [x-1, x+1, x*2]
-        
-        for i in range(3):
-            nextX = dx[i]
-        
-            if nextX < 0 or nextX >= lastIndex+1:
-                continue
-            if graph[nextX]==0 and i!=2:
-                graph[nextX] = graph[x]+1
-                q.append(nextX)
-            elif i == 2:
-                graph[nextX] = graph[x]
-                q.append(nextX)
-                has_been_teleported[nextX] = True
+for i in range(n):
+    print(max(paper[i])*2)
+    answer += (max(paper[i])*2)
 
-                while nextX*2**(cnt) < lastIndex+1 and has_been_teleported[nextX*2**(cnt)] == False:
-                    has_been_teleported[nextX*2**(cnt)] = True
-                    graph[nextX*2**(cnt)] = graph[x]
-                    q.append(nextX*2**(cnt))
+print(answer)
 
+for i in range(m):
+    for j in range(n):## (i,j) = (0,0)(1,0)(2,0) / (0,1)(1,1)(2,1)
+        column_max = max(column_max,paper[j][i])
+        ##print(j,i) round check
+    print("%d column max: %d"%(i,column_max))
+    answer += (column_max*2)
+    column_max = 1
 
+print(answer)
 
-
-
-
-bfs(n)
-print(graph)
+print(answer)
