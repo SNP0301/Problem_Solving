@@ -1,28 +1,27 @@
 '''
-[BOJ] 2290. LCD Test
+[BOJ] 14501. 퇴사
 T: 2초
-M: 128MB
+M: 512MB
 '''
 import sys
 input = sys.stdin.readline
 
-s, n = map(int,input().split())
+n = int(input())
+time_table = list()
+pay_table = list()
+dp = [0] * (n+1)
+max_value = 0
 
-n_length = len(str(n))
+for i in range(n):
+    time, pay = map(int,input().split())
+    time_table.append(time)
+    pay_table.append(pay)
 
-LCD = list()
-LCD_NUMBERS = list()
-
-for _ in range(2*s+3):
-    LCD.append([i for i in range(n_length*(s+2))])
-
-for _ in range(2*s+3):
-    LCD_NUMBERS.append([" " for _ in range(n_length*(s+2))])
-
-
-def lcd_test(array):
-    for i in array:
-        print(i)
-
-
-lcd_test(LCD_NUMBERS)
+for i in range(n-1,-1,-1):
+    t = i + time_table[i]
+    if t <= n:
+        dp[i] = max(pay_table[i] + dp[t], max_value)
+        max_value = dp[i]
+    else:
+        dp[i] = max_value
+print(max_value)
