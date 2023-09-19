@@ -1,17 +1,28 @@
 '''
-[BOJ] 16931. 겉넓이 구하기
-T: 1초
-M: 512MB
+[BOJ] 2290. LCD Test
+T: 2초
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
 
-n,m = map(int,input().split())
-paper = list()
-answer = 2*n*m ## 위 + 아래
-column_max = 0
-print(answer)
+s, n = map(int,input().split())
 
-for i in range(n):
-    paper.append(list(map(int,input().split())))
+n_length = len(str(n))
 
+LCD = list()
+LCD_NUMBERS = list()
+
+for _ in range(2*s+3):
+    LCD.append([i for i in range(n_length*(s+2))])
+
+for _ in range(2*s+3):
+    LCD_NUMBERS.append([" " for _ in range(n_length*(s+2))])
+
+
+def lcd_test(array):
+    for i in array:
+        print(i)
+
+
+lcd_test(LCD_NUMBERS)
