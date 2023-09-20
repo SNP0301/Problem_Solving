@@ -1,56 +1,36 @@
 '''
-[BOJ] 13549. 숨바꼭질 3
-T: 2초
-M: 512MB
+[BOJ] 2529. 부등호
+T: 1초
+M: 256MB
 '''
 import sys
 input = sys.stdin.readline
-from collections import deque
 
-n, k = map(int,input().split())
-lastIndex = 200000
+n = int(input())
+sign = input().split()
+numbers = [i for i in range(0,10)]
+print(numbers[1:])
 
-graph = [0 for i in range(lastIndex+1)]
-visited = [False for i in range(lastIndex+1)]
 
-q = deque()
+def recur(idx:int,numbers:list,answer:int): ## 숫자의 idx번째를 채워야하는데, 재료는 numbers가 있다. 부등호에 맞는 숫자(x)가 있으면 answer = answer*10+x로 recur해라
+    if idx == n:
+        print(answer)
+    possible = False
+    if sign[idx-1] == ">":
+        for x in numbers:
+            if answer%10 > x:
+                next_numbers = numbers.remove(x)
+                recur(idx+1,next_numbers,answer*10+x)
+                possible = True
+    elif sign[idx-1] == "<": ## sign=="<"
+        for x in numbers:
+            if answer%10 < x:
+                next_numbers = numbers.remove(x)
+                recur(idx+1,next_numbers,answer*10+x)
+                possible = True
+    if not possible:
+        return
 
-def bfs(x):
-    q.append(x)
-    graph[x] = 0
-    visited[x] = True
-    ##print(graph)
-
-    while q:
-        if visited[k]:
-            print(graph[k])
-            ##print(graph)
-            break
-        x = q.popleft()
-        dx = [x*2,x-1,x+1]
-
-        for i in range(3):
-            nextX = dx[i]
-
-            if nextX == 0 and not visited[nextX]:
-                visited[nextX] = True
-                graph[nextX] = graph[x]+1
-            elif  nextX < 0 or nextX >= lastIndex+1:
-                continue
-            
-            if i != 0 and (not visited[nextX] or (visited[nextX] and graph[nextX] > graph[x]+1)):
-                graph[nextX] = graph[x] + 1
-                visited[nextX] = True
-                q.append(nextX)
-            elif  i == 0 and (not visited[nextX] or (visited[nextX] and graph[nextX] > graph[x]+1)) :
-                graph[nextX] = graph[x]
-                visited[nextX] = True
-                q.append(nextX)
-            ##print(graph)
-
-        if visited[k]:
-            print(graph[k])
-            ##print(graph)
-            break
-
-bfs(n)
+for i in range(1,10):
+    first_numbers = numbers.remove(i)
+    recur(1,first_numbers,i)
