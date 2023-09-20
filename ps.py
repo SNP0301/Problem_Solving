@@ -19,30 +19,38 @@ def bfs(x):
     q.append(x)
     graph[x] = 0
     visited[x] = True
+    ##print(graph)
 
     while q:
         if visited[k]:
             print(graph[k])
+            ##print(graph)
             break
         x = q.popleft()
-        dx = [x-1,x+1,x*2]
+        dx = [x*2,x-1,x+1]
 
         for i in range(3):
             nextX = dx[i]
 
-            if nextX == 0:
+            if nextX == 0 and not visited[nextX]:
                 visited[nextX] = True
                 graph[nextX] = graph[x]+1
             elif  nextX < 0 or nextX >= lastIndex+1:
                 continue
             
-            if not visited[nextX] and i != 2:
+            if i != 0 and (not visited[nextX] or (visited[nextX] and graph[nextX] > graph[x]+1)):
                 graph[nextX] = graph[x] + 1
                 visited[nextX] = True
                 q.append(nextX)
-            elif (not visited[nextX] or graph[nextX] >= graph[x])and i == 2:
+            elif  i == 0 and (not visited[nextX] or (visited[nextX] and graph[nextX] > graph[x]+1)) :
                 graph[nextX] = graph[x]
                 visited[nextX] = True
                 q.append(nextX)
+            ##print(graph)
+
+        if visited[k]:
+            print(graph[k])
+            ##print(graph)
+            break
 
 bfs(n)
