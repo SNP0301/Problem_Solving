@@ -14,7 +14,7 @@ num_list = [i for i in range(0,MAX_IDX)]
 
 ## index:int, 채워야 할 자리수
 ## num_list:list, 사용할 수 있는 숫자들의 배열
-## 
+
 
 def recur(idx:int, numbers:list, answer:int):
     if idx > k:
