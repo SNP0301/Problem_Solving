@@ -10,45 +10,37 @@ from collections import deque
 k = int(input())
 graph = list()
 
-def bfs(x,color_int):
-    q = deque()
-    q.append((x,color_int))
+def bfs(x, color):
+    q = deque([x])
+    visited[x] = color
+    
     while q:
-        nextX,next_color_int = q.popleft()
-        for i in range(v):
-            if graph[nextX][i] == 0:
-                continue
-            elif graph[nextX][i] == 1:
-                graph[nextX][i] *= next_color_int
-                graph[i][nextX] *= next_color_int
-                q.append((nextX,next_color_int*-1))
-            elif graph[nextX][i] + next_color_int != 0:
-                print("ERRORRORORORORO")
-            
+        x = q.popleft()
+        for i in graph[x]:
+            if not visited[i]:
+                q.append(i)
+                visited[i] = visited[x]*-1
+            elif visited[i] + visited[x] != 0:
+                return False
+    return True
 
- 
-def check_array(array):
-    for a in array:
-        print(a)
-    print("\n")
-
-for _ in range(k):################################################################ k
+for _ in range(k):
     v,e = map(int,input().split())
-    graph = [[0 for _ in range(v)] for _ in range(v)]
+    graph = [[] for _ in range(v)]
+    visited = [0 for _ in range(v)]
+
+    ##print("visited:",visited)
     
     for _ in range(e):
         u,v = map(int,input().split())
-        graph[u-1][v-1] = 1
-        graph[v-1][u-1] = 1
-    #check_array(graph)
-
+        graph[u-1].append(v-1)
+        graph[v-1].append(u-1)
     
+
     for i in range(v):
-        for j in range(v):
-            if graph[i][j] == 1:
-                bfs(i,3)
-    
-    check_array(graph)
-
-
-    
+        if not visited[i]:
+            result = bfs(i,3)
+            if not result:
+                break
+    if result: print('YES')
+    else: print('NO')
