@@ -1,58 +1,38 @@
 '''
-[BOJ] 2529. 부등호
-T: 1s
-M: 256MB
+[BOJ] 1699. 제곱수의 합
+T: 2s
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
-MAX_IDX = 10 ## 453 342
 
-k = int(input())
-sign = list(input().split())
-num_list = [i for i in range(0,MAX_IDX)]
-answer_list = list()
-## index:int, 채워야 할 자리수
-## num_list:list, 사용할 수 있는 숫자들의 배열
 
-def recur(idx:int, input_array:list, answer:int):
-    numbers = input_array
-    if idx >= k:
-        answer_list.append(answer)
-        return
+MAX_IDX = 100000
+n = int(input())
+
+dp = [1]+[999]*(MAX_IDX+1)
+
+perfect_number = [i*i for i in range(int(100000**0.5))]
+
+def square_check(num):
+    if num == int(num**0.5)**2:
+        return True
     else:
-        
-        possible = False
+        return False
 
-        if sign[idx] == ">":
-            for x in numbers:
-                if answer%10 > x:
-                    #print("after %d, %d is small"%(answer%10,x))
-                    next_list = [i for i in numbers]
-                    next_list.remove(x)
-                    recur(idx+1, next_list, answer*10+x)
-                    possible = True
+for i in range(2,n+1):
+    cnt = 1
 
-        elif sign[idx] == "<":
-            for x in numbers:
-                if answer%10 < x:
-                    #print("after %d, %d is large"%(answer%10,x))
-                    next_list = [i for i in numbers]
-                    next_list.remove(x)
-                    recur(idx+1, next_list, answer*10+x)
-                    possible = True
+    if square_check(i):
+        dp[i] = 1
+        '''
+            while cnt*i <= n:
+            dp[i*cnt] = min(dp[i*cnt],cnt)
+            cnt += 1
+        '''
 
-        if not possible:
-            return
-
-
-for i in range(MAX_IDX):
-    first_list = [i for i in range(0,MAX_IDX)]
-    first_list.remove(i)
-    recur(0,first_list,i)
-
-print(max(answer_list))
-
-if sign[0] == "<":
-    print("0"+str(min(answer_list)))
-else:
-    print(min(answer_list))
+    else:
+        for x in perfect_number:
+            dp[i] = min(dp[x] + dp[i-x],dp[i])
+            
+print(dp[n])
