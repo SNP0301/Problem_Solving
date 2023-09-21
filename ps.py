@@ -1,38 +1,54 @@
 '''
-[BOJ] 1699. 제곱수의 합
+[BOJ] 1707. 이분 그래프
 T: 2s
 M: 128MB
 '''
 import sys
 input = sys.stdin.readline
+from collections import deque
 
+k = int(input())
+graph = list()
 
-MAX_IDX = 100000
-n = int(input())
-
-dp = [1]+[999]*(MAX_IDX+1)
-
-perfect_number = [i*i for i in range(int(100000**0.5))]
-
-def square_check(num):
-    if num == int(num**0.5)**2:
-        return True
-    else:
-        return False
-
-for i in range(2,n+1):
-    cnt = 1
-
-    if square_check(i):
-        dp[i] = 1
-        '''
-            while cnt*i <= n:
-            dp[i*cnt] = min(dp[i*cnt],cnt)
-            cnt += 1
-        '''
-
-    else:
-        for x in perfect_number:
-            dp[i] = min(dp[x] + dp[i-x],dp[i])
+def bfs(x,color_int):
+    q = deque()
+    q.append((x,color_int))
+    while q:
+        nextX,next_color_int = q.popleft()
+        for i in range(v):
+            if graph[nextX][i] == 0:
+                continue
+            elif graph[nextX][i] == 1:
+                graph[nextX][i] *= next_color_int
+                graph[i][nextX] *= next_color_int
+                q.append((nextX,next_color_int*-1))
+            elif graph[nextX][i] + next_color_int != 0:
+                print("ERRORRORORORORO")
             
-print(dp[n])
+
+ 
+def check_array(array):
+    for a in array:
+        print(a)
+    print("\n")
+
+for _ in range(k):################################################################ k
+    v,e = map(int,input().split())
+    graph = [[0 for _ in range(v)] for _ in range(v)]
+    
+    for _ in range(e):
+        u,v = map(int,input().split())
+        graph[u-1][v-1] = 1
+        graph[v-1][u-1] = 1
+    #check_array(graph)
+
+    
+    for i in range(v):
+        for j in range(v):
+            if graph[i][j] == 1:
+                bfs(i,3)
+    
+    check_array(graph)
+
+
+    
