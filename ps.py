@@ -1,27 +1,24 @@
 '''
-[BOJ] 1912. 연속합
-T: 1s
-M: 128MB
+[BOJ] 1764. 듣보잦ㅂ
+T: 2s
+M: 256MB
 '''
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
 
-n = int(input())
-arr = list(map(int,input().split()))
-dp = list()
+n,m = map(int,input().split())
+d_set = set()
+b_set = set()
 
-dp.append(arr)
+for _ in range(n):
+    d_set.add(input())
+for _ in range(m):
+    b_set.add(input())
 
-## i: 1,2,3,...,n-1
-answer = -99999
-cnt = 2
-for i in range(1,n):
-    dp.append([])
-    for j in range(n-i):
-        ##print(i,j,dp[i-1][j],arr[j+cnt-1])
-        dp[i].append(dp[i-1][j]+arr[j+cnt-1])
-    cnt += 1
-    answer = max(answer,max(dp[i]))
+db_set = d_set.intersection(b_set)
+db_list = list(db_set)
+db_list.sort()
+print(len(db_list))
+for i in db_list:
+    print(i,end="")
 
-print(max(answer,max(arr)))
