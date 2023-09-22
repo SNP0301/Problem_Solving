@@ -1,46 +1,55 @@
 '''
-[BOJ] 1707. 이분 그래프
+[BOJ] 14889. 스타트와 링크
+
 T: 2s
-M: 128MB
+M: 512MB
 '''
 import sys
 input = sys.stdin.readline
-from collections import deque
+from itertools import combinations
 
-k = int(input())
-graph = list()
+n = int(input())
+stat_max = -1
+stat_min = 10001
+start_stat = 0
+link_stat = 0
+stat = list()
+entries = list()
+member_list = [i for i in range(n)]
 
-def bfs(x, color):
-    q = deque([x])
-    visited[x] = color
-    
-    while q:
-        x = q.popleft()
-        for i in graph[x]:
-            if not visited[i]:
-                q.append(i)
-                visited[i] = visited[x]*-1
-            elif visited[i] + visited[x] != 0:
-                return False
-    return True
+for _ in range(n):
+    stat.append(list(map(int,input().split())))
 
-for _ in range(k):
-    v,e = map(int,input().split())
-    graph = [[] for _ in range(v)]
-    visited = [0 for _ in range(v)]
+for i in combinations(member_list, n//2):
+    entries.append(list(i))
 
-    ##print("visited:",visited)
-    
-    for _ in range(e):
-        u,v = map(int,input().split())
-        graph[u-1].append(v-1)
-        graph[v-1].append(u-1)
-    
+##print(len(entries)) ## nCn//2
+#print(entries)
 
-    for i in range(v):
-        if not visited[i]:
-            result = bfs(i,3)
-            if not result:
-                break
-    if result: print('YES')
-    else: print('NO')
+stat_diff = 99999
+for e in entries:
+    stat_min = 10001
+
+    #print(e)
+    start = e
+    link = list()
+    for m in member_list:
+        if m not in e:
+            link.append(m)
+
+    for u in range(n):
+        for v in range(n):
+            if u in start and v in start:
+                start_stat += stat[u][v]
+            elif u in link and v in link:
+                link_stat += stat[u][v]
+    #print(start, start_stat)
+    #print(link, link_stat)
+    stat_diff = min(max(start_stat-link_stat, link_stat-start_stat),stat_diff)
+    #print(stat_diff, stat_min,"\n")
+
+
+    start_stat = 0
+    link_stat = 0
+
+print(stat_diff)
