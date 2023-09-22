@@ -12,7 +12,7 @@ def check(g):
         print(i)     
 
 n,m,k = map(int,input().split())
-##visited = [[0 for _ in range(m)] for _ in range(n)]
+
 
 graph = list()
 for i in range(n):
@@ -21,8 +21,7 @@ for i in range(n):
 dx = [1,-1,0,0]
 dy = [0,0,1,-1]
 answer_list = list()
-#check(visited)
-#check(graph)
+
 
 def bfs(x,y):
     global k
@@ -39,17 +38,26 @@ def bfs(x,y):
             nextX = x+dx[i]
             nextY = y+dy[i]
 
-            if nextX < 0 or nextY < 0 or nextX >= m or nextY >= n:
+            if nextX < 0 or nextY < 0 or nextX >= n or nextY >= m:
                 continue
+            ##print(nextX, nextY, "is fine")
             if visited[nextX][nextY] == 0:
+                visited[nextX][nextY] = 1
                 q.append((nextX, nextY))
+                #print(cnt,answer,graph[nextX][nextY])
                 answer += graph[nextX][nextY]
                 cnt += 1
+                if cnt >= k:
+                     break
     return answer
 
-for i in range(m):
-    for j in range(n):
-        visited = [[0 for _ in range(m)] for _ in range(n)]
-        answer_list.append(bfs(i,j))
+if n==1 and m == 1:
+    print(graph[0][0])
+else:
+    for i in range(n):
+        for j in range(m):
+            visited = [[0 for _ in range(m)] for _ in range(n)]
+            answer_list.append(bfs(i,j))
 
-print(max(answer_list))
+    print(max(answer_list))
+    #print(answer_list)
