@@ -1,28 +1,37 @@
 '''
-[BOJ] 10816. 숫자 카드 2
-T: 1s
-M: 256MB
+[BOJ] 14226. 이모티콘
+T: 2s
+M: 512MB
 '''
 import sys
 input = sys.stdin.readline
+from collections import deque
 
 n = int(input())
-input_list = list(map(int,input().split()))
+MAX_INDEX = n*2+1
 
+graph = [i for i in range(MAX_INDEX)]
+graph[1] = 0
 
-plus_list = [0 for i in range(10000001)]
-minus_list = [0 for i in range(10000001)]
+def bfs(x):
+    q = deque()
+    q.append(x)
 
-for i in input_list:
-    if i >= 0:
-        plus_list[i] += 1
-    else:
-        minus_list[i] += 1
+    while q:
+        x = q.popleft()
+        i = 1
+        while x*i < MAX_INDEX:
+            if i == 2:
+                graph[x*i] = min(graph[x*i],graph[x]+2)
+                i += 1
+            else:
+                if graph[x*i] > graph[x]+1:
+                    graph[x*i] = graph[x]+i
+                    q.append(x*i)
+                if graph[x*i-1] > graph[x*i]+1:
+                    graph[x*i-1] = graph[x*i]+1
+                i += 1
 
-m = int(input())
-
-for i in list(map(int,input().split())):
-    if i >= 0:
-        print(plus_list[i],end=" ")
-    else:
-        print(minus_list[i],end=" ")
+bfs(1)
+print(graph)
+print(graph[n])
