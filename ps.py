@@ -1,35 +1,42 @@
 '''
-[BOJ] 1107. 리모컨
+[BOJ] 1759. 암호 만들기
 T: 2s
-M: 256MB
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
 
-n = int(input())
-m = int(input())
+l, c = map(int,input().split())
+input_character = sorted(list(map(str,input().split())))
+vowel = ["a","e","i","o","u"]
 
-if m == 0:
-    broken_button = list()
-else:
-    broken_button = list(map(int,input().split()))
+def make_password(password, available_character):
+    vowel_check = False
+    if len(password) == l:
+        '''
+        for x in vowel:
+            if x in password:
+                print(password)
+                return
+        '''
+        not_vowel_cnt = 0
+        for x in password:
+            if x in vowel:
+                vowel_check = True
+            elif x not in vowel:
+                not_vowel_cnt += 1
+        if vowel_check and (not_vowel_cnt >= 2):
+            print(password)
+            return
+    for i in available_character:
+        if not password:
+            next_character_list = [y for y in available_character]
+            next_character_list.remove(i)
+            make_password(i, next_character_list)
+        elif password[-1] < i:
+            next_character_list = [y for y in available_character]
+            next_character_list.remove(i)
+            make_password(password+i, next_character_list)
 
-available_button = {i for i in range(0,10)} - set(broken_button)
-
-def is_possible_channel(channel, available_button):
-    for i in str(channel):
-        if int(i) not in available_button:
-            return False
-    return True ### 숫자만으로 갈 수 있으면 False, +/- 조작해야 하면 False
-
-def solution(goal, available_button):
-    current_min = abs(goal-100)
-
-    for channel in range(1000001):
-        if is_possible_channel(channel,available_button):
-            current_press = abs(goal-channel) + len(str(channel))
-            current_min = min(current_min, current_press)
-    print(current_min)
-    return
-
-solution(n,available_button)
+make_password("",input_character)
