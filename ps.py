@@ -1,23 +1,45 @@
 '''
-[BOJ] 2839. 설탕 배달
-T: 1s
-M: 128MB
+[BOJ] 1107. 리모컨
+
+T: 2s
+M: 512MB
 '''
 import sys
 input = sys.stdin.readline
 
 n = int(input())
+m = int(input())
+available_buttons = list()
 
-def sugar(num):
-    total = 2
-    while total<=num:
-        for for_five in range(0,total+1):
-            for_three = total-for_five
-            #print("%d = %d + %d"%(total,for_five,for_three))
-            if for_five*5 + for_three*3 == num:
-                return for_five + for_three
-        total += 1
-    return -1
+def get_available_buttons(broken_buttons):
+    available_buttons = [i for i in range(10)]
+    for i in broken_buttons:
+        available_buttons.remove(i)
+    
+    return available_buttons
+    
 
 
-print(sugar(n))
+def available_with_numbers(target, buttons):
+    for i in str(target):
+        if int(i) not in buttons:
+            return False
+    return True
+
+if m != 0:
+    broken_buttons =  list(map(int,input().split()))
+    get_available_buttons(broken_buttons)
+else:
+    available_buttons = [i for i in range(10)]
+
+current_min = 99999999
+
+if n == 100:
+    print(0)
+    exit()
+for i in range(1000001):
+    if available_with_numbers(i,available_buttons):
+        current_press = abs(n-i) + len(str(i))
+        current_min = min(current_min, current_press)
+
+print(current_min)
