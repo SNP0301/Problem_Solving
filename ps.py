@@ -15,10 +15,7 @@ def get_available_buttons(broken_buttons):
     available_buttons = [i for i in range(10)]
     for i in broken_buttons:
         available_buttons.remove(i)
-    
     return available_buttons
-    
-
 
 def available_with_numbers(target, buttons):
     for i in str(target):
@@ -28,18 +25,16 @@ def available_with_numbers(target, buttons):
 
 if m != 0:
     broken_buttons =  list(map(int,input().split()))
-    get_available_buttons(broken_buttons)
+    available_buttons = get_available_buttons(broken_buttons)
 else:
     available_buttons = [i for i in range(10)]
 
-current_min = 99999999
+current_min = abs(n-100)
 
-if n == 100:
-    print(0)
-    exit()
 for i in range(1000001):
     if available_with_numbers(i,available_buttons):
         current_press = abs(n-i) + len(str(i))
         current_min = min(current_min, current_press)
+
 
 print(current_min)
