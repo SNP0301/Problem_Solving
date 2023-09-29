@@ -1,40 +1,21 @@
 '''
-[BOJ] 1107. 리모컨
-
-T: 2s
-M: 512MB
+[BOJ] 2577. 숫자의 개수
+T: 1s
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
 
-n = int(input())
-m = int(input())
-available_buttons = list()
+a = int(input())
+b = int(input())
+c = int(input())
 
-def get_available_buttons(broken_buttons):
-    available_buttons = [i for i in range(10)]
-    for i in broken_buttons:
-        available_buttons.remove(i)
-    return available_buttons
+result = str(a*b*c)
 
-def available_with_numbers(target, buttons):
-    for i in str(target):
-        if int(i) not in buttons:
-            return False
-    return True
+count_numbers = [0 for _ in range(10)]
 
-if m != 0:
-    broken_buttons =  list(map(int,input().split()))
-    available_buttons = get_available_buttons(broken_buttons)
-else:
-    available_buttons = [i for i in range(10)]
+for i in range(len(result)):
+    count_numbers[int(result[i])] += 1
 
-current_min = abs(n-100)
-
-for i in range(1000001):
-    if available_with_numbers(i,available_buttons):
-        current_press = abs(n-i) + len(str(i))
-        current_min = min(current_min, current_press)
-
-
-print(current_min)
+for i in range(10):
+    print(count_numbers[i])
