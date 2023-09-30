@@ -1,25 +1,18 @@
 '''
-[BOJ] 1620. 나는야 포켓몬 마스터 이다솜
-T: 1초
-M: 256MB
+[BOJ] 10989. 수 정렬하기 3
+T: 5초
+M: 8MB
 '''
 import sys
 input = sys.stdin.readline
 
-n, m = map(int, input().split())
-poketmon = ['empty']
-poketmon_set = set()
+num_arr = [0 for _ in range(10001)]
 
+n = int(input())
 for _ in range(n):
-    p = input().strip()
-    poketmon.append(p)
-    poketmon_set.add(p)
+    num_arr[int(input())] += 1
 
-#print(poketmon_set)
-#print(poketmon)
-for _ in range(m):
-    quiz_poketmon = input().rstrip()
-    if quiz_poketmon in poketmon_set:
-        print(poketmon.index(quiz_poketmon))
-    else:
-        print(poketmon[int(quiz_poketmon)])
+for i in range(10001):
+    if num_arr[i] != 0:
+        for j in range(num_arr[i]):
+            print(i)
