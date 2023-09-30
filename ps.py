@@ -9,7 +9,8 @@ from collections import deque
 
 def check(g):
     for i in g:
-        print(i)     
+        print(i) 
+    print("\n")    
 
 n,m,k = map(int,input().split())
 
@@ -27,11 +28,12 @@ def bfs(x,y):
     global k
     q = deque()
     q.append((x,y))
-    visited[x][y] = "P"
+    visited[x][y] = 1
     cnt = 0
     answer = 0
     while q:
-
+        if cnt >= k:
+            break
         x,y = q.popleft()
         for i in range(4):
             nextX = x+dx[i]
@@ -39,28 +41,29 @@ def bfs(x,y):
 
             if nextX < 0 or nextY < 0 or nextX >= n or nextY >= m:
                 continue
-            q.append((nextX, nextY))
-            if visited[nextX][nextY] == 0:
-                visited[nextX][nextY] = "P"
-                for k in range(4):
-                    if nextX+dx[k] < 0 or nextY+dy[k] < 0 or nextX+dx[k] >= n or nextY+dy[k] >= m:
-                        continue
-                    visited[nextX+dx[k]][nextY+dy[k]] = "N"
 
-                print(cnt,answer,graph[nextX][nextY])
+            if visited[nextX][nextY] == 0:
+                visited[nextX][nextY] = 1
+                q.append((nextX, nextY))
                 answer += graph[nextX][nextY]
                 cnt += 1
-            elif visited[nextX][nextY] == "N":
-                for k in range(4):
-                    if nextX+dx[k] < 0 or nextY+dy[k] < 0 or nextX+dx[k] >= n or nextY+dy[k] >= m:
+                for p in range(4):
+                    if nextX+dx[p] < 0 or nextY+dy[p] < 0 or nextX+dx[p] >= n or nextY+dy[p] >= m:
                         continue
-                    q.append((nextX+dx[k], nextY+dy[k]))
-        if cnt >= k:
-            break
+                    if visited[nextX+dx[p]][nextY+dy[p]] != 1:
+                        q.append((nextX+dx[p],nextY+dy[p]))
+                        visited[nextX+dx[p]][nextY+dy[p]] = "N"
+            elif visited[nextX][nextY] == "N":
+                for p in range(4):
+                    if nextX+dx[p] < 0 or nextY+dy[p] < 0 or nextX+dx[p] >= n or nextY+dy[p] >= m:
+                        continue
+                    if visited[nextX+dx[p]][nextY+dy[p]] == 0:
+                        q.append((nextX+dx[p],nextY+dy[p]))
+            if cnt >= k:
+                    break
+    print(answer)   
+    check(visited)
 
-    for x in visited:
-        print(x)
-    print(answer,"\n")
     return answer
 
 if n==1 and m == 1:
@@ -71,7 +74,6 @@ else:
         for j in range(m):
             visited = [[0 for _ in range(m)] for _ in range(n)]
             answer_list.append(bfs(i,j))
-
 print(answer_list)
 print(max(answer_list))
 
