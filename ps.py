@@ -1,23 +1,17 @@
 '''
-[BOJ] 1181. 단어 정렬 
+[BOJ] 18870. 좌표 압축
 T: 2초
-M: 256MB
+M: 512MB
 '''
 import sys
 input = sys.stdin.readline
 
-n = int(input())
-word_set = set()
-for _ in range(n):
-    word_set.add(input().rstrip())
+x = input()
+cnt = 0
 
-word_list = list(word_set)
-answer_list = list()
-
-for i in range(len(word_list)):
-    answer_list.append([word_list[i],len(word_list[i])])
-
-answer_list.sort(key = lambda x: (x[1],x[0]))
-
-for i in range(len(word_list)):
-    print(answer_list[i][0])
+for i in range(len(x)):
+    print(x[i],end="")
+    cnt += 1
+    if cnt == 10:
+        print("\n",end="")
+        cnt = 0
