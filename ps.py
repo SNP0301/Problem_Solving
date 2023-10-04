@@ -29,7 +29,7 @@ def bfs(x,y,visited):
     q = deque()
     q.append((x,y))
     answer = 0
-    cnt = 1
+    cnt = 0
     visited[x][y] = "P"
 
     while q:
@@ -45,8 +45,11 @@ def bfs(x,y,visited):
                 continue
             if visited[nextX][nextY] == 0:
                 answer += graph[nextX][nextY]
-                visited[nextX][nextY] = "P"
                 cnt += 1
+                visited[nextX][nextY] = cnt*9
+                if cnt >= k:
+                    break
+
                 for b in range(4):
                     blockX = nextX + dx[b]
                     blockY = nextY + dy[b]
@@ -54,7 +57,7 @@ def bfs(x,y,visited):
                         continue
                     visited[blockX][blockY] = 1
                     q.append((blockX,blockY))
-            else: #if visited[nextX][nextY] != 0:
+            elif visited[nextX][nextY] != 0:
                 for b in range(4):
                     blockX = nextX + dx[b]
                     blockY = nextY + dy[b]
