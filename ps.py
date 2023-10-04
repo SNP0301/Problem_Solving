@@ -1,87 +1,33 @@
 '''
-[BOJ] 18290. NM과 K(1)
-T: 2s
+[BOJ] 15990. 1,2,3 더하기 5
+T: 1s
 M: 512MB
 '''
 import sys
-input = sys.stdin.readline
-from collections import deque
+input=sys.stdin.readline
 
-def check(g):
-    for i in g:
-        print(i)   
-    print("\n")  
-
-n,m,k = map(int,input().split())
+max=100000
+mod=1000000009
 
 
-graph = list()
-for i in range(n):
-    graph.append(list(map(int,input().split())))
+dp=[[0]*4 for _ in range(max+1)]
 
-dx = [1,-1,0,0]
-dy = [0,0,1,-1]
-answer_list = list()
+dp[1]=[0,1,0,0]
+dp[2]=[0,0,1,0]
+dp[3]=[0,1,1,1]
+
+for i in range(4, max+1):
+    dp[i][1]=dp[i-1][2] +dp[i-1][3]
+    dp[i][2]=dp[i-2][1] +dp[i-2][3]
+    dp[i][3]=dp[i-3][1] +dp[i-3][2]
 
 
-def bfs(x,y,visited):
+    dp[i][1]%=mod
+    dp[i][2]%=mod
+    dp[i][3]%=mod
 
-    q = deque()
-    q.append((x,y))
-    answer = 0
-    cnt = 0
-    visited[x][y] = "P"
 
-    while q:
-        if cnt >= k:
-            answer_list.append(answer)
-            return
-        x,y = q.popleft()
-        for i in range(4):
-            nextX = x + dx[i]
-            nextY = y + dy[i]
-
-            if nextX < 0 or nextY < 0 or nextX >= n or nextY >= m:
-                continue
-            if visited[nextX][nextY] == 0:
-                answer += graph[nextX][nextY]
-                cnt += 1
-                visited[nextX][nextY] = cnt*9
-                if cnt >= k:
-                    break
-
-                for b in range(4):
-                    blockX = nextX + dx[b]
-                    blockY = nextY + dy[b]
-                    if blockX < 0 or blockY < 0 or blockX >= n or blockY >= m:
-                        continue
-                    visited[blockX][blockY] = 1
-                    q.append((blockX,blockY))
-            elif visited[nextX][nextY] != 0:
-                for b in range(4):
-                    blockX = nextX + dx[b]
-                    blockY = nextY + dy[b]
-                    if blockX < 0 or blockY < 0 or blockX >= n or blockY >= m:
-                        continue
-                    visited[blockX][blockY] = 1
-                    q.append((blockX,blockY))
-
-        if cnt >= k:
-            print(answer)
-            check(visited)
-            answer_list.append(answer)
-            return
-
-if m + n == 2:
-    print(graph[0][0])
-elif m+n != 2 and k == 1:
-    for i in range(n):
-        answer_max = max(max(graph[i]),-100)
-    print(answer_max)
-else:
-    for i in range(n):
-        for j in range(m):
-            visited = [[0 for _ in range(m)] for _ in range(n)]
-            bfs(i,j,visited)
-    print(answer_list)
-    print(max(answer_list))
+t=int(input())
+for _ in range(t):
+    n=int(input())
+    print(sum(dp[n])%mod)
