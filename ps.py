@@ -1,35 +1,28 @@
 '''
-[BOJ] 6603. 로또
+[BOJ] 15990. 1,2,3 더하기 5
 T: 1s
-M: 128MB
+M: 512MB
 '''
 import sys
 input=sys.stdin.readline
-sys.setrecursionlimit(10**6)
 
-def show(K:int, S:list, is_visited:list):
-    for i in range(0,K):
-        if is_visited[i]:
-            print(S[i], end=' ')
-    print()
+MAX_IDX = 100000
 
-def dfs(l,arr,visited,i,cnt):
-    if cnt == 6:
-        show(l,arr,visited)
-        return
-    for x in range(i,l):
-        if visited[x]:
-            continue
-        visited[x] = True
-        dfs(l,arr,visited,x,cnt+1)
-        visited[x] = False
+dp = [[0]*4 for _ in range(MAX_IDX+1)]
 
-while True:
-    arr = list(map(int,input().split()))
-    if arr[0] == 0:
-        break
-    else:
-        l = arr[0]
-        visited = [False for _ in range(l)]
-        dfs(l,arr[1:],visited,0,0)
-        print()
+dp[1] = [0,1,0,0]
+dp[2] = [0,0,1,0]
+dp[3] = [0,1,1,1]
+
+for i in range(4,MAX_IDX+1):
+    dp[i][1] = dp[i-1][2] + dp[i-1][3]
+    dp[i][2] = dp[i-2][1] + dp[i-2][3]
+    dp[i][3] = dp[i-3][1] + dp[i-3][2]
+
+    dp[i][1] %= 1000000009
+    dp[i][2] %= 1000000009
+    dp[i][3] %= 1000000009
+
+t = int(input())
+for _ in range(t):
+    print(sum(dp[int(input())])%1000000009)
