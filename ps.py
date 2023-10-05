@@ -2,6 +2,8 @@
 [BOJ] 15990. 1,2,3 더하기 5
 T: 1s
 M: 512MB
+
+dp[i][j]의 의미: i를 1~3의 숫자를 조합해 만들 때, 첫 숫자가 j인 경우의 수
 '''
 import sys
 input=sys.stdin.readline
