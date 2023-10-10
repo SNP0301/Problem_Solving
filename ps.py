@@ -1,23 +1,18 @@
 '''
-[BOJ] 1904. 01타일
-T: 0.75s
-M: 256MB
+[BOJ] 9461. 파도반 수열
+T: 1s
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(10**7)
 
-n = int(input())
+t = int(input())
+dp = [0,1,1,1] + [0 for _ in range(99)]
 
-dp = [0 for _ in range(n+2)]
+for i in range(4,101):
+    dp[i] = dp[i-2]+dp[i-3]
 
-dp[1] = 1
-dp[2] = 2
-
-for i in range(3,n+1):
-    if i > 15746:
-        dp[i] = dp[i-1]%15746 + dp[i-2]%15746
-    else:
-        dp[i] = dp[i-1]+dp[i-2]
-
-print(dp[n]%15746)
+for _ in range(t):
+    n = int(input())
+    print(dp[n])
