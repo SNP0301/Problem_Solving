@@ -1,28 +1,23 @@
 '''
-[BOJ] 9184. 신나는 함수 실행
-T: 1s
-M: 128MB
+[BOJ] 1904. 01타일
+T: 0.75s
+M: 256MB
 '''
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
+sys.setrecursionlimit(10**7)
 
-def recur(a,b,c):
-    if a*b*c<=0:
-        return 1
-    elif a>20 or b>20 or c>20:
-        print(a,b,c)
-        print(type(a),type(b),type(c))
-        return recur(20,20,20)
-    elif a<b and b<c:
-        return recur(a,b,c-1)+recur(a,b-1,c-1)-recur(a,b-1,c)
+n = int(input())
 
-    return recur(a-1,b,c) + recur(a-1,b-1,c)+recur(a-1,b,c-1)-recur(a-1,b-1,c-1)
+dp = [0 for _ in range(n+2)]
 
-while True:
-    a,b,c = map(int,input().split())
-    if a== -1 and b==-1 and c==-1:
-        break
+dp[1] = 1
+dp[2] = 2
+
+for i in range(3,n+1):
+    if i > 15746:
+        dp[i] = dp[i-1]%15746 + dp[i-2]%15746
     else:
-        print("w(%d, %d, %d) = %d"%(a,b,c,recur(a,b,c)))
+        dp[i] = dp[i-1]+dp[i-2]
 
+print(dp[n]%15746)
