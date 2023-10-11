@@ -1,47 +1,35 @@
 '''
-[BOJ] 27433. 팩토리얼 2
+[BOJ] 4779. 칸토어 집합
 T: 1s
-M: 1024MB
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(10**7)
 
-n, k = map(int,input().split())
-a = list(map(int,input().split()))
 
-print(a)
+def cantorian(arr):
+    if (len(arr) == 1):
+        print(*arr,end="")
+        #print("arr = ",arr)
+        return
+    tres = len(arr)//3
+    for i in range(len(arr)):
+        if i >= tres and i < tres*2:
+            arr[i] = " "
 
-def merge_sort(arr,p,r):
-    if arr[p] < arr[r]:
-        q = (p+r)//2
-        merge_sort(arr,p,q)
-        merge_sort(arr,q+1,r)
-        merge(arr,p,q,r)
+    cantorian(arr[:tres])
+    cantorian(arr[tres:tres*2])
+    cantorian(arr[tres*2:])
 
-def merge(arr,p,q,r):
-    i = p
-    j = q+1
-    t = 1
-    tmp = [0 for _ in range(r)]
-    while (i<=q and j <= r):
-        if (arr[i]<=arr[j]):
-            tmp[t] = arr[i]
-            t += 1
-            i += 1
-        else:
-            tmp[t] = arr[j]
-            t += 1
-            j += 1
-    while (i<=q):
-        tmp[t] = arr[i]
-        i += 1
-    while (j <= r):
-        tmp[t] = arr[j]
-        j += 1
-    i = p
-    t = 1
-    while (i <= r):
-        arr[i] = tmp[t]
-        i += 1
-        t += 1
+
+for _ in range(4):
+    n = int(input())
+    if n == 0:
+        print("-")
+    else:
+        arr = ["-" for _ in range(3**n)]
+        cantorian(arr)
+        #cantorian(arr)
+        #print(*arr)
+        print("\n")
