@@ -1,21 +1,20 @@
 '''
-[BOJ] 15988. 1,2,3 더하기 3
-T: 1초
-M: 512MB
+[BOJ] 1026. 보물
+T: 2초
+M: 128MB
 '''
 import sys
 input = sys.stdin.readline
 
-t = int(input())
+n = int(input())
+a = list(map(int,input().split()))
+b = list(map(int,input().split()))
+answer = 0
 
-dp = [0 for _ in range(1000002)]
-dp[1] = 1
-dp[2] = 2
-dp[3] = 4
+a.sort(reverse=True)
+b.sort()
 
-for i in range(4,1000001):
-        dp[i] = (dp[i-1] + dp[i-2] + dp[i-3])%1000000009
+for i in range(n):
+    answer += a[i]*b[i]
 
-for _ in range(t):
-    n = int(input())
-    print(dp[n]%1000000009)
+print(answer)
