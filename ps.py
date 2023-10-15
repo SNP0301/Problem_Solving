@@ -1,42 +1,38 @@
 '''
-[BOJ] 9012. 괄호
+[BOJ] 4949. 균형잡힌 세상
 T: 1초
 M: 128MB
 '''
 import sys
 input = sys.stdin.readline
 
-ps_open = []
+while True:
+    p = input()
+    if p == '.' or p == '.\n':
+        break
+    right = True
+    ps_stack = list()
 
-stack = [1,2,3]
-
-t = int(input())
-
-for _ in range(t):
-    ps = input()
-    ps_open = list()
-    possible = True
-    for i in range(len(ps)):
-        if ps[i] == "(":
-            ps_open.append("(")
-        elif ps[i] == ")":
-            if ps_open:
-                current = ps_open[-1]
-                if current == "(":
-                    ps_open.pop()
-                i += 1
-            elif not ps_open:
-                possible = False
-                i += 1
-                break
-
-    
-    if ps_open:
-        possible = False
-    
-    if possible:
-        print("YES")
+    for i in range(len(p)):
+        if p[i] == '(':
+            ps_stack.append('(')
+        elif p[i] == '[':
+            ps_stack.append('[')
+        elif p[i] == ')':
+            if not ps_stack:
+                right = False
+            elif ps_stack[-1] != '(':
+                right = False
+            else:
+                ps_stack.pop()
+        elif p[i] == ']':
+            if not ps_stack:
+                right = False
+            elif ps_stack[-1] != '[':
+                right = False
+            else:
+                ps_stack.pop()
+    if right and not ps_stack:
+        print("yes")
     else:
-        print("NO")
-
-            
+        print("no")
