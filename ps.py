@@ -1,38 +1,20 @@
 '''
-[BOJ] 4949. 균형잡힌 세상
+[BOJ] 11047. 동전 0
 T: 1초
-M: 128MB
+M: 256MB
 '''
 import sys
 input = sys.stdin.readline
 
-while True:
-    p = input()
-    if p == '.' or p == '.\n':
-        break
-    right = True
-    ps_stack = list()
+n, k = map(int,input().split())
+coins = list()
+answer = 0
 
-    for i in range(len(p)):
-        if p[i] == '(':
-            ps_stack.append('(')
-        elif p[i] == '[':
-            ps_stack.append('[')
-        elif p[i] == ')':
-            if not ps_stack:
-                right = False
-            elif ps_stack[-1] != '(':
-                right = False
-            else:
-                ps_stack.pop()
-        elif p[i] == ']':
-            if not ps_stack:
-                right = False
-            elif ps_stack[-1] != '[':
-                right = False
-            else:
-                ps_stack.pop()
-    if right and not ps_stack:
-        print("yes")
-    else:
-        print("no")
+for _ in range(n):
+    coins.append(int(input()))
+
+for i in range(n-1,-1,-1):
+    answer += k//coins[i]
+    k -= (k//coins[i])*coins[i]
+
+print(answer)
