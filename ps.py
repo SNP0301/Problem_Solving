@@ -1,7 +1,7 @@
 '''
-[BOJ] 18258. 큐 2
-T: 1 s
-M: 512 MB
+[BOJ] 28279. 덱 2
+T: 2 s
+M: 1024 MB
 '''
 
 import sys
@@ -9,34 +9,46 @@ input = sys.stdin.readline
 from collections import deque
 
 n = int(input())
-q = deque()
+d = deque()
 
 for _ in range(n):
-    command = list(input().split())
-    if len(command) == 2:
+    command = list(map(int,input().split()))
+    if (len(command) == 2):
         x = command[1]
-    if command[0] == 'push':
-        q.append(x)
-    elif command[0] == 'pop':
-        if not q:
+
+    if command[0] == 1:
+        d.append(x)
+    elif command[0] == 2:
+        d.appendleft(x)
+    elif command[0] == 3:
+        if not d:
             print(-1)
         else:
-            print(q[0])
-            q.popleft()
-    elif command[0] == 'size':
-        print(len(q))
-    elif command[0] == 'empty':
-        if not q:
+            a = d.pop()
+            print(a)
+    elif command[0] == 4:
+        if not d:
+            print(-1)
+        else:
+            a = d.popleft()
+            print(a)
+    elif command[0] == 5:
+        print(len(d))
+    elif command[0] == 6:
+        if not d:
             print(1)
         else:
             print(0)
-    elif command[0] == 'front':
-        if not q:
+    elif command[0] == 7:
+        if not d:
             print(-1)
         else:
-            print(q[0])
-    elif command[0] == 'back':
-        if not q:
+            print(d[-1])
+    elif command[0] == 8:
+        if not d:
             print(-1)
         else:
-            print(q[-1])
+            print(d[0])
+        
+
+
