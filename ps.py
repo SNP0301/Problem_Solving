@@ -1,15 +1,6 @@
 '''
-[BOJ] 2338. 긴자리 계산
-T: 2 s
+[BOJ] 30030. 스위트콘 가격 구하기
+T: 1 s
 M: 1024 MB
 '''
-
-import sys
-input = sys.stdin.readline
-
-a = int(input())
-b = int(input())
-
-print(a+b)
-print(a-b)
-print(a*b)
+print((int(input())//11)*10)
