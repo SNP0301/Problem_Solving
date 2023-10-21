@@ -1,6 +1,19 @@
 '''
-[BOJ] 30030. 스위트콘 가격 구하기
+[BOJ] 27889. 특별한 학교 이름
 T: 1 s
-M: 1024 MB
+M: 512 MB
 '''
-print((int(input())//11)*10)
+
+import sys
+input = sys.stdin.readline
+
+n = input().rstrip()
+
+if n == "NLCS":
+    print("North London Collegiate School")
+elif n == "BHA":
+    print("Branksome Hall Asia")
+elif n == "KIS":
+    print("Korea International School")
+elif n == "SJA":
+    print("St. Johnsbury Academy")
