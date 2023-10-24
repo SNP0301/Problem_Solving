@@ -1,5 +1,5 @@
 '''
-[BOJ] 5532. 방학 숙제
+[BOJ] 1009. 분산처리
 T: 1 s
 M: 128 MB
 '''
@@ -7,20 +7,20 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-l = int(input())
-a = int(input())
-b = int(input())
-c = int(input())
-d = int(input())
+t = int(input())
+c = [[0],[1],[2,4,8,6],[3,9,7,1],[4,6],[5],[6],[7,9,3,1],[8,4,2,6],[9,1]]
 
-if a%c == 0:
-    k = a//c
-else:
-    k = a//c+1
+for _ in range(t):
+    a,b = map(int,input().split())
+    print(c[a][b%len(c[a])-1])
 
-if b%d == 0:
-    m = b//d
-else:
-    m = b//d+1
+## 1 1 1 1
+## 2: 2,4,8,6, 2,4,6,8
+## 3: 3,9,7,1, 3,9,7,1
+## 4: 4,6, 4,6, 4,6,
+## 5: 5,5,5,5,5,5
+## 7: 7,9,3,1, 7,9,3,1
+## 8: 8,4,2,6, 8,4,2,6
+## 9: 9,1, 9,1
+    
 
-print(l-max(k,m))
