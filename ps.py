@@ -1,5 +1,5 @@
 '''
-[BOJ] 1075. 나누기
+[BOJ] 1076. 저항
 T: 1 s
 M: 128 MB
 '''
@@ -7,14 +7,17 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-n = int(input())//100*100
-n_last_two_digit = str(n)[-2:]
-f = int(input())
-answer = 0
-for i in range(100):
-    if (i+n)%f == 0:
-        if i<= 9:
-            print('0'+str(i))
-        else:
-            print(i)
+f = input().rstrip()
+s = input().rstrip()
+t = input().rstrip()
+
+color_name = ['black','brown','red','orange','yellow','green','blue','violet','grey','white']
+color_value = [i for i in range(0,10)]
+color_multiplier = [10**i for i in range(10)]
+
+before_multiple = int(color_name.index(f))*10+int(color_name.index(s))
+
+for i in range(len(color_name)):
+    if t == color_name[i]:
+        print(before_multiple*color_multiplier[i])
         break
