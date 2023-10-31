@@ -1,35 +1,21 @@
 '''
-[BOJ] 1436. 영화감독 숌
-T: 2 s
+[BOJ] 1003. 피보나치 함수
+T: 0.25 s
 M: 128 MB
 '''
-
 import sys
 input = sys.stdin.readline
 
-n = int(input())
-jm = ['0']
-number = 666
-def isDoom(x):    
-    x_str = str(x)
-    x_len = len(x_str)
-    cnt = 0
-    if x_len < 3:
-        return False
-    else:
-        while cnt+3 <= x_len:
-            if int(x_str[cnt:3+cnt]) == 666:
-                return True
-            else:
-                cnt += 1
 
+zero_call = [1,0]
+one_call = [0,1]
 
-while True:
-    if isDoom(number):
-        jm.append(number)
-        #print(jm)
-    
-    number += 1
-    if n == len(jm)-1:
-        print(jm[-1])
-        break
+for i in range(2,41):
+    zero_call.append(zero_call[i-1]+zero_call[i-2])
+    one_call.append(one_call[i-1]+one_call[i-2])
+
+t = int(input())
+
+for _ in range(t):
+    n = int(input())
+    print(zero_call[n], one_call[n])
