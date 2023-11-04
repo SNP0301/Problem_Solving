@@ -1,5 +1,5 @@
 '''
-[BOJ] 2839. 설탕 배달
+[BOJ] 9093. 단어 뒤집기
 T: 1 s
 M: 128 MB
 '''
@@ -7,14 +7,11 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-print("    8888888888  888    88888")
-print("   88     88   88 88   88  88")
-print("    8888  88  88   88  88888")
-print("       88 88 888888888 88   88")
-print("88888888  88 88     88 88    888888")
-print("")
-print("88  88  88   888    88888    888888")
-print("88  88  88  88 88   88  88  88")
-print("88 8888 88 88   88  88888    8888")
-print(" 888  888 888888888 88  88      88")
-print("  88  88  88     88 88   88888888")
+t = int(input())
+for _ in range(t):
+    words = list(input().split())
+    for i in words:
+        for j in range(len(i)-1,-1,-1):
+            print(i[j],end="")
+        print(" ",end="")
+    print()
