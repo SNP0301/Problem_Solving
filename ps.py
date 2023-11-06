@@ -1,5 +1,5 @@
 '''
-[BOJ] 2576. 홀수
+[BOJ] 2455. 지능형 기차
 T: 1 s
 M: 128 MB
 '''
@@ -7,15 +7,11 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-odd = list()
+h = list()
+c = 0
+for _ in range(4):
+    d, u = map(int,input().split())
+    c += u-d
+    h.append(c)
 
-for _ in range(7):
-    n = int(input())
-    if n % 2 != 0:
-        odd.append(n)
-
-if not odd:
-    print(-1)
-else: 
-    print(sum(odd))
-    print(min(odd))
+print(max(h))
