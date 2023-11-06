@@ -1,5 +1,5 @@
 '''
-[BOJ] 11943. 파일 옮기기
+[BOJ] 2576. 홀수
 T: 1 s
 M: 128 MB
 '''
@@ -7,11 +7,15 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-n,m = map(int,input().split())
+odd = list()
 
+for _ in range(7):
+    n = int(input())
+    if n % 2 != 0:
+        odd.append(n)
 
-for _ in range(n):
-    bread = input().strip()
-    for i in range(len(bread)-1,-1,-1):
-        print(bread[i],end="")
-    print("")
+if not odd:
+    print(-1)
+else: 
+    print(sum(odd))
+    print(min(odd))
