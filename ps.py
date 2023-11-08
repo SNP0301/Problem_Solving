@@ -1,6 +1,6 @@
 '''
-[BOJ] 1267. 핸드폰 요금
-T: 2 s
+[BOJ] 2506. 점수 계산
+T: 1 s
 M: 128 MB
 '''
 
@@ -8,21 +8,15 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-arr = list(map(int, input().split()))
 
-y = 0
-m = 0
-
+right_answer = list(map(int,input().split()))
+current_score = 0
+answer = 0
 for i in range(n):
-    y += arr[i]//30+1
-    m += arr[i]//60+1
+    if right_answer[i] == 1:
+        current_score += 1
+        answer += current_score
+    elif right_answer[i] == 0:
+        current_score = 0
 
-if y*10 == m*15:
-    print("Y M", y*10)
-elif y*10 < m*15:
-    print("Y", y*10)
-else:
-    print("M", m*15)
-
-
-
+print(answer)
