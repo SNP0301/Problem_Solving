@@ -1,5 +1,5 @@
 '''
-[BOJ] 2506. 점수 계산
+[BOJ] 2953. 나는 요리사다
 T: 1 s
 M: 128 MB
 '''
@@ -7,16 +7,10 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-n = int(input())
+score = list()
 
-right_answer = list(map(int,input().split()))
-current_score = 0
-answer = 0
-for i in range(n):
-    if right_answer[i] == 1:
-        current_score += 1
-        answer += current_score
-    elif right_answer[i] == 0:
-        current_score = 0
+for i in range(5):
+    score.append(sum(list(map(int,input().split()))))
 
-print(answer)
+
+print(score.index(max(score))+1, max(score))
