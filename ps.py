@@ -1,11 +1,10 @@
 '''
-[BOJ] 16430. 제리와 톰
+[BOJ] 10189. Hook
 T: 1 s
-M: 128 MB
+M: 256 MB
 '''
 
-import sys
-input = sys.stdin.readline
-
-a, b = map(int,input().split())
-print(b-a, b)
+print("#  # #### #### #  #")
+print("#### #  # #  # # #")
+print("#### #  # #  # # #")
+print("#  # #### #### #  #")
