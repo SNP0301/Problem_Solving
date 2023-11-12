@@ -1,10 +1,9 @@
 '''
-[BOJ] 10189. Hook
+[BOJ] 15726. 이칙연산
 T: 1 s
 M: 256 MB
 '''
 
-print("#  # #### #### #  #")
-print("#### #  # #  # # #")
-print("#### #  # #  # # #")
-print("#  # #### #### #  #")
+a, b, c = map(int,input().split())
+
+print(int(max(a*b/c,a/b*c)))
