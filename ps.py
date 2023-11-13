@@ -1,9 +1,7 @@
 '''
-[BOJ] 15726. 이칙연산
+[BOJ] 15733. 나는 누구인가
 T: 1 s
-M: 256 MB
+M: 128 MB
 '''
 
-a, b, c = map(int,input().split())
-
-print(int(max(a*b/c,a/b*c)))
+print("I\'m Sexy")
