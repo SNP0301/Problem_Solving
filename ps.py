@@ -1,7 +1,15 @@
 '''
-[BOJ] 15733. 나는 누구인가
+[BOJ] 27959. 초코바
 T: 1 s
 M: 128 MB
 '''
 
-print("I\'m Sexy")
+import sys
+input = sys.stdin.readline
+
+n,m = map(int,input().split())
+
+if n*100 >= m:
+    print("Yes")
+else:
+    print("No")
