@@ -1,5 +1,5 @@
 '''
-[BOJ] 27959. 초코바
+[BOJ] 1264. 모음의 개수
 T: 1 s
 M: 128 MB
 '''
@@ -7,9 +7,8 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-n,m = map(int,input().split())
+n = int(input())
 
-if n*100 >= m:
-    print("Yes")
-else:
-    print("No")
+for i in range(n):
+    sen = input()
+    print("%d."%(i+1),sen,end="")
