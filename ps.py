@@ -1,5 +1,5 @@
 '''
-[BOJ] 4470. 줄번호
+[BOJ] 2475. 검증수
 T: 1 s
 M: 128 MB
 '''
@@ -7,6 +7,6 @@ M: 128 MB
 import sys
 input = sys.stdin.readline
 
-a, b = map(int,input().split())
+a,b,c,d,e = map(int,input().split())
 
-print(a*b)
+print((a**2+b**2+c**2+d**2+e**2)%10)
