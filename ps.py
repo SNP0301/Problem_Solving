@@ -1,12 +1,16 @@
 '''
-[BOJ] 2475. 검증수
+[BOJ] 11365. !밀비 급일
 T: 1 s
-M: 128 MB
+M: 256 MB
 '''
 
 import sys
 input = sys.stdin.readline
 
-a,b,c,d,e = map(int,input().split())
+a,b = map(int,input().split())
+c,d = map(int,input().split())
 
-print((a**2+b**2+c**2+d**2+e**2)%10)
+if b+c < a+d :
+    print(b+c)
+else:
+    print(a+d)
