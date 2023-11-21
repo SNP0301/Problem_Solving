@@ -1,16 +1,27 @@
 '''
-[BOJ] 11365. !밀비 급일
+[BOJ] 27918. 탁구 경기
 T: 1 s
-M: 256 MB
+M: 1024 MB
 '''
 
 import sys
 input = sys.stdin.readline
 
-a,b = map(int,input().split())
-c,d = map(int,input().split())
+n = int(input())
+d = 0
+p = 0
 
-if b+c < a+d :
-    print(b+c)
-else:
-    print(a+d)
+for _ in range(n):
+    s = input().rstrip()
+    if s == 'D':
+        d += 1
+    elif s == 'P':
+        p += 1
+    if d-p >= 2:
+        print("%d:%d"%(d,p))
+        exit()
+    elif p-d >= 2:
+        print("%d:%d"%(d,p))
+        exit()
+
+print("%d:%d"%(d,p))
