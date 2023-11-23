@@ -1,5 +1,5 @@
 '''
-[BOJ] 20492. 세금
+[BOJ] 14581. 팬들에게 둘러싸인 홍준
 T: 1 s
 M: 1024 MB
 '''
@@ -7,6 +7,8 @@ M: 1024 MB
 import sys
 input = sys.stdin.readline
 
-n = int(input())
+id = input().rstrip()
 
-print(int(n*0.78), int(n*0.8)+int(n*0.2*0.78))
+print(":fan::fan::fan:")
+print(":fan::%s::fan:"%(id))
+print(":fan::fan::fan:")
