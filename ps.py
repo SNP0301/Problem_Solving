@@ -1,3 +1,13 @@
-name = input('enter name:')
+N = int(input())
+numbers = list()
 
-print(f'name is {name}')
+for _ in range(N):
+    numbers.append(int(input()))
+
+for i in range(len(numbers)):
+    for j in range(len(numbers)):
+        if numbers[i] < numbers[j]:
+            numbers[i], numbers[j] = numbers[j], numbers[i]
+
+for x in numbers:
+    print(x)
