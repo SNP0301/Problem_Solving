@@ -1,38 +1,40 @@
-"""
-* 주제가 가려져 있어도 2차원 문제인 척하는 1차원 문제 구분할 것
-
-[배운 것]
-
-[제약사항]
-1. 가로 길이는 항상 100으로 고정
-2. 모든 위치에서 상자의 높이는 1 이상 100 이하
-3. 덤프 횟수는 1 이상 1000 이하
-4. 평탄화가 완료되면 덤프를 수행할 수 없으므로 그 때 최고점과 최저점의 차를 반환
-    - 평탄화 완료 여부는 max(arr)-min(arr) <= 1 으로 검증
-5. 테스트 케이스가 10개로 고정
-"""
-
+T = int(input())
 # 여러개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
-for test_case in range(1, 11):
+for test_case in range(1, T + 1):
     # ///////////////////////////////////////////////////////////////////////////////////
     answer = 0
-    dump_limit = int(input())
-    boxes = list(map(int,input().split()))
+    N, K = map(int,input().split())
+    arr = list()
 
-    while dump_limit > 0 :
-        if max(boxes) - min(boxes) <= 1 :
-            answer = max(boxes) - min(boxes)
-            break
-        elif max(boxes) - min(boxes) > 1:
-            A = boxes.index(max(boxes))
-            B = boxes.index(min(boxes))
-            boxes[A] -= 1
-            boxes[B] += 1
-            dump_limit -= 1
-            answer = max(boxes) - min(boxes)
-        else:
-            print("why")
-            break
+    for _ in range(N):
+        arr.append(list(map(int,input().split())))
 
-    print("#%d %d"%(test_case, answer))
+    for i in range(N):
+        cnt = 0
+        for j in range(N):
+            if arr[i][j] == 1:
+                cnt += 1
+            elif arr[i][j] == 0:
+                if cnt == K:
+                    answer += 1
+                cnt = 0
+        if cnt == K:
+            answer += 1
+    zipped_arr = list(zip(*arr))
+    for i in range(N):
+        cnt = 0
+        for j in range(N):
+            if zipped_arr[i][j] == 1:
+                cnt += 1
+            elif zipped_arr[i][j] == 0:
+                if cnt == K:
+                    answer += 1
+                cnt = 0
+
+        if cnt == K:
+            answer += 1
+
+
+
+    print("#%d %d"%(test_case,answer))
     # ///////////////////////////////////////////////////////////////////////////////////
