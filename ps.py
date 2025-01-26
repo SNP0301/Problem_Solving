@@ -1,22 +1,28 @@
 """
-* 숫자 카드의 범위가 -10000000~10000000이므로, 리스트로는 불가능
+
 """
 
-N = int(input())
-sg_dct = dict()
-numbers = input().split()
-#print(numbers)
-for i in range(N):
-    if numbers[i] in sg_dct:
-        sg_dct[numbers[i]] += 1
-    else:
-        sg_dct[numbers[i]] = 1
+N, K = map(int,input().split())
+answer = list()
+arr_idx = K-1 #2
+arr = [i+1 for i in range(N)]
 
-#print(sg_dct)
-M = int(input())
-check_numbers = input().split()
-for i in range(M):
-    if check_numbers[i] in sg_dct:
-        print(sg_dct[check_numbers[i]],end=" ")
+
+while arr:
+    answer.append(arr[arr_idx])
+    arr.remove(arr[arr_idx]) #pop?
+    if arr_idx + K - 1 < len(arr):
+        arr_idx += K - 1
+    elif arr_idx + K - 1 >= len(arr) and len(arr) >= 1: ## 앞의 remove에서 숫자 만족하지 않는 경우 break
+        arr_idx = (arr_idx + K - 1 ) % len(arr)
+    if not arr:
+        break
+
+##print(answer)
+
+print("<",end="")
+for i in range(len(answer)):
+    if i  != len(answer)-1:
+        print("%d, "%(answer[i]),end="")
     else:
-        print(0,end=" ")
+        print(answer[i],end=">")
