@@ -1,28 +1,32 @@
-"""
+mandarat = list() ## 만다라트
+for _ in range(9):
+    mandarat.append(list(input().split()))
 
-"""
+middle_goals = list() ## 중간 목표
+for x in [1,4,7]:
+    for y in [1,4,7]:
+        middle_goals.append([mandarat[x][y],x,y])
+middle_goals = sorted(middle_goals[:4]+middle_goals[5:])
 
-N, K = map(int,input().split())
-answer = list()
-arr_idx = K-1 #2
-arr = [i+1 for i in range(N)]
+dx = [-1,-1,-1,0,1,1,1,0]
+dy = [-1,0,1,1,1,0,-1,-1]
+
+sub_goals = list()
+for mg in range(8):
+    sub_goals.append([]) ## 2차원
+    x = middle_goals[mg][1]
+    y = middle_goals[mg][2]
+    for e in range(8): ## e of eight
+        nx = x + dx[e]
+        ny = y + dy[e]
+        sub_goals[mg].append(mandarat[nx][ny])
+    sub_goals[mg] = sorted(sub_goals[mg])
+    ##for e in range(8): ## e of eight
 
 
-while arr:
-    answer.append(arr[arr_idx])
-    arr.remove(arr[arr_idx]) #pop?
-    if arr_idx + K - 1 < len(arr):
-        arr_idx += K - 1
-    elif arr_idx + K - 1 >= len(arr) and len(arr) >= 1: ## 앞의 remove에서 숫자 만족하지 않는 경우 break
-        arr_idx = (arr_idx + K - 1 ) % len(arr)
-    if not arr:
-        break
+for m in range(8):
+    print("#%d. %s"%(m+1,middle_goals[m][0]))
+    for s in range(8):
+        print("#%d-%d. %s"%(m+1,s+1,sub_goals[m][s]))
 
-##print(answer)
-
-print("<",end="")
-for i in range(len(answer)):
-    if i  != len(answer)-1:
-        print("%d, "%(answer[i]),end="")
-    else:
-        print(answer[i],end=">")
+    
