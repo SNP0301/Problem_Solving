@@ -1,25 +1,22 @@
 """
-[실수한 것]
-- ny 선언할 때 [x] 자리에 [y]가 들어감
+* 숫자 카드의 범위가 -10000000~10000000이므로, 리스트로는 불가능
 """
 
 N = int(input())
-game_arr = [list(map(int,input().split())) for _ in range(N)]
-score_arr = [[0 for _ in range(N)] for _ in range(N)]
+sg_dct = dict()
+numbers = input().split()
+#print(numbers)
+for i in range(N):
+    if numbers[i] in sg_dct:
+        sg_dct[numbers[i]] += 1
+    else:
+        sg_dct[numbers[i]] = 1
 
-dx = [0,1]
-dy = [1,0]
-score_arr[0][0] = 1
-for x in range(N):
-    for y in range(N):
-        for d in range(2):
-            nx = x + dx[d]*game_arr[x][y]
-            ny = y + dy[d]*game_arr[x][y]
-            if 0 <= nx < N and 0 <= ny < N:
-                if game_arr[x][y] != 0:
-                    #print("from [%d, %d], can go to [%d, %d] with %d power"%(x,y,nx,ny,game_arr[x][y]))
-                    score_arr[nx][ny] += score_arr[x][y]
-                elif game_arr[x][y] == 0:
-                    continue
-
-print(score_arr[N-1][N-1])
+#print(sg_dct)
+M = int(input())
+check_numbers = input().split()
+for i in range(M):
+    if check_numbers[i] in sg_dct:
+        print(sg_dct[check_numbers[i]],end=" ")
+    else:
+        print(0,end=" ")
