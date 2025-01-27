@@ -1,22 +1,38 @@
 """
-* M이상 N이하, 소수가 하나 이상 있는 입력만
-** 한 줄에 하나씩, 증가하는 순서대로 소수 출력
+* 중요도가 같은 문서가 여러 개 있을 수도 있다.
 
-[구상]
-    - 1~N 사이에 존재하는 소수 x를 미리 구해 is_prime[x]에 'True' 로 저장
+[복잡도]
+    - 우선순위가 역순으로 주어져도 100*100
 """
 
-M, N = map(int,input().split())
-is_prime = [True for _ in range(N+1)]
-is_prime[1] = False
+T = int(input())
 
-for i in range(2, N):
-    if is_prime[i]:
-        n = i*2
-        while n <= N:
-            is_prime[n] = False
-            n += i
+for _ in range(T):
+    N, M = map(int,input().split())
+    tmp_paper = list(map(int,input().split()))
+    paper = list()
+    priority = list()
+    cnt = 0
+    for i in range(len(tmp_paper)):
+        paper.append([i,tmp_paper[i]])
+        priority.append(tmp_paper[i])
+    #print(paper)
+    priority = sorted(priority)
+    #print(priority)
+    while True:
+        is_printable = True
+        if max(priority) > paper[0][1]:
+            is_printable = False
+            paper = paper[1:]+paper[0]
+        
+        if is_printable:
+            if paper[0][0] == M:
+                print(cnt)
+            else:
+                priority.pop(len(priority)-1)
+                paper = paper[1:]
+                print(paper)
+                cnt += 1
 
-for i in range(M,N+1):
-    if is_prime[i]:
-        print(i)
+
+            
