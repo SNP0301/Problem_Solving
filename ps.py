@@ -4,28 +4,39 @@
 
 
 N = int(input())
-numbers = [[i,0] for i in range(-4000,4001,1)]
-exist_numbers = list()
+numbers = dict()
+median_list = list()
+mode_list = list()
+exist_numbers = set()
+num = 0
 accum = 0
 mode_cnt = -1
 
 for i in range(N):
     num = int(input())
-    numbers[num+4000][1] += 1
+    if num in numbers:
+        numbers[num] += 1
+    else:
+        numbers[num] = 1
     accum += num
-    print(numbers[num+4000])
+    exist_numbers.add(num)
+    mode_cnt = max(mode_cnt, numbers[num])
+    median_list.append(num)
 
-for i in range(8001):
-    if numbers[i][1] ^ 0:
-        exist_numbers.append(numbers[i])
+median_list = sorted(median_list)
+##print(exist_numbers)
 
-exist_numbers = sorted(exist_numbers, key = lambda x: -x[1])
+for i in exist_numbers:
+    if numbers[i] == mode_cnt:
+        mode_list.append(i)
+
+mode_list = sorted(mode_list)
 
 
 print(round(accum/N))
-print(exist_numbers[len(exist_numbers)//2][0])
-if exist_numbers[0][1] == exist_numbers[1][1]:
-    print(exist_numbers[1][0])
+print(median_list[N//2])
+if len(mode_list) == 1:
+    print(mode_list[0])
 else:
-    print(exist_numbers[0][0])
-
+    print(mode_list[1])
+print(max(list(exist_numbers))-min(list(exist_numbers)))
