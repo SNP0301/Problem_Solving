@@ -1,42 +1,49 @@
 """
-*최빈 값이 여러개 있을 때에는 최빈값 중 두번째로 작은 값을 출력한다.
+[구상]
+- set으로 중요도 검증, [초기 순서, 중요도]
 """
 
+T = int(input())
+for _ in range(T):
+    N, M = map(int,input().split())
+    papers = list(map(int,input().split()))
+    priority_dct = dict()
+    printer = list()
+    for i in range(N):
+        if papers[i] not in priority_dct:
+            priority_dct[papers[i]] = 1
+        else:
+            priority_dct[papers[i]] += 1
+        printer.append([i,papers[i]])
+    not_printed = True
+    cnt = 1
+    ##print(len(printer))
+    #print(priority_dct)
+    if len(printer) == 1:
+        print(1)
+        not_printed = False
 
-N = int(input())
-numbers = dict()
-median_list = list()
-mode_list = list()
-exist_numbers = set()
-num = 0
-accum = 0
-mode_cnt = -1
+    while not_printed :
+        if len(printer) == 1:
+            print(cnt)
+            break
+        elif len(printer) >= 2:
+            if printer[0][1] < max(priority_dct):
+                printer = printer[1:] + [printer[0]]
+                ##print("moved" + str(printer))
+            elif printer[0][1] == max(priority_dct):
+                if printer[0][0] == M:
+                    print(cnt)
+                    not_printed = False
+                elif printer[0][0] != M:
+                    cnt += 1
+                    priority_dct[printer[0][1]] -= 1
+                    if priority_dct[printer[0][1]] == 0:
+                        priority_dct.pop(printer[0][1])
+                    printer = printer[1:]
 
-for i in range(N):
-    num = int(input())
-    if num in numbers:
-        numbers[num] += 1
-    else:
-        numbers[num] = 1
-    accum += num
-    exist_numbers.add(num)
-    mode_cnt = max(mode_cnt, numbers[num])
-    median_list.append(num)
-
-median_list = sorted(median_list)
-##print(exist_numbers)
-
-for i in exist_numbers:
-    if numbers[i] == mode_cnt:
-        mode_list.append(i)
-
-mode_list = sorted(mode_list)
+            
 
 
-print(round(accum/N))
-print(median_list[N//2])
-if len(mode_list) == 1:
-    print(mode_list[0])
-else:
-    print(mode_list[1])
-print(max(list(exist_numbers))-min(list(exist_numbers)))
+
+
