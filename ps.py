@@ -1,58 +1,61 @@
 """
-- 랜선 길이가 2**31-1로 주어지고, N이 1,000,000인 경우
-    - 1부터 하나씩 잘라 올라가면 초과하나?
-- 2**move_size로 탐색
+
 """
+
+def get_cur_N(cable_size,K):
+    cur_N = 0
+    for i in range(K):
+        cur_N += cables[i]//cable_size
+    return int(cur_N)
 
 K, N = map(int,input().split())
 cables = list()
-for i in range(K):
+
+for _ in range(K):
     cables.append(int(input()))
-
-#print(cables)
-current_length = 1
-move_size = 31
-cnt = 0
+cable_size = 1
+move_size = 1
+going_up = True
+going_down = not going_up
 answer = list()
-current_N = 0
-go_up = True
-go_down = not go_up
+while True:
+    if N == 1:
+        print(cables[0])
+        break
+    else:
+        cur_N = get_cur_N(cable_size,K)
 
-while cnt <= 30:
-    cnt += 1
-    current_N = 0
-    for k in range(K):
-        current_N += cables[k]//current_length
-    if current_N >= N:
-        answer.append([current_N,current_length])
-    if go_up:
-        if current_N > N:
-            move_size += 1
-            current_length += move_size**2
-            go_up = True
-        elif current_N < N:
-            move_size -= 1
-            current_length -= move_size**2
-            go_down = True
-        elif current_N == N:
-            move_size == 0
-            current_length += move_size**2
-    elif go_down:
-        if current_N > N:
-            move_size -= 1
-            current_length += move_size**2
-            go_down = False
-        elif current_N < N:
-            move_size += 1
-            current_length -= move_size**2
-            go_down = True
-        elif current_N == N:
-            move_size == 0
-            current_length += move_size**2
-    if current_N <= 0:
-        move_size = 1
-        current_length = 1
+        if going_up:
+            if cur_N >= N: ## P1. 등호 위치
+                move_size *= 2
+                cable_size += move_size
+            elif cur_N < N:
+                move_size /= 2
+                cable_size -= move_size
+                going_down = True
+                going_up = False
+        elif going_down:
+            if cur_N < N: ## P1. 등호 위치
+                move_size /= 2
+                cable_size -= move_size
+            elif cur_N >= N:
+                move_size /= 2
+                cable_size += move_size
+                going_down = False
+                going_up = True
+        if move_size == 1:
+            for a in range(-1,2,1):
+                answer.append([int(cable_size+a),get_cur_N(cable_size+a,K)])
+                answer = sorted(answer,key = lambda x: (x[1],-x[0]))
+            for i in range(len(answer)):
+                if answer[i][1] >= N:
+                    print(answer[i][0])
+                    break
+            break
 
-answer = sorted(answer,key = lambda x: (-x[1],x[0]))
-print(answer[:10])
-print(answer[0][1])
+
+
+
+    
+
+    
