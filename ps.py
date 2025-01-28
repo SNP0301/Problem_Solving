@@ -1,21 +1,58 @@
 """
-
-[구상]
-- 10,000길이의 dict 선언
-- 숫자가 등장하면 dict[해당 숫자] = 1
-- for(1,10001)에서 if dict[해당 숫자] = 1 이면 해당 숫자 출력
+- 랜선 길이가 2**31-1로 주어지고, N이 1,000,000인 경우
+    - 1부터 하나씩 잘라 올라가면 초과하나?
+- 2**move_size로 탐색
 """
 
-N = int(input())
-numbers = [0 for _ in range(10002)]
+K, N = map(int,input().split())
+cables = list()
+for i in range(K):
+    cables.append(int(input()))
 
-for i in range(N):
-    n = int(input())
-    numbers[n] += 1
-    ##print(n)
+#print(cables)
+current_length = 1
+move_size = 31
+cnt = 0
+answer = list()
+current_N = 0
+go_up = True
+go_down = not go_up
 
-print()
-for i in range(1, 10001):
-    if numbers[i] != 0:
-        for _ in range(numbers[i]):
-            print(i)
+while cnt <= 30:
+    cnt += 1
+    current_N = 0
+    for k in range(K):
+        current_N += cables[k]//current_length
+    if current_N >= N:
+        answer.append([current_N,current_length])
+    if go_up:
+        if current_N > N:
+            move_size += 1
+            current_length += move_size**2
+            go_up = True
+        elif current_N < N:
+            move_size -= 1
+            current_length -= move_size**2
+            go_down = True
+        elif current_N == N:
+            move_size == 0
+            current_length += move_size**2
+    elif go_down:
+        if current_N > N:
+            move_size -= 1
+            current_length += move_size**2
+            go_down = False
+        elif current_N < N:
+            move_size += 1
+            current_length -= move_size**2
+            go_down = True
+        elif current_N == N:
+            move_size == 0
+            current_length += move_size**2
+    if current_N <= 0:
+        move_size = 1
+        current_length = 1
+
+answer = sorted(answer,key = lambda x: (-x[1],x[0]))
+print(answer[:10])
+print(answer[0][1])
