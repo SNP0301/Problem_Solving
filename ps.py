@@ -1,79 +1,43 @@
 """
-* 어디서 틀린거지?
-
-T = int(input())
-
-for _ in range(T):
-    M,N,K = map(int,input().split())
-    field = [[0 for _ in range(M)] for _ in range(N)]
-    visited= [[False for _ in range(M)] for _ in range(N)]
-    
-    dx = [0,0,-1,1]
-    dy = [-1,1,0,0]
-
-    answer = 0
-
-    for _ in range(K):
-        y,x = map(int,input().split())
-        field[x][y] = 1
-
-    for x in range(N):
-        for y in range(M):
-            if field[x][y] == 1 and not visited[x][y]:
-                next_search = [[x,y]]
-                visited[x][y] = True
-                while next_search:
-                    #print("before: ",next_search)
-                    x = next_search[0][0]
-                    y = next_search[0][1]
-                    next_search.pop(0)
-                    for f in range(4): ## t of two
-                        nx = x+dx[f]
-                        ny = y+dy[f]
-                        if 0<=nx<N and 0<=ny<M and field[nx][ny] == 1 and not visited[nx][ny]:
-                                next_search.append([nx,ny])
-                                visited[nx][ny]= True
-                    #print("after: ",next_search)
-                answer += 1
-    print(answer)
+* 반복문,조건문의 역할을 mece하게 이해했다면 안 틀렸을 것,,,
+** 손구현 먼저 하자.
 """
-
-
-
-
-T = int(input())
-
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
-
-def BFS(x,y):
-    queue = [(x,y)]
-    field[x][y] = 0
+def BFS(x,N):
+    queue = [x]
     while queue:
-        x,y = queue.pop()
+        x = queue.pop()
+        for j in range(1,N+1):
+            if arr[x][j] == 1:
+                ##print("from %d to %d"%(x,j))
+                queue.append(j)
+                answer_set.add(j)
+                arr[x][j] = -1
 
-        for f in range(4):
-            nx = x + dx[f]
-            ny = y + dy[f]
+computers = int(input())
 
-            if 0<=nx<N and 0<=ny<M:
-                if field[nx][ny] == 1:
-                    queue.append((nx,ny))
-                    field[nx][ny] = 0
-        
-
-for _ in range(T):
-    M,N,K = map(int,input().split())
-    field = [[0 for _ in range(M)] for _ in range(N)]
+if computers == 1:
+    print(0)
+else:
+    num = int(input())
+    arr = [[0 for _ in range(computers+1)] for _ in range(computers+1)]
     answer = 0
+    answer_set = set()
 
-    for _ in range(K):
-        y,x = map(int,input().split())
-        field[x][y] = 1
+    for _ in range(num):
+        start,end = map(int,input().split())
+        
+        if start > end:
+            start,end = end,start
+        arr[start][end] = 1
+        arr[end][start] = 1
 
-    for x in range(N):
-        for y in range(M):
-            if field[x][y] == 1:
-                BFS(x,y)
-                answer += 1
-    print(answer)
+    for i in range(2,computers+1):
+        if arr[1][i] == 1:
+            BFS(1,computers)
+    
+
+    if 1 in answer_set:
+        print(len(answer_set)-1)
+    else:
+        print(len(answer_set))
+
