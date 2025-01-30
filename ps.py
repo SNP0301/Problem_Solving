@@ -1,5 +1,5 @@
 """
-* 열렸거나, 안 열렸거나
+* 지뢰가 열렸거나, 안 열렸거나
 """
 def my_print(i):
     for x in i:
@@ -16,9 +16,9 @@ dx = [0,-1,0,1,1,1,0,-1,-1]
 dy = [0,1,1,1,0,-1,-1,-1,0]
 
 
-for _ in range(N): # *이거나 .이거나
+for _ in range(N):
     original_arr.append(list(input()))
-for _ in range(N): # x이거나 .이거나
+for _ in range(N):
     played_arr.append(list(input()))
 
 
@@ -36,8 +36,7 @@ for x in range(N):
             answer_arr[x][y] = cnt
             if original_arr[x][y] == "*":
                 bombed = True
-
-#my_print(answer_arr)
+                answer_arr[x][y] = "*"
 
 if bombed:
     for x in range(N):
@@ -45,11 +44,8 @@ if bombed:
             if original_arr[x][y] == "*":
                 answer_arr[x][y] = "*"
 
+
 for x in range(N):
     for y in range(N):
         print(answer_arr[x][y],end="")
     print()
-
-
-##if bombed: ## 10*10이라 수제로 매칭시켜도 괜찮을듯?
-
