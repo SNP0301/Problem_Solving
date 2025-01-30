@@ -7,27 +7,21 @@
 """
 
 from collections import deque
-def bfs(s): # 방문 표시?
-    q = deque()
-    q.append(s)
-    visited[s] = True
-    while q:
-        cur = q.popleft()
-        #print(cur, q)
-        for next in [cur-1,cur+1,cur*2]:
-            if next == K:
-                return arr[cur] + 1 ##
-            elif 0<=next<=100000 and not visited[next]:
-                arr[next] = arr[cur] + 1
-                q.append(next)
-                visited[next] = True
 
+test = deque()
 
+test.append(1)
+print(test)
 
-N, K = map(int,input().split())
-arr = [0 for _ in range(100001)] # 0부터니까 갯수만큼 선언해도 ㄱㅊ
-visited = [ False for _ in range(100001)]
-if K == N:
-    print(0)
-else:
-    print(bfs(N))
+test.append(2)
+print(test)
+
+test.append(3)
+print(test)
+
+test.popleft()
+print(test)
+test.appendleft(1)
+print(test)
+test.pop()
+print(test)
