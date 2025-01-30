@@ -1,27 +1,35 @@
 """
-단위 작업 내용 및 순서를 아직 잘 모르는 것 같다.
-반복문, 조건문 등이 각각 언제/무엇을/언제까지 하는 것인지 명확하게 이해하고 구현할 것.
+* 리스트 슬라이스 연습용 문제
 
-
-* K*2로 두거나, 반복문으로 앞으로 갔다가 뒤로 갔다면 못 풀었던 이유 찾아내기
+[배운 것]
+- 조건문 분기를 최대한 꼼꼼하게 해야 구현도 쉽다
+- idx 0, 1인 경우를 따로 세면 나중에 불편해진다.
 """
 
-from collections import deque
+P = int(input())
+for p in range(1,P+1):
+    answer = 0
+    info = list(map(int,input().split()))
+    info.pop(0)
+    stood = [info.pop(0)]
+    for _ in range(19):
+        cur = info.pop(0)
+        ##print(cur,answer)
+        if cur > stood[-1]: ##최대값보다 크다면
+            stood.append(cur)
+        elif cur < stood[0]: ##최소값보다 작다면
+            #print("%d made +%d"%(cur,len(stood)))
+            answer += len(stood)
+            stood = [cur] + stood
+        elif stood[0]<cur<stood[-1]: ##그 사이라면
+            for i in range(len(stood)-1,-1,-1):
+                if cur > stood[i]: ## 자리를 찾으면
+                    #print("%d made +%d"%(cur,len(stood[i:])))
+                    answer += len(stood[i:])-1
+                    stood = stood[:i+1] + [cur] + stood[i+1:]
 
-test = deque()
 
-test.append(1)
-print(test)
 
-test.append(2)
-print(test)
 
-test.append(3)
-print(test)
-
-test.popleft()
-print(test)
-test.appendleft(1)
-print(test)
-test.pop()
-print(test)
+        #print(stood)
+    print(p, answer)

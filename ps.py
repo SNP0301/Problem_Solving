@@ -1,60 +1,29 @@
 """
+* 리스트 슬라이스 연습용 문제
 
+[배운 것]
+- 조건문 분기를 최대한 꼼꼼하게 해야 구현도 쉽다
+- idx 0, 1인 경우를 따로 세면 나중에 불편해진다.
 """
 
-def my_print(a):
-    for x in a:
-        print(x)
-    print()
-
-
-N = int(input())
-target = int(input())
-arr = [[0 for _ in range(N)] for _ in range(N)]
-
-dx = [1,0,-1,0]
-dy = [0,1,0,-1]
-c_cnt = 0
-for i in range(N,0,-2):
-    #print("doing %d"%i)
-    cur = i**2
-    cnt = 0
-    x = (N-i)//2
-    y = (N-i)//2
-    arr[x][y] = cur
-    if cur == target:
-        x_answer = (N-i)//2+1
-        y_answer = (N-i)//2+1
-    if i == 1:
-        break
-
-
-    for f in range(4):
-        for e in range(1,i):
-            nx = x + dx[f]*e
-            ny = y + dy[f]*e
-            if 0<=nx<N and 0<=ny<N:
-
-                if nx == (N-i)//2 and ny == (N-i)//2:
+P = int(input())
+for p in range(1,P+1):
+    answer = 0
+    info = list(map(int,input().split()))
+    info.pop(0)
+    stood = [info.pop(0)]
+    for _ in range(19):
+        cur = info.pop(0)
+        if cur > stood[-1]: ##최대값보다 크다면
+            stood.append(cur)
+        elif cur < stood[0]: ##최소값보다 작다면
+            answer += len(stood)
+            stood = [cur] + stood
+        elif stood[0]<cur<stood[-1]: ##그 사이라면
+            for i in range(len(stood)-1,-1,-1):
+                if cur > stood[i]: ## 자리를 찾으면
+                    answer += len(stood[i:])-1
+                    stood = stood[:i+1] + [cur] + stood[i+1:]
                     break
-                else:
-                    cur -= 1
-                    arr[nx][ny] = cur
-                    if cur == target:
-                        x_answer = nx+1
-                        y_answer = ny+1
-                #my_print(arr)
-
-        x = nx
-        y = ny
-
-
-
-
-
-
-for i in arr:
-    for x in i:
-        print(x,end=" ")
-    print()
-print(x_answer,y_answer)
+                    
+    print(p, answer)
