@@ -9,11 +9,8 @@ stk = []
 answer = 0
 cnt = 0
 for i in range(len(bar)):
-    if bar[i] == '(':
-        if i+1 <= len(bar) and bar[i+1] == ')':
-            pass
-        elif i+1 <= len(bar) and bar[i+1] == '(':
-            cnt += 1
+    if bar[i] == '(' and bar[i+1] == '(':
+        cnt += 1
     elif bar[i] == ')':
         if bar[i-1] == '(':
             answer += cnt
