@@ -1,39 +1,14 @@
 """
 [복잡도] O(n)
-    - 학생들의 수 <= 1000인 자연수
-    - 반대로 정렬([5,4,3,2,1])된 경우여도 
+    - input 자체가 크지 않다.
 """
 
-N = int(input())
-stdnts = list(map(int,input().split()))
-#stk = [stdnts.pop(0)]
-stk = []
-turn = 1
-
-while stdnts or stk:
-    #print(stdnts,stk)
-    if stdnts:
-        if stdnts[0] == turn:
-            stdnts.pop(0)
-            turn += 1
-        elif stdnts[0] != turn:
-            if stk and stk[-1] == turn:
-                stk.pop()
-                turn += 1
-            elif stk and stk[-1] != turn:
-                stk.append(stdnts.pop(0))
-            elif not stk:
-                stk.append(stdnts.pop(0))
-    elif not stdnts:
-        if stk and stk[-1] != turn:
-            break
-        if stk and stk[-1] == turn:
-            stk.pop()
-            turn += 1
-            #print(stk)
-
-if not stk and not stdnts:
-    print("Nice")
-else:
-    print("Sad")
+T = int(input())
+nums = [0,1,1,1,2,2,3]+[0 for _ in range(94)]
+for i in range(7,101):
+    nums[i] = nums[i-1] + nums[i-5]
+for _ in range(T):
+    N = int(input())
+    print(nums[N])
     
+
