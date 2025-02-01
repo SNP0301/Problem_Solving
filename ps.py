@@ -1,37 +1,34 @@
 """
-[복잡도] O(n)
+[복잡도] O(N**2) 
+    - 자료구조가 100,000개, 삽입할 수열의 길이가 100,000인 경우  10**10승 수행?
+        - 다른 방법이 필요하다.
+[구상]
+    - 단순하게 연산 및 탐색을 하면 무조건 시간 초과가 나올 것으로 예상
+        - 규칙, 줄일 수 있는 방법 찾기
+        - 결론: queuestack 및 입력값의 특성상 stack들은 출력에 영향을 미치지 않는다.
+    - stack은 제외하고, queue끼리만 합쳐 하나의 queue를 만들고 이름은 queuestack으로 선언
+        - 초기의 queuestack에는 queuestack을 이루고 있는 queue의 수만큼만 원소가 존재
+        - 수열 C로 주어지는 입력값 또한 queuestack에 push
+        - 수열 C의 길이(M)만큼 popleft 한 것이 전체 queuestack의 결과
+    - **시간복잡도 및 입력의 크기를 고려해 import sys 사용**
+
 """
+import sys
+input = sys.stdin.readline
+from collections import deque
 
+queuestack = deque()
 N = int(input())
-numbers = [0]+ list(map(int,input().split()))
-bal_value = 0
-cur = 1
+series_ds = list(map(int,input().split())) ## series of data structure
+ds_value = list(map(int,input().split()))
+M = int(input())
+C = map(int,input().split())
 
-for i in range(N): ## 풍선 순서는 자연수를 기준으로 하므로 array index에 맞추기 위해 -1
-    bal_value = numbers[cur]
-    numbers[cur] = 0
-    print(cur,end=" ")
-    if bal_value > 0:
-        cnt = bal_value
-        while cnt > 0:
-            #print(bal_value,cnt)
-            cur += 1
-            if cur > N:
-                cur = 0
-            if numbers[cur] == 0:
-                cnt += 1
-            cnt -= 1
-            if sum(numbers) == 0:
-                break
-    elif bal_value < 0:
-        cnt = bal_value*-1
-        while cnt > 0:
-            #print(bal_value,cnt)
-            cur -= 1
-            if cur < 0:
-                cur = N
-            if numbers[cur] == 0:
-                cnt += 1
-            cnt -= 1
-            if sum(numbers) == 0:
-                break
+for i in range(N-1,-1,-1):
+    if series_ds[i] == 0:
+        queuestack.append(ds_value[i])
+for c in C:
+    queuestack.append(c)
+
+for i in range(M):
+    print(queuestack.popleft(),end=" ")
