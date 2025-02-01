@@ -1,21 +1,36 @@
 """
-DP 문제인 것 같으면 목표/재료 구분할 것
-    - 목표: 무엇을 구하는가 -> 갯수
-    - 재료: 최종적으로 구하려는 갯수를 하나하나 세는게 아니고, 전에 셌던 갯수를 재사용한다
-        - ex1) 계단 오르기 문제: 갑자기 5번째 이후 계단을 고려하면 안된다. 237번째 계단을 줘도 규칙이 1,2계단 단위임을 고려.
-        - ex2) Four Squares 문제: 갑자기 6번째 이전, 13번째 이전을 구하지 않는다. N = 11339를 줘도 i-1, i-4, i-9를 사용할 것.
+[복잡도] O(n^2)? O(nlgn)??
+- K=7이어서 전체 종이 크기가 128*128인 경우
+    - 128*128 사이즈 1번 탐색
+    - 64*64 사이즈 4번 탐색
+    - 32*32 사이즈 16번 탐색
+    - ...
+    - (2**14개에 7번 접근) * 2 (0,1을 각각 탐색)
 """
+def my_print(a):
+    for x in a:
+        print(x)
+    print()
+
 N = int(input())
-dp = [0,1]
+sz = N*2
+arr = [list(map(int,input().split())) for _ in range(N)]
 
-for i in range(2,N+1): ## ~N까지, 해당 수에 도달하기 전의 위치에는 i-1, i-4, i-9 등이 있다.
-    tmp_min = 50001 # 입력의 최대값인 50000이 들어와도 1+1+...+1 = 1*50000이므로 50001로 선언
-    j = 1
+my_print(arr)
 
-    while j**2 <= i: ## 주어진 재료는 제곱수이므로, 제곱수에 대해서만 탐색
-        tmp_min = min(tmp_min, dp[i-(j**2)]) ## 만약 j**2 == i 면 dp[0] = 0으로 빠지지만, dp에 append 할 때는 +1 한 상태로 들어간다
-        j += 1
-    dp.append(tmp_min+1)
+while True: #한번 돌 때 마다 128 -> 64 -> ... 으로 사이즈 줄여가며 탐색
+    sz = sz//2
+    print(sz)
 
-print(dp[N])
-    
+    for start_x in range(N//sz):
+        for start_y in range(N//sz):
+            #print(start_x*sz,start_y*sz)
+            for x in range(start_x,start_x+sz):
+                for y in range(start_y,start_y+sz):
+                    print(x,y)
+            print("####")
+
+    print()
+
+    if sz == 1:
+        break
