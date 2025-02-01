@@ -1,51 +1,66 @@
 """
-[복잡도] O(N)
-    - 식의 길이 전체가 50 이하
+[복잡도] O(N^2)
+    - 1000*1000 arr의 elem에 대해 4개의 근접 elem 탐색/연산
+    - 시간 제한 1초인거 보고 어떻게 생각해야하지? 가능?불가능?
 [구상]
-    - 최소값으로 만든다 -> 첫 "-" 연산자를 만나면 누적을 시작(괄호를 열고), "+" 연산자를 만나도 누적
-        - 이후 2번째 "-"를 만나는 경우 누적+cur만큼 ans에서 뺴기 (괄호를 닫았기 때문)
-    - 숫자가 0으로 시작할 수도 있으므로, 문자열 처리 점검 필요
-    - **가장 처음과 마지막 문자는 숫자이다** --> "-"로 시작하는 경우의 수 고려할 필요 없음
-
+    - input은 mp에 저장
+    - 정답은 answer에 저장 -> 각 요소는 1000*1000+1로 선언
+    - v에 방문 여부 저장
+    - 탐색 시작
+        - "2"인 곳에서 시작, cur = 0
+        - 0<=nx<X, 0<=ny<Y, not v[nx][ny] 일 때
+            - mp[nx][ny] != 0 이면 이동 가능
+                - mp[x][y]+1한 값을 answr[nx][ny]에 저장, deque에 [nx][ny] append
+            - mp[nx][ny] == 0 이면 이동 불가능
+                - visited만 변경 (answer[x][y] 초기값은 0이므로 값 변경 필요 x)
+    - 탐색 종료
+        - not v[x][y]인 곳이 있으면 answer[x][y] = -1로 변경
 """
-def make_number(l):
-    num = 0
-    for x in range(len(l)):
-        num *= 10
-        num += int(l[x])
-    l = list()
-    return num
+from collections import deque
 
-cmd = input() ## 연산자 수 < 숫자 수 확인 필요
-operator = list()
-operand = list()
-making_number = list()
-num = 0
-for i in range(len(cmd)):
-    if cmd[i] == "+" or cmd[i] == "-":
-        operator.append(cmd[i])
-        if making_number:
-            operand.append(make_number(making_number))
-            making_number = list()
+def bfs(x,y):
+    queue = deque()
+    queue.append((x,y))
+    v[x][y] = True
+    while queue:
+        x,y = queue.popleft()
+        for f in range(4): # f of four
+            nx = x+dx[f]
+            ny = y+dy[f]
+            if 0<=nx<N and 0<=ny<M and not v[nx][ny]:
+                if mp[nx][ny] != 0:
+                    answer[nx][ny] = answer[x][y] + 1
+                    v[nx][ny] = True
+                    queue.append((nx,ny))
+                elif mp[nx][ny] == 0:
+                    v[nx][ny] = True
 
-    else:
-        making_number.append(cmd[i])
+def my_print(a):
+    for x in a:
+        print(x)
+    print()
 
-operand.append(make_number(making_number)) ## P1. if making_number로 점검 해야하나?
+N, M = map(int,input().split())
+mp = [list(map(int,input().split())) for _ in range(N)]
+v = [[False for _ in range(M)] for _ in range(N)]
+answer = [[0 for _ in range(M)] for _ in range(N)]
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+for x in range(N):
+    for y in range(M):
+        if mp[x][y] == 2:
+            start_x = x
+            start_y = y
 
-answer = operand[0]
-accum = 0
-is_subtracting = False
-for i in range(len(operator)): ## operator[0] = "-", operator[1] = "+"
-    if operator[i] == "-" and not is_subtracting: ## 빼기 시작 (괄호 열기)
-        answer -= operand[i+1]
-        is_subtracting = True
-    elif operator[i] == "-" and is_subtracting: ## 빼기 끝, (괄호 닫기)
-        answer -= operand[i+1]
-    elif operator[i] == "+" and not is_subtracting:
-        answer += operand[i+1]
-        is_subtracting = False
-    elif operator[i] == "+" and is_subtracting:
-        answer -= operand[i+1]
+#print(start_x,start_y)
 
-print(answer)
+bfs(start_x, start_y)
+
+
+for x in range(N):
+    for y in range(M):
+        if v[x][y] == 0 and mp[x][y] != 0:
+            print(-1,end=" ")
+        else:
+            print(answer[x][y],end=" ")
+    print()
