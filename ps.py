@@ -1,34 +1,51 @@
 """
-[복잡도] O(N**2) 
-    - 자료구조가 100,000개, 삽입할 수열의 길이가 100,000인 경우  10**10승 수행?
-        - 다른 방법이 필요하다.
+[복잡도] O(N)
+    - 식의 길이 전체가 50 이하
 [구상]
-    - 단순하게 연산 및 탐색을 하면 무조건 시간 초과가 나올 것으로 예상
-        - 규칙, 줄일 수 있는 방법 찾기
-        - 결론: queuestack 및 입력값의 특성상 stack들은 출력에 영향을 미치지 않는다.
-    - stack은 제외하고, queue끼리만 합쳐 하나의 queue를 만들고 이름은 queuestack으로 선언
-        - 초기의 queuestack에는 queuestack을 이루고 있는 queue의 수만큼만 원소가 존재
-        - 수열 C로 주어지는 입력값 또한 queuestack에 push
-        - 수열 C의 길이(M)만큼 popleft 한 것이 전체 queuestack의 결과
-    - **시간복잡도 및 입력의 크기를 고려해 import sys 사용**
+    - 최소값으로 만든다 -> 첫 "-" 연산자를 만나면 누적을 시작(괄호를 열고), "+" 연산자를 만나도 누적
+        - 이후 2번째 "-"를 만나는 경우 누적+cur만큼 ans에서 뺴기 (괄호를 닫았기 때문)
+    - 숫자가 0으로 시작할 수도 있으므로, 문자열 처리 점검 필요
+    - **가장 처음과 마지막 문자는 숫자이다** --> "-"로 시작하는 경우의 수 고려할 필요 없음
 
 """
-import sys
-input = sys.stdin.readline
-from collections import deque
+def make_number(l):
+    num = 0
+    for x in range(len(l)):
+        num *= 10
+        num += int(l[x])
+    l = list()
+    return num
 
-queuestack = deque()
-N = int(input())
-series_ds = list(map(int,input().split())) ## series of data structure
-ds_value = list(map(int,input().split()))
-M = int(input())
-C = map(int,input().split())
+cmd = input() ## 연산자 수 < 숫자 수 확인 필요
+operator = list()
+operand = list()
+making_number = list()
+num = 0
+for i in range(len(cmd)):
+    if cmd[i] == "+" or cmd[i] == "-":
+        operator.append(cmd[i])
+        if making_number:
+            operand.append(make_number(making_number))
+            making_number = list()
 
-for i in range(N-1,-1,-1):
-    if series_ds[i] == 0:
-        queuestack.append(ds_value[i])
-for c in C:
-    queuestack.append(c)
+    else:
+        making_number.append(cmd[i])
 
-for i in range(M):
-    print(queuestack.popleft(),end=" ")
+operand.append(make_number(making_number)) ## P1. if making_number로 점검 해야하나?
+
+answer = operand[0]
+accum = 0
+is_subtracting = False
+for i in range(len(operator)): ## operator[0] = "-", operator[1] = "+"
+    if operator[i] == "-" and not is_subtracting: ## 빼기 시작 (괄호 열기)
+        answer -= operand[i+1]
+        is_subtracting = True
+    elif operator[i] == "-" and is_subtracting: ## 빼기 끝, (괄호 닫기)
+        answer -= operand[i+1]
+    elif operator[i] == "+" and not is_subtracting:
+        answer += operand[i+1]
+        is_subtracting = False
+    elif operator[i] == "+" and is_subtracting:
+        answer -= operand[i+1]
+
+print(answer)
