@@ -1,51 +1,32 @@
 """
-[복잡도] O(N**2)
-    - 캠퍼스 최대 크기인 600*600에 대해 접근
-        - 접근시마다 최대 4방향에 대해 탐색
+[복잡도] O(N)
+    - left 포인터와 right 포인터가 각각 N번 이동하므로 O(n)
+        - right 포인터가 한번 움직일 때, 최악의 경우 left 포인터가 N-1회 움직이는 경우 N*(N-1)로 생각할 수 있으나, 이런 케이스는 최대 1번 발생
+
+*무조건 다시 풀어볼 것.
 """
-from collections import deque
+N = int(input())
+thr = list(map(int,input().split()))
+thr_dct = dict()
+fruit_type_counter = 0
+answer = 0
+lft = 0
+rgt = 0
 
-def bfs(x,y):
-    answer = 0
-    queue = deque()
-    queue.append((x,y))
-    visited[x][y] = True
-    while queue:
-        x, y = queue.popleft()
-        for f in range(4): # f of four
-            nx = x+ dx[f]
-            ny = y+ dy[f]
-            if 0<=nx<N and 0<=ny<M and not visited[nx][ny]:
-                if campus[nx][ny] == "O":
-                    visited[nx][ny] = True
-                    queue.append((nx,ny))
-                elif campus[nx][ny] == "P":
-                    visited[nx][ny] = True
-                    queue.append((nx,ny))
-                    answer += 1
-                elif campus[nx][ny] == "X":
-                    visited[nx][ny] = True
-                
-    return answer
+for rgt in range(N):
+    if thr[rgt] in thr_dct:
+        thr_dct[thr[rgt]] += 1
+    elif thr[rgt] not in thr_dct:
+        thr_dct[thr[rgt]] = 1
+        fruit_type_counter += 1
+    
+    while fruit_type_counter > 2:
+        thr_dct[thr[lft]] -= 1
+        if thr_dct[thr[lft]] == 0:
+            del thr_dct[thr[lft]]
+            fruit_type_counter -= 1
+        lft += 1
 
+    answer = max(answer,rgt-lft+1)
 
-
-N, M = map(int,input().split())
-campus = [list(input()) for _ in range(N)]
-visited = [[False for _ in range(M)] for _ in range(N)]
-dx = [1,-1,0,0]
-dy = [0,0,-1,1]
-
-for x in range(N):
-    for y in range(M):
-        if campus[x][y] == 'I':
-            start_x = x
-            start_y = y
-
-answer = bfs(start_x, start_y)
-
-if answer == 0:
-    print("TT")
-else:
-    print(answer)
-
+print(answer)
