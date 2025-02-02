@@ -16,6 +16,6 @@ for _ in range(N):
         if not hpq:
             print(0)
         elif hpq:
-            print(heapq.heappop(hpq))
+            print(heapq.heappop(hpq)*-1)
     else:
-        heapq.heappush(hpq,cmd)
+        heapq.heappush(hpq,cmd*-1)
