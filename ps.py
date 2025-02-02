@@ -1,41 +1,52 @@
 """
 [시간복잡도] O(N**2)
-    - 전체 사람에 대해 완전탐색하므로, 100*100
+    - 전체 지도에 대해 완전탐색 -> 25*25
 
-* 항상 도착위치로 이동할 수 있는 경우만 입력으로 주어진다.
-** 칸을 셀 때는 시작 위치와 도착 위치도 포함한다.
+* 연결되었다 = 상하좌우로 인접 -> 대각선은 연결된 것이 아니다.
+** 단지의 수를 출력, 각 단지의 세대수를 오름차순으로 출력
 
-소요시간 총 17분 내외
-    - 구상: 5분
-    - 구현: 12분
+소요시간 총 12분 내외
+    - 구상: 3분
+    - 구현: 9분
 """
 from collections import deque
-
 
 def bfs(x,y):
     queue = deque()
     queue.append((x,y))
     visited[x][y] = True
-    score_arr[x][y] = 1
+    num = 1
     while queue:
         x,y = queue.popleft()
-        for f in range(4): ## f of four
-            nx = x + dx[f]
-            ny = y + dy[f]
-            if 0<=nx<N and 0<=ny<M and not visited[nx][ny] and arr[nx][ny] != 0:
-                score_arr[nx][ny] = score_arr[x][y]+1
-                queue.append((nx,ny))
+        for f in range(4): # f of four
+            nx = x+dx[f]
+            ny = y+dy[f]
+            if 0<=nx<N and 0<=ny<N and mp[nx][ny] and not visited[nx][ny]:
+                num += 1 ## 세대 수 하나 추가
+                queue.append((nx,ny)) ## 해당 단지 내에서 탐색할 다음 세대
                 visited[nx][ny] = True
-                
+    return num
 
-N, M = map(int,input().split())
-arr = [list(map(int,input())) for _ in range(N)]
-score_arr = [[0 for _ in range(M)] for _ in range(N)]
-visited = [[False for _ in range(M)] for _ in range(N)]
+N = int(input())
+mp = [list(map(int,input())) for _ in range(N)]
+visited = [[False for _ in range(N)] for _ in range(N)]
+answer_arr = list() ## 단지 내 세대수를 오름차순으로 정렬하기 위한 배열
+cnt = 0 ## 단지 수
 
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
 
-bfs(0,0)
+for x in range(N):
+    for y in range(N):
+        if mp[x][y] == 1 and not visited[x][y]:
+            answer_arr.append(bfs(x,y))
+            cnt += 1
 
-print(score_arr[N-1][M-1])
+
+##############################################################
+
+print(cnt)
+
+answer_arr = sorted(answer_arr)
+for i in answer_arr:
+    print(i)
