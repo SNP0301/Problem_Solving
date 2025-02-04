@@ -1,119 +1,39 @@
+T = int(input())
+for tc in range(1, T + 1):
+    # N : 화덕 크기, M : 피자 개수
+    N, M = map(int, input().split())
+    arr = list(map(int, input().split()))
 
-def left(gear):
-    gear.append(gear.popleft())
+    temp = [0] * (M + 1)
+    for i in range(M):
+        temp[i + 1] = arr[i]
 
-def right(gear):
-    gear.appendleft(gear.pop())
+    pizza = []
+    for idx, c in enumerate(temp):  # idx : 피자번호, c : 치즈양
+        pizza.append([idx, c])  # [[0, 0], [1, 7], [2, 2], [3, 6], [4, 5], [5, 3]]
+    pizza = pizza[1:]  # [[1, 7], [2, 2], [3, 6], [4, 5], [5, 3]]
 
-from collections import deque
-gears = [deque() for _ in range(4)]
+    # 빈 화덕에 피자 넣기
+    bake = []
+    for _ in range(N):
+        p = pizza.pop(0)
+        bake.append(p)
 
-for i in range(4):
-    info = input()
-    for j in range(len(info)):
-        gears[i].append(info[j])
+    # print(bake)     # [[1, 7], [2, 2], [3, 6]] >> 화덕에 있는 피자
+    # print(pizza)    # [[4, 5], [5, 3]] >> 대기중인 피자
 
+    # 피자개수 1개 남을때 까지 반복
+    while len(bake) > 1:
+        p = bake.pop(0)  # 피자 꺼내서
+        c = p[1] // 2  # 피자 치즈 양 확인
 
-M = int(input())
-for _ in range(M):
-    cmd = list(map(int,input().split()))
-    do_move = list()
-    for i in range(3):
-        if gears[i][2] == gears[i+1][-2]:
-            do_move.append(0)
-        else:
-            do_move.append(1)
-    #print(do_move)
-    if cmd[0] == 1: ## 1-> 2-> 3-> 4
-        if cmd[1] == -1:
-            left(gears[0])
-        else:
-            right(gears[0])
+        if c != 0:  # 0이 아니면
+            p[1] = c
+            bake.append(p)  # 다시 넣기
 
-        if do_move[0] == 1:
-            if cmd[1] == -1:
-                right(gears[1])
-                if do_move[1] == 1:
-                    left(gears[2])
-                    if do_move[2] == 1:
-                        right(gears[3])
-            if cmd[1] == 1:
-                left(gears[1])
-                if do_move[1] == 1:
-                    right(gears[2])
-                    if do_move[2] == 1:
-                        left(gears[3])
+        else:  # 0이고
+            if pizza:  # 굽히지 않은 피자가 있다면
+                new_p = pizza.pop(0)  # 새로운 피자 넣기
+                bake.append(new_p)
 
-    elif cmd[0] == 2: ## 1<- 2-> 3-> 4
-        if cmd[1] == -1:
-            left(gears[1])
-        else:
-            right(gears[1])
-        if do_move[0] == 1:
-            if cmd[1] == -1:
-                right(gears[0])
-            elif cmd[1] == 1:
-                left(gears[0])
-
-        if do_move[1] == 1:
-            if cmd[1] == -1:
-                right(gears[2])
-            elif cmd[1] == 1:
-                left(gears[2])
-                if do_move[2] == 1:
-                    if cmd[1] == -1:
-                        right(gears[3])
-                    elif cmd[1] == 1:
-                        left(gears[3])
-
-    elif cmd[0] == 3: ## 1<- 2<- 3-> 4
-        if cmd[1] == -1:
-            left(gears[2])
-        else:
-            right(gears[2])
-
-        if do_move[2] == 1:
-            if cmd[1] == -1:
-                right(gears[3])
-            if cmd[1] == 1:
-                left(gears[3])
-        
-        if do_move[1] == 1:
-            if cmd[1] == -1:
-                right(gears[1])
-            elif cmd[1] == 1:
-                left(gears[1])
-                if do_move[0] == 1:
-                    if cmd[1] == -1:
-                        left(gears[0])
-                    elif cmd[1] == 1:
-                        right(gears[0])
-        
-                
-    elif cmd [0] == 4: ## 1<- 2<- 3<- 4
-        if cmd[1] == -1:
-            left(gears[3])
-        else:
-            right(gears[3])
-
-        if do_move[2] == 1:
-            if cmd[1] == -1:
-                right(gears[2])
-                if do_move[1] == 1:
-                    left(gears[1])
-                    if do_move[0] == 1:
-                        right(gears[0])
-            if cmd[1] == 1:
-                left(gears[2])
-                if do_move[1] == 1:
-                    right(gears[1])
-                    if do_move[0] == 1:
-                        left(gears[0])
-    #my_gears(gears)
-answer = 0
-cnt = 1
-for i in range(4):
-    answer += int(gears[i][0])*cnt
-    cnt *= 2
-
-print(answer)
+    print(f'#{tc} {bake[0][0]}')

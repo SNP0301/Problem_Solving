@@ -1,85 +1,84 @@
 """
 [복잡도] O(N**2)
-    - 1000*1000의 바구니에 대해 완전탐색, 탐색 이후 0의 유무 검사를 위해 
-    - 시간 초과
+    - 1000*1000 상자에 대해 완전탐색
+    - BFS 시행 횟수는 주어진 익은 토마토(초기값 1)의 갯수와 동일
 
 [구상]
-    - 바구니 칸이 1이고 not visited면 bfs 실행 -> bfs 실행하면서 만난 갱신한 칸 수를 return -> 0이 아니면 answer.array에 저장
-        - 갱신한 칸 수 +1 하고 queue.append(nx,ny,갱신한 칸 수)
-        - return한 갱신 칸 수들 중 최대값이 정답
-    - bfs 끝났는데도 0이 있으면 answer = -1
-    - arr에 0은 없는데 bfs 결과값의 총합이 0이라면 (answer = 0이라면) 토마토가 익힌 토마토가 하나도 없다는 것이므로 정답은 0
+    - 변수
+        - arr[][]: 익은 토마토, 안 익은 토마토, 벽
+        - visited[][]: 방문 여부 결정
+        - queue(): BFS 대상 좌표 저장
+        - at_least_one: 모든 토마토가 익어있는 경우와 그렇지 않은 경우를 구분하는 boolean
+        - is_possible: 모든 토마토가 익지는 못하는 경우임을 나타내는 boolean
+        - dx[], dy[]: 4방향 탐색을 위한 방향 배열
+        - mx: 토마토가 익는 데에 걸리는 최소 시간
+    - 2차원 배열을 입력 받고, 이중 for 문으로 이미 익은 토마토의 위치를 탐색 -> 찾은 토마토의 위치는 queue에 저장.
+        - 예제 입력 3과 같이, 2개 이상의 익은 토마토가 있을 때 다른 문제처럼 BFS를 한번만 수행하면
+          최단거리가 갱신되지 않는 문제 발생
+    - BFS 수행 내용 - 4방향 탐색
+        - 탐색 칸의 4방향 인접 칸 중 0인 칸을 찾으면 탐색 칸의 값 + 1을 저장
+            - 해당 인접칸을 queue에 push
+            - 해당 인접칸 visited 표시
+            - 저장될 때부터 모든 토마토가 익어있는 경우와 그렇지 않은 경우를 구분하기 위해 at_least_one = True로 갱신
+        - 탐색 칸의 4방향 인접 칸 중 0이 아니지만 탐색 칸의 값 + 1 보다 큰 값을 가지고 있으면 최단거리 갱신
+            - 해당 분기는 이미 다른 bfs 실행에서 해당 칸을 방문했던 경우에 발생 -> visited 갱신 필요 x
 
-
-[] 문제 읽기 -> [] I/O 확인 -> [] 제약조건/특이사항 확인 -> [] 구상 -> [] 복잡도 계산 -> [] 손 구현 -> [] 구현 -> [] 오픈테케 -> []히든테케
+* 저장될 때부터 모든 토마토가 익어있는 상태면 0을 출력
+** 토마토가 모두 익지는 못하는 상황이면 -1 출력
 """
-import sys
-input = sys.stdin.readline
-
-def bfs(x,y,cur):
-    queue = deque()
-    queue.append((x,y,cur))
+def bfs(x,y):
     visited[x][y] = True
-    
+    global at_least_one
+    queue.append((x,y))
     while queue:
-        x,y,cur = queue.popleft()
-        arr[x][y] = cur
-
-        for f in range(4):
+        x, y = queue.popleft()
+        visited[x][y] = True
+        for f in range(4): ## f of four
             nx = x + dx[f]
             ny = y + dy[f]
-            if 0<=nx<N+2 and 0<=ny<M+2 and arr[nx][ny] != -1:
-                if not visited[nx][ny] and arr[nx][ny] != 1: ## 1) 들리지 않은 곳이고, 그 자리가 토마토 자리가 아닌 경우
-                    queue.append((nx,ny,cur+1))
+            if 0<=nx<N and 0<=ny<M:
+                if arr[nx][ny] == 0:
+                    arr[nx][ny] = arr[x][y] + 1
                     visited[nx][ny] = True
-                elif arr[nx][ny] > cur+1: ## 2) 들렸던 곳인데 다른 토마토에 의해 익은 속도가 지금 잡은 토마토의 익힘 속도보다 느린 경우
-                    queue.append((nx,ny,cur+1))
-                    arr[nx][ny] = cur+1
-
-    return cur
-
-
+                    queue.append((nx,ny))
+                    at_least_one = True
+                elif arr[nx][ny] != 1 and arr[nx][ny] != -1:
+                    if arr[nx][ny] > arr[x][y] + 1:
+                        arr[nx][ny] = arr[x][y] + 1
+        
 from collections import deque
+
 M, N = map(int,input().split())
+arr = [list(map(int,input().split())) for _ in range(N)]
+visited = [[False for _ in range(M)] for _ in range(N)]
 
-
-arr = [[-1 for _ in range(M+2)]] + [[-1] + list(map(int,input().split()))+[-1] for _ in range(N)] + [[-1 for _ in range(M+2)]]
-for x in arr:
-    print(x)
-
-print()
-visited = [[False for _ in range(M+2)] for _ in range(N+2)]
-answer = 0
-is_possible = True
-mx = -1
+at_least_one = False ## 모든 토마토가 익어있다고 선언 -> 하나라도 새로 익으면 True로 갱신
+mx = -2
+is_possible = True ##
+queue = deque()
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
 
-for x in range(1,N+1):
-    for y in range(1,M+1):
-        if arr[x][y] == 1 and not visited[x][y]:
-            answer += bfs(x,y,0)
-            arr[x][y] = 1
-        elif arr[x][y] == 0:
-            zero_cnt = 0
-            for f in range(4):
-                nx = x+dx[f]
-                ny = y+dy[f]
-                if 0<=nx<N+2 and 0<=ny<M+2 and arr[nx][ny] == -1:
-                    zero_cnt += 1
-            if zero_cnt == 4:
-                print("%d %d is zero_cnt 4"%(x,y))
-                is_possible = False
-                break
+for x in range(N):
+    for y in range(M):
+        if arr[x][y] == 1:
+            queue.append((x,y))
+if queue:
+    sx, sy = queue.popleft()
+    bfs(sx,sy)
+
+for x in range(N):
+    for y in range(M):
+        if arr[x][y] == 0:
+            is_possible = False
+        if arr[x][y] > mx:
+            mx = arr[x][y]
 
 
-for x in arr:
-    print(x)
-
-if not is_possible:         ## 만약 모두 익히지 못했다면
-    print(-1) 
-elif is_possible:           ## 모두 익어있는데
-    if answer == 0:         ## 원래 다 익었던거라면
+if not is_possible:
+    print(-1)
+elif is_possible:
+    if not at_least_one:
         print(0)
-    else:                   ## 하나라도 익혔다면
-        print(mx)
+    elif at_least_one:
+        print(mx-1)
