@@ -1,84 +1,70 @@
 """
+* 스터디
 [복잡도] O(N**2)
-    - 1000*1000 상자에 대해 완전탐색
-    - BFS 시행 횟수는 주어진 익은 토마토(초기값 1)의 갯수와 동일
+    - 3000*3000의 사진에 대해 완전탐색
 
 [구상]
-    - 변수
-        - arr[][]: 익은 토마토, 안 익은 토마토, 벽
-        - visited[][]: 방문 여부 결정
-        - queue(): BFS 대상 좌표 저장
-        - at_least_one: 모든 토마토가 익어있는 경우와 그렇지 않은 경우를 구분하는 boolean
-        - is_possible: 모든 토마토가 익지는 못하는 경우임을 나타내는 boolean
-        - dx[], dy[]: 4방향 탐색을 위한 방향 배열
-        - mx: 토마토가 익는 데에 걸리는 최소 시간
-    - 2차원 배열을 입력 받고, 이중 for 문으로 이미 익은 토마토의 위치를 탐색 -> 찾은 토마토의 위치는 queue에 저장.
-        - 예제 입력 3과 같이, 2개 이상의 익은 토마토가 있을 때 다른 문제처럼 BFS를 한번만 수행하면
-          최단거리가 갱신되지 않는 문제 발생
-    - BFS 수행 내용 - 4방향 탐색
-        - 탐색 칸의 4방향 인접 칸 중 0인 칸을 찾으면 탐색 칸의 값 + 1을 저장
-            - 해당 인접칸을 queue에 push
-            - 해당 인접칸 visited 표시
-            - 저장될 때부터 모든 토마토가 익어있는 경우와 그렇지 않은 경우를 구분하기 위해 at_least_one = True로 갱신
-        - 탐색 칸의 4방향 인접 칸 중 0이 아니지만 탐색 칸의 값 + 1 보다 큰 값을 가지고 있으면 최단거리 갱신
-            - 해당 분기는 이미 다른 bfs 실행에서 해당 칸을 방문했던 경우에 발생 -> visited 갱신 필요 x
+    - 유성 탐색
+        - 유성인 칸을 모두 알아내서, 유성의 초기 위치를 queue에 저장
+            - 유성을 찾는 4방향 탐색 중 [x+1][y]가 "."인 곳을 만나면 땅 탐색 시작
+        - 땅("#")인 곳을 찾아내면 answer_photo에 땅("#") 표시
+    - 최소 간격 측정
+        - 유성 탐색으로부터 시작
+        - cnt=0으로 시작해, x값을 1씩 늘리면서 "#"을 만날 때까지 cnt += 1
+        - return cnt 후, return 받은 cnt를 현재의 땅<->유성 최소거리와 비교해 최소값 갱신
+    - 사진 출력
+        - answer_photo를 R*S 사이즈의 "."로 선언
+        - photo를 돌며 "X"인 좌표가 나오면
 
-* 저장될 때부터 모든 토마토가 익어있는 상태면 0을 출력
-** 토마토가 모두 익지는 못하는 상황이면 -1 출력
+[시도]
+    - 1트 (89603508): 시간 초과 -> sys.stdin.readline 추가
+    - 2트 (89603683): 시간 초과 -> 진짜진짜 중요한 문제 = BFS 써야 할 것 "같아서" BFS 쓰는 것. 유성 탐색을 BFS로 할 이유가 1도 없었다.
+                                    ㄴ 땅-유성 간 갭을 확인할 때는 [x+1][y]이 "."인 "X"에 대해서만 계산하면 된다. 매 X 볼 때마다 BFS하면 터지는 것은 당연함
+                                    ㄴ "같아서"를 줄이자.
+    - 3트 (89604067): 메모리 초과 -> answer_photo 안 쓰고 X 옮기기
+                                    ㄴ 3000*3000을 두개 만들려고 했을 때 멈췄어야 함.
+    - 4트 (89604500): 시간 초과 -> 사실 BFS를 딱 한번만 쓸 수 있었다. visited도 빼고 "."으로 표시했으면 됐다.
+    - 5트 (89605172): 시간 초과 -> 한번만 쓸 수 있다고 해놓고 break 안 걸었다.
+
+* 적어도 한 줄 이상의 공기가 존재
+** 사진의 맨 밑줄은 모두 땅 -> 땅 탐색 시 무조건 땅을 발견할 수 있다는 보장
+[] 문제 읽기 -> [] I/O 확인 -> [] 제약조건/특이사항 확인 -> [] 구상 -> [] 복잡도 계산 -> [] 손 구현 -> [] 구현 -> [] 오픈테케 -> []히든테케
 """
-def bfs(x,y):
-    visited[x][y] = True
-    global at_least_one
-    queue.append((x,y))
-    while queue:
-        x, y = queue.popleft()
-        visited[x][y] = True
-        for f in range(4): ## f of four
-            nx = x + dx[f]
-            ny = y + dy[f]
-            if 0<=nx<N and 0<=ny<M:
-                if arr[nx][ny] == 0:
-                    arr[nx][ny] = arr[x][y] + 1
-                    visited[nx][ny] = True
-                    queue.append((nx,ny))
-                    at_least_one = True
-                elif arr[nx][ny] != 1 and arr[nx][ny] != -1:
-                    if arr[nx][ny] > arr[x][y] + 1:
-                        arr[nx][ny] = arr[x][y] + 1
-        
 from collections import deque
-
-M, N = map(int,input().split())
-arr = [list(map(int,input().split())) for _ in range(N)]
-visited = [[False for _ in range(M)] for _ in range(N)]
-
-at_least_one = False ## 모든 토마토가 익어있다고 선언 -> 하나라도 새로 익으면 True로 갱신
-mx = -2
-is_possible = True ##
-queue = deque()
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
-
-for x in range(N):
-    for y in range(M):
-        if arr[x][y] == 1:
-            queue.append((x,y))
-if queue:
-    sx, sy = queue.popleft()
-    bfs(sx,sy)
-
-for x in range(N):
-    for y in range(M):
-        if arr[x][y] == 0:
-            is_possible = False
-        if arr[x][y] > mx:
-            mx = arr[x][y]
+import sys
+input = sys.stdin.readline
 
 
-if not is_possible:
-    print(-1)
-elif is_possible:
-    if not at_least_one:
-        print(0)
-    elif at_least_one:
-        print(mx-1)
+def gap_search(x,y):
+    cnt = 0
+    while photo[x+1+cnt][y] != "#":
+        if cnt > gap_mn:
+            break
+        cnt += 1
+    return cnt
+
+
+R, S = map(int,input().split())
+photo = [list(input()) for _ in range(R)] 
+comet = list() ## 유성 위치를 담는 리스트                                
+gap_mn = 3000 + 1
+
+
+for x in range(R):
+    for y in range(S):
+        if photo[x][y] == "X":
+            comet.append((x,y))
+            if photo[x+1][y] == ".":
+                cur_gap = gap_search(x,y)
+                if cur_gap < gap_mn:
+                    gap_mn = cur_gap
+            photo[x][y] = "."
+
+while comet:
+    x,y = comet.pop()
+    photo[x+gap_mn][y] = "X"
+
+
+for x in photo:
+    for y in x:
+        print(y,end="")
