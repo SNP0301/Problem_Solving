@@ -1,40 +1,51 @@
 """
-[복잡도]
-    - 20*20 크기의 보드에서 완전탐색 => 최악의 경우 한번 탐색할 때마다 
+* 시험에 도움이 되는 방향으로
+** 같은 실수를 반복하지 말자
+*** 지금 급하면 본 시험 때도 급하다
+**** 시간 관리
 
-[구상]
-    I: 표의 크기 1<=R,C<=20
-        - R개의 줄에 걸쳐 C개의 대문자 알파벳
-    O: 같은 알파벳이 적힌 칸을 두 번 지나지 않고 움직일 수 있는 최대의 칸 수
+[I/O]
+    I: 격자의 상태
+    O: 격자를 지울 수 있는 색종이 수의 최소값
 """
-def dfs(x,y,st,cur_alphabet):
+arr = [list(map(int,input().split())) for _ in range(10)]
+pv = [5 for _ in range(5)]
+answer = 5*5+1
+
+def btk(cur_ans):
     global answer
-    if cur_alphabet in st:
-        answer = max(answer,len(st))
-        print(st)
-        return
-    else:
-        for f in range(4):
-            nx = x + dx[f]
-            ny = y + dy[f]
-            if 0<=nx<R and 0<=ny<C and not v[nx][ny]:
-                new_st = {i for i in st}
-                new_st.add(cur_alphabet)
-                v[nx][ny] = True
-                dfs(nx,ny,new_st,arr[nx][ny])
-                v[nx][ny] = False
-                #new_st.remove(cur_alphabet)
+    for x in range(10):
+        for y in range(10):
+            if arr[x][y] == 1:
+                for sz in range(5):
+                    nx = x + sz
+                    ny = y + sz
+                    if 0<=nx<10 and 0<=ny<10: ##범위 내
+                        if pv[sz] >= 1:
+                            possible = True
+                            for ix in range(x,nx+1):
+                                for iy in range(y,ny+1):
+                                    if arr[ix][iy] != 1:
+                                        possible = False
+                                        break
+                                if not possible: break
+                            if possible:
+                                for ix in range(x,nx+1):
+                                    for iy in range(y,ny+1):
+                                        arr[ix][iy] = 0
+                                pv[sz] -= 1 #한장 쓸게
+                                btk(cur_ans+1)
+                                pv[sz] += 1 ## 원복
+                                for ix in range(x,nx+1):
+                                    for iy in range(y,ny+1):
+                                        arr[ix][iy] = 1
 
-R,C = map(int,input().split())
-arr = [list(input()) for _ in range(R)]
-v = [[False for _ in range(C)] for _ in range(R)]
-v[0][0] = True
-answer = 0
 
-dx = [1,0,0,-1]
-dy = [0,1,-1,0]
 
-for t in range(2):
-    dfs(dx[t],dy[t],set(),arr[0][0])
+    answer = min(cur_ans,answer)
 
-print(answer)
+
+
+
+if answer == 5*5+1: print(-1)
+else: print(answer)

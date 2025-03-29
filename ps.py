@@ -1,14 +1,31 @@
 """
-* 시험에 도움이 되는 방향으로
-** 같은 실수를 반복하지 말자
+할 수 있다
 
-[복잡도] O(N*M)
-    - 명령 1번이 수행 될 때 N*M 크기의 배열을 모두 조작
-    - 300*300 크기의 배열을 1_000번 조작 => 90_000_000번
-        - 여차하면 터질 수도 있다.
+[I/O]
+    I: SCV의 수 1<=N<=3
+        둘째 줄에는 SCV N개의 체력이 주어진다
+    O: 모든 SCV를 파괴하기 위한 공격횟수의 최솟값
 
-[구상]
-    I: 배열의 크기 2<=N,M<=300, 1<=R<=1_000
-    O: R번만큼 회전시킨 뒤 배열의 상태
+
 """
-N,M,R = map(int,input().split()
+def recur(x,y,z): 
+    if (x,y,z) in acc: return acc[(x,y,z)]
+    if (x,y,z) == (0,0,0): return
+    
+    cur_ans = min(recur(max(x-1,0),max(y-3,0),max(z-9,0)),\
+                  recur(max(x-3,0),max(y-1,0),max(z-9,0)),\
+                  recur(max(x-1,0),max(y-9,0),max(z-3,0)),\
+                    recur(max(x-9,0),max(y-1,0),max(z-3,0)),\
+                        recur(max(x-9,0),max(y-3,0),max(z-1,1)),\
+                            recur(max(x-3,0),max(y-9,0),max(z-1,1)))
+    
+    acc[(x,y,z)] = cur_ans + 1
+    return cur_ans +1
+
+N = int(input())
+scvs = list(map(int,input().split()))
+scvs.extend([0]*(3-N))
+
+acc = dict()
+
+

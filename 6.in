@@ -1,46 +1,10 @@
-"""
-[복잡도]
-    - 깊이가 최대 10 (먹냐, 안 먹냐로 2**10)
-[구상]
-    I: 시식대의 갯수 2<=N<=10, 보선이의 뻔뻔함 1<=K<=100
-        - 육회비빔밤의 단맛 A1, A2 ... An (1<=Ai<=10)
-        - 육회비빔밥이 짠맛 B1, B2 ... Bn (1<=Bi<=10)
-        - 각 시식대 직원의 눈치 정도 C1, C2 ... Cn (1<=Ci<=10)
-        * 입력으로 주어지는 모든 수는 정수다
-    O: 육회비빔밥 N그릇을 다 먹었을 때 느낄 수 있는 총 감칠맛의 "최댓값"
-        - 만약 N그릇을 다 먹을 수 없다면 -1을 출력
-    - N그릇을 다 못 먹는 경우는 모든 경우의 수에서 눈치가 보이는 경우
-        - 즉, 한번이라도 다 먹는 경우가 생기면 -1을 출력할 일이 없다
-            => at_least_once = False로 세워두고 한번이라도 먹으면 True로 돌리자
-"""
-def dfs(n,A,C,score):
-    global answer
-    global at_least_once
-    if n == N:
-        at_least_once = True
-        #print(score)
-        answer = max(answer,score)
-        return
-    else: 
-        for i in range(N):
-            if not v[i] and C*Cs[i] <= K:
-                v[i] = True
-                dfs(n+1,As[i],Cs[i],A*Bs[i]+score)
-                v[i] = False
-
-
-N, K = map(int,input().split())
-As = list(map(int,input().split()))
-Bs = list(map(int,input().split()))
-Cs = list(map(int,input().split()))
-
-v = [False for _ in range(N)]
-at_least_once = False
-answer = -1
-
-dfs(0,0,0,0) ## def dfs(n,A,C,score,start)
-
-if not at_least_once:
-    print(-1)
-else:
-    print(answer)
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
