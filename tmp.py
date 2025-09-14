@@ -1,51 +1,35 @@
 """
-* 시험에 도움이 되는 방향으로
-** 같은 실수를 반복하지 말자
-*** 지금 급하면 본 시험 때도 급하다
-**** 시간 관리
+긍정
 
-[I/O]
-    I: 격자의 상태
-    O: 격자를 지울 수 있는 색종이 수의 최소값
+200,000자에 대해 200,000개의 질문
+알파벳 26자 배열을 만들어두고 200,000자 쭉 읽어서 누적시키기
+
+200,000 * 26 = 5,200,000
+
 """
-arr = [list(map(int,input().split())) for _ in range(10)]
-pv = [5 for _ in range(5)]
-answer = 5*5+1
+import sys
+input = sys.stdin.readline
 
-def btk(cur_ans):
-    global answer
-    for x in range(10):
-        for y in range(10):
-            if arr[x][y] == 1:
-                for sz in range(5):
-                    nx = x + sz
-                    ny = y + sz
-                    if 0<=nx<10 and 0<=ny<10: ##범위 내
-                        if pv[sz] >= 1:
-                            possible = True
-                            for ix in range(x,nx+1):
-                                for iy in range(y,ny+1):
-                                    if arr[ix][iy] != 1:
-                                        possible = False
-                                        break
-                                if not possible: break
-                            if possible:
-                                for ix in range(x,nx+1):
-                                    for iy in range(y,ny+1):
-                                        arr[ix][iy] = 0
-                                pv[sz] -= 1 #한장 쓸게
-                                btk(cur_ans+1)
-                                pv[sz] += 1 ## 원복
-                                for ix in range(x,nx+1):
-                                    for iy in range(y,ny+1):
-                                        arr[ix][iy] = 1
+s = input().strip()
+n = len(s)
+q = int(input())
 
 
+pref = [[0]*(n+1) for _ in range(26)]
 
-    answer = min(cur_ans,answer)
+for i in range(1, n+1):           
+    ch = s[i-1]                    
+    idx = ord(ch) - 97            
+    for c in range(26):
+        pref[c][i] = pref[c][i-1] 
+    pref[idx][i] += 1             
 
+ans = []
 
+for _ in range(q):
+    a, l, r = input().split()
+    l = int(l); r = int(r)
+    idx = ord(a) - 97
+    ans.append(str(pref[idx][r+1] - pref[idx][l]))
 
-
-if answer == 5*5+1: print(-1)
-else: print(answer)
+sys.stdout.write("\n".join(ans))

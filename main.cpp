@@ -1,11 +1,7 @@
-#include <iostream>
-#include <string>
+#include<stdio.h>
 
-std::string greet(const std::string& name) {
-    return "Hello, " + name + "!";
-}
-
-int main() {
-    std::cout << greet("World") << std::endl;
+int main()
+{
+    printf("Hello test World!");
     return 0;
 }

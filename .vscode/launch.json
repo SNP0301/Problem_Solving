@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "program": "${workspaceFolder}/build/Debug/outDebug",
-      "cwd": "${workspaceFolder}",
       "args": [],
+      "cwd": "${workspaceFolder}",
       "preLaunchTask": "build-debug"
     },
     {
