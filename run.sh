@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-SRC=${1:-main.cpp}    # 1번 인자: 소스파일 (기본 main.cpp)
-IN=${2:-input.in}     # 2번 인자: 입력파일 (기본 input.in)
-OUT="${SRC%.*}"       # 실행파일 이름: 확장자 제거
+# 고정 파일명 사용 (요구사항)
+MAIN=main.cpp
+SOL=solution.cpp
+IN=sample_input.txt
+OUT="${OUT:-main}"   # 실행파일 이름(원하면 OUT=app ./run.sh 식으로 바꿀 수 있음)
 
-g++ -std=c++17 -O2 -Wall -Wextra -o "$OUT" "$SRC"
-"./$OUT" < "$IN"
+# 빌드
+g++ -std=c++17 -O2 -Wall -Wextra -o "$OUT" "$MAIN" "$SOL"
+
+# 실행 (input.txt 있으면 리디렉션)
+if [[ -f "$IN" ]]; then
+  "./$OUT" < "$IN"
+else
+  "./$OUT"
+fi
