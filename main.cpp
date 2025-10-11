@@ -1,22 +1,24 @@
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
-static long long int A,B,C;
+static long first = 0;
 
-long long solve(long num){
-    long long halfNum = num / 2;
-    if (num == 0) return 1;
-    else if (num == 1) return A%C;
-    else {
-        long long curNum = solve(halfNum)%C;
-        if (num%2 == 1) return (curNum * curNum % C) *(A%C);
-        else return curNum * curNum % C;
+long fib(int n){
+    if (n == 1 || n == 2){
+        ++first;
+        return 1;
     }
+    else return (fib(n-1)+fib(n-2));
 }
 
 int main(){
-    cin >> A >> B >> C;
-    cout << solve(B)%C;
+    int n;
+    cin >> n;
+    fib(n);
+    cout << first << " " << n-2;
+
 
     return 0;
 }
