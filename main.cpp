@@ -1,14 +1,19 @@
 #include <iostream>
 
+static int t;
+
+int getBundle(int pNum){ // 신청한 people 수, 묶음 크기
+    if (pNum == 0) return 0;
+    else if (pNum%t== 0) return pNum/t;
+    else return (pNum/t)+1;
+}
+
 int main(){
-    int A,B,C;
 
-    while (true){
-        std::cin >> A >> B >> C;
-        if (A==0 && B==0 && C==0) break;
-        if (A*A == B*B + C*C || B*B == C*C + A*A || C*C == B*B + A*A) std::cout << "right\n";
-        else std::cout << "wrong\n";
-    }
-
+    int n,s, m, l, xl, xxl, xxxl, p, tAnswer;
+    std::cin >> n >> s >> m >> l >> xl >> xxl >> xxxl >> t >> p;
+    tAnswer = getBundle(s) + getBundle(m) + getBundle(l) + getBundle(xl) + getBundle(xxl) + getBundle(xxxl);
+    std::cout << tAnswer << "\n";
+    std::cout << n/p << " " << n%p;
     return 0;
 }
