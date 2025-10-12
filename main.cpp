@@ -1,11 +1,14 @@
-#include <stdio.h>
+#include <iostream>
 
 
 int main(){
     int A,B;
-    while(scanf("%d%d",&A,&B)==2){
-        printf("%d\n",A+B);
+    while (true){
+        std::cin >> A >> B;
+        if (A==0 && B==0) break;
+        else std::cout << A+B << "\n";
     }
-
     return 0;
+
+
 }
