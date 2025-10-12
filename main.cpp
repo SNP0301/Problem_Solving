@@ -2,13 +2,9 @@
 
 
 int main(){
-    int A,B;
-    while (true){
-        std::cin >> A >> B;
-        if (A==0 && B==0) break;
-        else std::cout << A+B << "\n";
-    }
+    char c;
+    std::cin >> c;
+    std::cout << (int)c;
+
     return 0;
-
-
 }
