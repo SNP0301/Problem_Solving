@@ -1,21 +1,21 @@
 #include <iostream>
 
 int main(){
-    
-    int num;
-    int answerNum = -1;
-    int answerIdx = -1;
 
-    for(int i=1;i<10;++i){
+    int N,num;
+    std::cin >> N;
+
+    int mnNum = 1'000'000+1;
+    int mxNum = -1'000'000-1;
+
+    for(int i=0;i<N;++i){
         std::cin >> num;
-        if (num > answerNum){
-            answerNum = num;
-            answerIdx = i;
-        }
+        if (num > mxNum) mxNum = num;
+        if (num < mnNum) mnNum = num;
     }
+
+    std::cout << mnNum << " " << mxNum;
     
-    std::cout << answerNum << "\n";
-    std::cout << answerIdx;
 
     return 0;
 }
