@@ -2,20 +2,19 @@
 
 int main(){
 
-    int N,num;
-    std::cin >> N;
+    int T,R;
+    std::string S;
+    std::cin >> T;
 
-    int mnNum = 1'000'000+1;
-    int mxNum = -1'000'000-1;
-
-    for(int i=0;i<N;++i){
-        std::cin >> num;
-        if (num > mxNum) mxNum = num;
-        if (num < mnNum) mnNum = num;
+    for (int i=0; i<T; ++i){
+        std::cin >> R >> S;
+        for (int j=0; j<(int)S.size();++j){
+            for (int k=0; k<R; ++k){
+                std::cout << S[j];
+            }
+        }
+        std::cout << "\n";
     }
-
-    std::cout << mnNum << " " << mxNum;
-    
 
     return 0;
 }
