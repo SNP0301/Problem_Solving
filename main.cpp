@@ -1,14 +1,13 @@
-#include <iostream>
+ #include <iostream>
 
-int main(){
-    int A,B;
-    std::cin >> A >> B;
-    
-    if (A > B) std::cout << ">";
-    else if (A < B) std::cout << "<";
-    else std::cout << "==";
+ int main(){
+    int N;
 
+    std::cin >> N;
 
+    for (int i=1; i<10;++i){
+        std::cout << N << " * " << i << " = " << N*i << "\n";
+    }
 
     return 0;
-}
+ }
