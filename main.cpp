@@ -1,17 +1,21 @@
 #include <iostream>
-#include <vector>
 
 int main(){
-    int N,answer;
-    answer = 0;
-    std::cin >> N;
+    
+    int num;
+    int answerNum = -1;
+    int answerIdx = -1;
 
-    std::string number;
-    std::cin >> number;
-    for (int i =0; i<N; i++){
-        answer += (int)number[i]-48;
+    for(int i=1;i<10;++i){
+        std::cin >> num;
+        if (num > answerNum){
+            answerNum = num;
+            answerIdx = i;
+        }
     }
-    std::cout << answer;
+    
+    std::cout << answerNum << "\n";
+    std::cout << answerIdx;
 
     return 0;
 }
