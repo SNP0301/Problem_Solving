@@ -1,19 +1,13 @@
 #include <iostream>
 
 int main(){
+    int A,B,C;
 
-    int T,R;
-    std::string S;
-    std::cin >> T;
-
-    for (int i=0; i<T; ++i){
-        std::cin >> R >> S;
-        for (int j=0; j<(int)S.size();++j){
-            for (int k=0; k<R; ++k){
-                std::cout << S[j];
-            }
-        }
-        std::cout << "\n";
+    while (true){
+        std::cin >> A >> B >> C;
+        if (A==0 && B==0 && C==0) break;
+        if (A*A == B*B + C*C || B*B == C*C + A*A || C*C == B*B + A*A) std::cout << "right\n";
+        else std::cout << "wrong\n";
     }
 
     return 0;
