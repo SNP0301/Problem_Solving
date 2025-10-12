@@ -1,13 +1,17 @@
 #include <iostream>
-
+#include <vector>
 
 int main(){
+    int N,answer;
+    answer = 0;
+    std::cin >> N;
 
-    std::cout << "         ,r\'\"7\n";
-    std::cout << "r`-_   ,\'  ,/\n";
-    std::cout << " \\. \". L_r\'\n";
-    std::cout << "   `~\\/\n";
-    std::cout << "      |\n";
-    std::cout << "      |\n";
+    std::string number;
+    std::cin >> number;
+    for (int i =0; i<N; i++){
+        answer += (int)number[i]-48;
+    }
+    std::cout << answer;
+
     return 0;
 }
