@@ -1,14 +1,11 @@
-#include <iostream>
+#include <stdio.h>
 
 
 int main(){
-    int A,B,T;
-    std::cin >> T;
-    for (int i=0; i<T; ++i){
-        std::cin >> A >> B;
-        std::cout << A+B << "\n";
+    int A,B;
+    while(scanf("%d%d",&A,&B)==2){
+        printf("%d\n",A+B);
     }
-
 
     return 0;
 }
