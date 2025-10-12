@@ -1,19 +1,43 @@
 #include <iostream>
 
-static int t;
+int binarySerach(int n){
+    int s,e,m;
+    s = 1;
+    e = n/2;
+    m = 0;
 
-int getBundle(int pNum){ // 신청한 people 수, 묶음 크기
-    if (pNum == 0) return 0;
-    else if (pNum%t== 0) return pNum/t;
-    else return (pNum/t)+1;
+    while (s <= e){
+        m = (s+e)/2;
+        int target = m*m;
+
+        if(target > n || target <= 0) e = m - 1;
+        else if (target < n) s = m + 1;
+        else break;
+    }
+
+    if(n > m * m) ++m;
+    return m;
+}
+
+bool isPrime(int n){
+    if (n == 1) return false;
+    if (n == 2) return true;
+    for (int i=2; i<binarySerach(n)+1; ++i){
+        if (n%i == 0) return false;
+    }
+    return true;
 }
 
 int main(){
 
-    int n,s, m, l, xl, xxl, xxxl, p, tAnswer;
-    std::cin >> n >> s >> m >> l >> xl >> xxl >> xxxl >> t >> p;
-    tAnswer = getBundle(s) + getBundle(m) + getBundle(l) + getBundle(xl) + getBundle(xxl) + getBundle(xxxl);
-    std::cout << tAnswer << "\n";
-    std::cout << n/p << " " << n%p;
+    int N, answer,num;
+    std::cin >> N;
+    answer = 0;
+    for (int j=0; j<N; ++j){
+        std::cin >> num;
+        if (isPrime(num)) answer += 1;
+    }
+
+    std::cout << answer;
     return 0;
 }
