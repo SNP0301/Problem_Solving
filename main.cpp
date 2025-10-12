@@ -1,43 +1,25 @@
 #include <iostream>
-
-int binarySerach(int n){
-    int s,e,m;
-    s = 1;
-    e = n/2;
-    m = 0;
-
-    while (s <= e){
-        m = (s+e)/2;
-        int target = m*m;
-
-        if(target > n || target <= 0) e = m - 1;
-        else if (target < n) s = m + 1;
-        else break;
-    }
-
-    if(n > m * m) ++m;
-    return m;
-}
-
-bool isPrime(int n){
-    if (n == 1) return false;
-    if (n == 2) return true;
-    for (int i=2; i<binarySerach(n)+1; ++i){
-        if (n%i == 0) return false;
-    }
-    return true;
-}
+#include <vector>
 
 int main(){
 
-    int N, answer,num;
-    std::cin >> N;
-    answer = 0;
-    for (int j=0; j<N; ++j){
-        std::cin >> num;
-        if (isPrime(num)) answer += 1;
+    int N, M, curNum;
+    int mx = -1;
+    std::vector <int> vc;
+    std::cin >> N >> M;
+    for(int i=0; i<N; ++i){
+        std::cin >> curNum;
+        vc.push_back(curNum);
     }
 
-    std::cout << answer;
+    for(int i=0; i<N-2; ++i){
+        for(int j=i+1; j<N-1; ++j){
+            for(int k=j+1; k<N; ++k){
+                if (vc[i]+vc[j]+vc[k] > mx && vc[i]+vc[j]+vc[k] <= M) mx = vc[i]+vc[j]+vc[k];
+            }
+        }
+    }
+
+    std::cout << mx;
     return 0;
 }
