@@ -1,55 +1,42 @@
+/*
+    lexicographically 라는 말이 잇네
+*/
+
 #include <iostream>
+#include <algorithm>
+#include <string>
 #include <vector>
 
 using namespace std;
 
-void merge(vector<int>& vec, int left, int mid, int right){
-    int i,j,k;
-    int fIdx = mid - left + 1;
-    int sIdx = right - mid;
+typedef struct member {
+    int age;
+    string name;
+    int signInTime;
+}member;
 
-    vector<int> leftVc(fIdx), rightVc(sIdx);
-
-    for(i=0; i<fIdx; ++i) leftVc[i] = vec[left+i];
-    for(j=0; j<sIdx; ++j) rightVc[j] = vec[mid+1+j];
-
-    i=0;
-    j=0;
-    k=left;
-
-    while (i < fIdx && j <sIdx){
-        if (leftVc[i] <= rightVc[j]){
-            vec[k] = leftVc[i];
-            ++i;
-        }
-        else{
-            vec[k] = rightVc[j];
-            ++j;
-        }
-        ++k;
-    }
-
-    while (i < fIdx){
-        vec[k] = leftVc[i];
-        ++i;
-        ++k;
-    }
-
-    while (j < sIdx){
-        vec[k] = rightVc[j];
-        ++j;
-        ++k;
-    }
+bool compareMembers(const member &aMember, const member &bMember){
+    if(aMember.age == bMember.age) return aMember.signInTime < bMember.signInTime;
+    return aMember.age < bMember.age;
 }
 
-void mergeSort(vector<int>& vec, int left, int right){
-    if (left <right){ // base case: size가 1인 경우 left == right가 true이므로 재귀 종료.
-        int mid = left + (right - left) / 2;
+int main(){
+    int T, age;
+    string s;
+    cin >> T;
+    vector<member> memberVc;
 
-        mergeSort(vec,left,mid);
-        mergeSort(vec,mid+1,right);
-
-        merge(vec, left, mid, right);
+    for(int t=0; t<T; ++t){
+        cin >> age >> s;
+        memberVc.push_back({age,s,t});
     }
 
+    sort(memberVc.begin(), memberVc.end(), compareMembers);
+
+    for (const auto &m : memberVc) {
+        cout << m.age << " " << m.name << "\n";
+    }
+
+
+    return 0;
 }
