@@ -3,27 +3,53 @@
 
 using namespace std;
 
-int main(){
-    float N,num;
-    float mx = -1;
-    float newSum = 0;
-    vector <int> vc;
+void merge(vector<int>& vec, int left, int mid, int right){
+    int i,j,k;
+    int fIdx = mid - left + 1;
+    int sIdx = right - mid;
 
-    cin >> N;
+    vector<int> leftVc(fIdx), rightVc(sIdx);
 
-    for (int i=0; i<N; ++i){
-        cin >> num;
-        vc.push_back(num);
-        if (num >= mx) mx = num;
+    for(i=0; i<fIdx; ++i) leftVc[i] = vec[left+i];
+    for(j=0; j<sIdx; ++j) rightVc[j] = vec[mid+1+j];
+
+    i=0;
+    j=0;
+    k=left;
+
+    while (i < fIdx && j <sIdx){
+        if (leftVc[i] <= rightVc[j]){
+            vec[k] = leftVc[i];
+            ++i;
+        }
+        else{
+            vec[k] = rightVc[j];
+            ++j;
+        }
+        ++k;
     }
 
-    for (int i=0; i<N; ++i){
-        newSum += (vc[i]/mx)*100;
-
+    while (i < fIdx){
+        vec[k] = leftVc[i];
+        ++i;
+        ++k;
     }
-    cout.precision(10);
-    cout << float(newSum/N);
 
+    while (j < sIdx){
+        vec[k] = rightVc[j];
+        ++j;
+        ++k;
+    }
+}
 
-    return 0;
+void mergeSort(vector<int>& vec, int left, int right){
+    if (left <right){ // base case: size가 1인 경우 left == right가 true이므로 재귀 종료.
+        int mid = left + (right - left) / 2;
+
+        mergeSort(vec,left,mid);
+        mergeSort(vec,mid+1,right);
+
+        merge(vec, left, mid, right);
+    }
+
 }
