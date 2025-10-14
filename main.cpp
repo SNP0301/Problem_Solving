@@ -1,34 +1,40 @@
 /*
     긍정, 책임
 */
-
 #include <iostream>
-#include <unordered_set>
-
-
+#include <string>
 
 using namespace std;
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
-    int N,num;
-    cin >> N;
-    unordered_set<int> st = {};
+    int T;
+    cin >> T;
 
-    for (int i=0; i<N; ++i){
-        cin >> num;
-        st.insert(num);
+    for(int i=0; i<T; ++i){
+        string s;
+        cin >> s;
+        int l = 0;
+        int r = 0;
+        bool isVPS = true;
+        for(int j=0; j<(int)s.length(); ++j){
+            if (s[j] == '(') ++l;
+            else if (s[j] == ')'){
+                ++r;
+                if (l > 0){
+                    --l;
+                    --r;
+                }
+                else if (l <= 0){
+                    isVPS = false;
+                    break;
+                }
+            }
+        }
+        if (l>0 || r>0) isVPS = false;
+        if (isVPS) cout << "YES\n";
+        else cout << "NO\n";
     }
 
-    cin >> N;
-    for(int i=0; i<N; ++i){
-        cin >> num;
-        if(st.find(num) != st.end()) cout << 1;
-        else cout << 0;
-        cout << "\n";
-    }
 
 
     return 0;
