@@ -1,40 +1,33 @@
 /*
-    lexicographically 라는 말이 잇네
+    긍정, 책임
 */
 
 #include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
+#include <unordered_set>
+
+
 
 using namespace std;
 
-typedef struct member {
-    int age;
-    string name;
-    int signInTime;
-}member;
-
-bool compareMembers(const member &aMember, const member &bMember){
-    if(aMember.age == bMember.age) return aMember.signInTime < bMember.signInTime;
-    return aMember.age < bMember.age;
-}
-
 int main(){
-    int T, age;
-    string s;
-    cin >> T;
-    vector<member> memberVc;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int N,num;
+    cin >> N;
+    unordered_set<int> st = {};
 
-    for(int t=0; t<T; ++t){
-        cin >> age >> s;
-        memberVc.push_back({age,s,t});
+    for (int i=0; i<N; ++i){
+        cin >> num;
+        st.insert(num);
     }
 
-    sort(memberVc.begin(), memberVc.end(), compareMembers);
-
-    for (const auto &m : memberVc) {
-        cout << m.age << " " << m.name << "\n";
+    cin >> N;
+    for(int i=0; i<N; ++i){
+        cin >> num;
+        if(st.find(num) != st.end()) cout << 1;
+        else cout << 0;
+        cout << "\n";
     }
 
 
