@@ -3,24 +3,26 @@
     유클리드 호제법
 */
 #include <iostream>
+#include <tuple>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-int gcd(int A, int B) {
-	int res = A % B;
-	while (res != 0) {
-		A = B;
-		B = res;
-		res = A % B;
-	}
-	return B;
-}
+typedef struct pair<int,int> point;
 
-int lcm(int A, int B) {
-	return ((A * B) / gcd(A, B));
-}
-
-int main() {
-	int A, B;
-	cin >> A >> B;
-	cout << gcd(A, B) << "\n" << lcm(A, B);
+int main(){
+    int N,x,y;
+    cin >> N;
+    vector<point> vc;
+    for(int i=0; i<N; ++i){
+        cin >> x >> y;
+        vc.push_back(point(x,y));
+    }
+    sort(vc.begin(),vc.end());
+    
+    for (int i=0; i<N; ++i) {
+        cout << vc[i].first << " " << vc[i].second << '\n';
+    }   
+    return 0;
 }
