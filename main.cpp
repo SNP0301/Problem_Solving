@@ -1,28 +1,39 @@
 /*
     긍정, 책임
-    유클리드 호제법
 */
-#include <iostream>
-#include <tuple>
-#include <vector>
-#include <algorithm>
 
+#include <iostream>
 using namespace std;
 
-typedef struct pair<int,int> point;
+const int MAXN = 2'000'001;
 
 int main(){
-    int N,x,y;
+    int N;
     cin >> N;
-    vector<point> vc;
-    for(int i=0; i<N; ++i){
-        cin >> x >> y;
-        vc.push_back(point(x,y));
+
+    int arr[MAXN];
+    int startIdx = 1;
+    int endIdx = N;
+
+    for (int i=1; i<N+1; ++i){
+        arr[i] = i;
     }
-    sort(vc.begin(),vc.end());
-    
-    for (int i=0; i<N; ++i) {
-        cout << vc[i].first << " " << vc[i].second << '\n';
-    }   
+
+    while (true){
+        if (startIdx == endIdx){
+            cout << arr[startIdx];
+            break;
+        }
+
+        // 맨 위 카드 버리기
+        ++startIdx;
+
+        // 맨 위 카드를 맨 밑으로 넣기
+        arr[endIdx+1] = arr[startIdx];
+        ++endIdx;
+        ++startIdx;
+
+    }
+
     return 0;
 }
