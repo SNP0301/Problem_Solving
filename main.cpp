@@ -1,46 +1,82 @@
 /*
-    긍정, 책임
+    긍정
+    나는 기본기에 충실한 글로벌 개발자가 된다.
 */
+
 #include <iostream>
 using namespace std;
-static char arr[51][51];
+//까지만 사용
+
+const int MAXN = 1'001;
+const int MAXM = 10'001;
+int N,M;
+
+bool v[MAXN] = { false };
+int adj[MAXN][MAXN] = {{0}};
+int front = -1;
+int rear = -1;
+int q[MAXM] = {};
+
+void DFS(int cur){
+    v[cur] = true;
+    cout << cur << " ";
+
+    for(int i=1; i<=N; ++i){
+        if (adj[cur][i]==1 && !v[i]){
+            DFS(i);
+        }
+    }
+}
+
+// BFS 관련 enqueue, dequeue, empty
+void enqueue(int num){ q[++rear] = num; }
+
+int dequeue(){
+    int num = q[++front];
+    return num;
+}
+
+bool isEmpty(){
+    return (rear <= front);
+}
+
+void BFS(int cur){
+    v[cur] = true;
+    enqueue(cur);
+
+    while(!isEmpty()){
+        int nxt = dequeue();
+        cout << nxt << " ";
+        for(int i=1; i<=N; ++i){
+            if(adj[nxt][i]==1 && !v[i]){
+                enqueue(i);
+                v[i] = true;
+            }
+        }
+    }
+
+}
+
 
 int main(){
-    int answer = 8*8+1;
-    int N, M;
-    cin >> N >> M;
+    int startV,s,e;
+    cin >> N >> M >> startV;
 
-    for (int x=0; x<N; ++x){
-        for (int y=0; y<M; ++y){
-            cin >> arr[x][y];
-        }
+    for(int i=1; i<=M; ++i){
+        cin >> s >> e; // 노드 숫자는 받았다. 이걸 어디에 저장할거냐
+        //adj에 저장할건데, vector를 못쓰니까 MAXN, MAXM으로 받아둔 arr를 쓰자.
+        adj[s][e] = 1;
+        adj[e][s] = 1;
     }
 
+    //DFS
+    DFS(startV);
+    cout << "\n";
 
-    for (int x=0; x<N-8+1; ++x){
-        for (int y=0; y<M-8+1;++y){
-            // W로 시작하는 board에 맞추는 경우
-            int wAnswer = 0;
-            for (int ix=0; ix<8; ++ix){
-                for (int iy=0; iy<8; ++iy){
-                    if ((x+ix+y+iy)%2 == 0 && arr[x+ix][y+iy]=='B') ++wAnswer;
-                    if ((x+ix+y+iy)%2 == 1 && arr[x+ix][y+iy]=='W') ++wAnswer;
-                }
-            }
+    //BFS
+    for(int i=0; i<=N; ++i) v[i] = false;
+    BFS(startV);
 
-            // B로 시작하는 board에 맞추는 경우
-            int bAnswer = 0;
-            for (int ix=0; ix<8; ++ix){
-                for (int iy=0; iy<8; ++iy){
-                    if ((x+ix+y+iy)%2 == 0 && arr[x+ix][y+iy]=='W') ++bAnswer;
-                    if ((x+ix+y+iy)%2 == 1 && arr[x+ix][y+iy]=='B') ++bAnswer;
-                }
-            }
-            int curAnswer = min(wAnswer, bAnswer);
-            answer = min(answer,curAnswer);
-        }
-    }
-    cout << answer;
 
-    return 0;
+    return 0;   
 }
