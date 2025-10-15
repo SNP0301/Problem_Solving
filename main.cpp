@@ -1,39 +1,46 @@
 /*
     긍정, 책임
 */
-
 #include <iostream>
 using namespace std;
-
-const int MAXN = 2'000'001;
+static char arr[51][51];
 
 int main(){
-    int N;
-    cin >> N;
+    int answer = 8*8+1;
+    int N, M;
+    cin >> N >> M;
 
-    int arr[MAXN];
-    int startIdx = 1;
-    int endIdx = N;
-
-    for (int i=1; i<N+1; ++i){
-        arr[i] = i;
-    }
-
-    while (true){
-        if (startIdx == endIdx){
-            cout << arr[startIdx];
-            break;
+    for (int x=0; x<N; ++x){
+        for (int y=0; y<M; ++y){
+            cin >> arr[x][y];
         }
-
-        // 맨 위 카드 버리기
-        ++startIdx;
-
-        // 맨 위 카드를 맨 밑으로 넣기
-        arr[endIdx+1] = arr[startIdx];
-        ++endIdx;
-        ++startIdx;
-
     }
+
+
+    for (int x=0; x<N-8+1; ++x){
+        for (int y=0; y<M-8+1;++y){
+            // W로 시작하는 board에 맞추는 경우
+            int wAnswer = 0;
+            for (int ix=0; ix<8; ++ix){
+                for (int iy=0; iy<8; ++iy){
+                    if ((x+ix+y+iy)%2 == 0 && arr[x+ix][y+iy]=='B') ++wAnswer;
+                    if ((x+ix+y+iy)%2 == 1 && arr[x+ix][y+iy]=='W') ++wAnswer;
+                }
+            }
+
+            // B로 시작하는 board에 맞추는 경우
+            int bAnswer = 0;
+            for (int ix=0; ix<8; ++ix){
+                for (int iy=0; iy<8; ++iy){
+                    if ((x+ix+y+iy)%2 == 0 && arr[x+ix][y+iy]=='W') ++bAnswer;
+                    if ((x+ix+y+iy)%2 == 1 && arr[x+ix][y+iy]=='B') ++bAnswer;
+                }
+            }
+            int curAnswer = min(wAnswer, bAnswer);
+            answer = min(answer,curAnswer);
+        }
+    }
+    cout << answer;
 
     return 0;
 }
