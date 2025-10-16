@@ -1,43 +1,122 @@
+/*
+    긍정, 책임
+*/
+
 #include <iostream>
+#include <string>
 using namespace std;
 
-const int MAXN = 1001;
-int P[MAXN];        // 순열
-bool visited[MAXN]; // 방문 여부
-int N;
+class MyUnorderedSet {
+private:
+    static const int TABLE_SIZE = 23; // x가 1~20임
 
-void dfs(int cur) {
-    visited[cur] = true;
-    int next = P[cur];
-    
-    if (!visited[next]) {
-        dfs(next);
+    struct Node{
+        int key;
+        Node* next;
+        Node(int k, Node* n = nullptr) : key(k), next(n) {};
+    };
+
+    Node* table[TABLE_SIZE];
+
+    int hash(int key) const {
+        return (key % TABLE_SIZE + TABLE_SIZE) % TABLE_SIZE;
     }
-}
 
-int main() {
-    int T;
-    cin >> T;
-    for (int j=0; j<T; ++j){
-        for(int i=0; i<MAXN; ++i){
-            P[i] = 0;
-            visited[i] = false;
-        }
-        cin >> N;
-        for (int i = 1; i <= N; ++i) {
-            cin >> P[i];
-        }
+public:
+    MyUnorderedSet(){
+        for(int i=0; i<TABLE_SIZE; ++i) table[i] = nullptr;
+    }
 
-        int cycleCount = 0;
-
-        for (int i = 1; i <= N; ++i) {
-            if (!visited[i]) {
-                dfs(i);
-                ++cycleCount;
+    ~MyUnorderedSet(){
+        for(int i=0; i<TABLE_SIZE; ++i){
+            Node* curr = table[i];
+            while (curr){
+                Node* temp = curr;
+                curr = curr -> next;
+                delete temp;
             }
         }
+    }
 
-        cout << cycleCount << '\n';
+    bool check(int key) const {
+        int h = hash(key);
+        Node* curr = table[h];
+        while (curr){
+            if (curr->key == key) return true; // 찾았으면 잇다 하고, 
+            curr = curr -> next; // 못 찾았으면 다음으로 넘어가기
+        }
+        return false; // curr이 false라는 것은 끝까지 갔다는 것
+    }
+
+    void add (int key){
+        if (check(key)) return; // 중복 방지
+        int h = hash(key);
+        table[h] = new Node(key, table[h]);
+    }
+
+    void remove(int key){
+        int h = hash(key);
+        Node* curr = table[h];
+        Node* prev = nullptr;
+        while (curr){
+            if (curr -> key == key){
+                if(prev) prev -> next = curr -> next;
+                else table[h] = curr -> next;
+                delete curr;
+                return;
+            }
+        }
+    }
+
+    void toggle(int key){
+        if (check(key)) remove(key);
+        else add(key);
+    }
+
+    void all() {
+        for(int i=1; i<=20; ++i) add(i);
+    }
+
+    void empty() {
+        for (int i=1; i<=20; ++i) remove(i);
+    }
+
+};
+
+int main(){
+    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); // 연산 수가 MAX 3'000'000개
+    int M,x;
+    string cmd;
+    cin >> M;
+
+    MyUnorderedSet st;
+
+    for (int i=0; i<M; ++i){
+        cin >> cmd;
+        if (cmd == "add"){
+            cin >> x;
+            st.add(x);
+        }
+        else if (cmd == "remove"){
+            cin >> x;
+            st.remove(x);
+        }
+        else if (cmd == "check"){
+            cin >> x;
+            if(st.check(x)) cout << "1\n";
+            else cout << "0\n";
+        }
+        else if (cmd == "toggle"){
+            cin >> x;
+            st.toggle(x);
+        }
+        else if (cmd == "all"){
+            st.all();
+        }
+        else if (cmd == "empty"){
+            st.empty();
+        }
+
     }
 
     return 0;
