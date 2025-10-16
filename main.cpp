@@ -1,57 +1,92 @@
 /*
     긍정, 책임
 
-    단방향
-    비용 없음.
-    크기 비교를 간접적으로 할 수도 있음
-        [i][k] + [k][j] => [i][j]
+    MST를 만들어라. 근데 2개.
+    MST를 2개 만들 수 있는 경우의 수들 중에서 가장 비용이 가장 케이스? 말도 안됨
 */
 #include <iostream>
-
+#include <vector>
+#include <queue>
 using namespace std;
 
-const int MAXN = 500 + 1;
-const int INF = 500*500*500;
+struct Edge {
+    int u, v, weight;
+    Edge(int u, int v, int weight) : u(u), v(v), weight(weight) {}
 
-int dist[MAXN][MAXN] = {{INF}};
+    bool operator<(const Edge& other) const { // 해당 struct에 한정되는 오버라이딩이므로 걱정 ㄴㄴ
+        return weight > other.weight;
+    }
+};
 
-int main(){
-    int N,M,s,e;
-    int answer = 0;
-    cin >> N >> M;
+class UnionFind {
+private:
+    vector<int> parent, rank;
 
-    // 갈 수 있는지 없는지 확인
-    for(int i=0; i<M; ++i){
-        cin >> s >> e;
-        dist[s][e] = 1; // s에서 e가 1: s가 e보다 작다
-        dist[e][s] = -1; // e에서 s가 -1: e가 s보다 작지 않다
+public:
+    UnionFind(int n) {
+        parent.resize(n+1);
+        rank.resize(n+1, 0);
+        for (int i = 1; i <= n; ++i) parent[i] = i; // 일단 나 자신으로 초기화
     }
 
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
 
-    //Floyd-Warshall
-    for(int k=1; k<=N; ++k){
-        for(int i=1; i<=N; ++i){
-            for(int j=1; j<=N; ++j){ // i부터 j까지 갈건데, [i][k]+[k][j]가 [i][j]보다 짧니?
-                if (dist[i][k]==1 && dist[k][j]==1){
-                    dist[i][j] = 1;
-                    dist[j][i] = -1;
-                }
+    bool unite(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+
+        if (rootX != rootY) {
+            if (rank[rootX] > rank[rootY]) parent[rootY] = rootX;
+            else if (rank[rootX] < rank[rootY]) parent[rootX] = rootY;
+            else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
             }
+            return true;
+        }
+        else return false;  // 이미 같은 집합에 있는 경우
+    }
+};
+
+int main() {
+    int n, m;
+    int mx = -1;
+    cin >> n >> m;
+    
+    if (n == 2){
+        cout << 0;
+        return 0;
+    }
+    
+    
+    priority_queue<Edge> pq;
+
+    for (int i = 0; i < m; ++i) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        pq.push(Edge(u, v, w));
+    }
+
+    UnionFind uf(n);
+
+    int mstWeight = 0;
+    int edgesUsed = 0;
+
+    while (!pq.empty() && edgesUsed < n - 1) {
+        Edge e = pq.top(); pq.pop();
+
+        if (uf.unite(e.u, e.v)) {
+            mstWeight += e.weight;
+            edgesUsed++;
+            mx = max(mx,e.weight);
         }
     }
 
-    for(int i=1; i<=N; ++i){
-        int smaller = 0;
-        int larger = 0;
-        for(int j=1; j<=N; ++j){
-            if(dist[i][j] == 1) ++smaller;
-            else if(dist[i][j] == -1) ++larger;
-        }
-        if(smaller+larger == N-1) ++answer;
-    }
-
-    cout << answer;
-
+    // 최소 신장 트리의 가중치 출력
+    cout << mstWeight-mx;  // 최소 신장 트리의 총 가중치
 
     return 0;
 }
