@@ -1,46 +1,53 @@
 /*
     긍정, 책임
-    How many times do you BFS?
+    트리랑 친해지기
+    cur에서 nxt를 찾았다? 그럼 nxt의 부모가 cur인거임
 */
 #include <iostream>
 #include <queue>
+#include <vector>
 using namespace std;
 
-const static int MAXN = 1'000;
-bool adj[MAXN+1][MAXN+1] = {{false}};
-bool v[MAXN+1] = {false};
+const int MAXN = 100'000 + 1; 
+vector<int> adj[MAXN];
+bool v[MAXN] = {false};
+static int answer[MAXN] = {0};
+static int N;
 
-int main(){
-    int N,M,s,e;
-    int answer = 0;
-    cin >> N >> M;
+void BFS(){
+    queue<int> q;
+    q.push(1);
+    v[1] = true;
 
-    for(int i=1; i<=M; ++i){
-        cin >> s >> e;
-        adj[s][e] = true;
-        adj[e][s] = true;
-    }
-
-    for(int i=1; i<=N; ++i){
-        if(!v[i]){ // 미방문 노드라면
-            queue<int> q;
-            q.push(i);
-            v[i] = true;
-            while (!q.empty()){
-                int cur = q.front(); q.pop();
-                for(int j=1; j<=N; ++j){
-                    if((adj[cur][j]||adj[j][cur]) && !v[j]){
-                        q.push(j);
-                        v[j] = true;
-                    }
-                }
+    while(!q.empty()){
+        int cur = q.front(); q.pop();
+        for(int nxt: adj[cur]){
+            if(!v[nxt]){
+                answer[nxt] = cur;
+                q.push(nxt);
+                v[nxt] = true;
             }
-
-            answer += 1;
         }
     }
 
-    cout << answer;
+}
+
+int main(){
+    int s,e;
+    cin >> N;
+
+    for(int i=0; i<N; ++i){
+        cin >> s >> e;
+        adj[s].push_back(e);
+        adj[e].push_back(s);
+    }
+
+    BFS();
+
+    for(int i=2; i<=N; ++i){
+        cout << answer[i] << "\n";
+    }
+
 
     return 0;
 }
