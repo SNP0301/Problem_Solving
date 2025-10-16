@@ -1,57 +1,61 @@
 /*
     긍정, 책임
+
+    5
+    3 1 4 3 2
+    로 들어오면
+
+    정렬해보면 1 2 3 3 4
+    누적합하면 1 3 6 9 13
+    누적합을 총합하면 1+3+6+9+13 = 32
+
+    1) 정렬 O(N log N)
+    2) 누적합   O(N)
+    3) 누적합을 총합 O(N)
 */
 #include <iostream>
-#include <unordered_set>
-#include <algorithm>
 #include <vector>
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
 
+
+void merge(){
+
+}
+
+void mergeSort(){
+
+}
+
+
+
 int main(){
-    ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    int N,p;
+    int answer = 0;
+    vector<int> waitTime,accTime;
 
-    int N, M;
-    string id;
-    unordered_set<string> dst, bst;
-    vector<string> answer;
 
-    cin >> N >> M;
+    cin >> N;
+    for(int i=0; i<N; ++i){
+        cin >> p;
+        waitTime.push_back(p);
+        accTime.push_back(0);
+    }
+
+    sort(waitTime.begin(),waitTime.end());
+
+    accTime[0] = waitTime[0];
+    for(int i=1; i<N; ++i){
+        accTime[i] = waitTime[i]+accTime[i-1];
+    }
 
     for(int i=0; i<N; ++i){
-        cin >> id;
-        dst.insert(id);
+        answer += accTime[i];
     }
 
-    for(int i=0; i<M; ++i){
-        cin >> id;
-        bst.insert(id);
-    }
-
-    if (N>M){
-        for(string id: bst){
-            if(dst.count(id)){
-                answer.push_back(id);
-            }
-        }
-    }
-    else {
-        for(string id: dst){
-            if(bst.count(id)){
-                answer.push_back(id);
-            }
-        }
-    }
-
-    sort(answer.begin(), answer.end());
-
-    cout << (int)answer.size() << "\n";
-    for (string id: answer){
-        cout << id << "\n";
-    }
-
+    cout << answer;
 
 
     return 0;
