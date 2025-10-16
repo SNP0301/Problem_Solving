@@ -1,61 +1,90 @@
 /*
     긍정, 책임
-
-    5
-    3 1 4 3 2
-    로 들어오면
-
-    정렬해보면 1 2 3 3 4
-    누적합하면 1 3 6 9 13
-    누적합을 총합하면 1+3+6+9+13 = 32
-
-    1) 정렬 O(N log N)
-    2) 누적합   O(N)
-    3) 누적합을 총합 O(N)
+    추억의 BFS 렛츠고
 */
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
 
+const int MAXNM = 50;
+static int arr[MAXNM][MAXNM] = {{0}};
+static bool v[MAXNM][MAXNM] = {{false}};
+static int N,M,answer;
+static int dx[4] = {0,-1,0,1};
+static int dy[4] = {-1,0,1,0};
 
 
-void merge(){
-
+bool isOut(int x, int y){
+    if(x<0 || x>=N || y<0 || y>=M) return true;
+    return false;
 }
 
-void mergeSort(){
-
+void clean(){
+    for(int cx=0; cx<MAXNM; ++cx){
+        for(int cy=0; cy<MAXNM; ++cy){
+            arr[cx][cy] = 0;
+            v[cx][cy] = false;
+        }
+    }
 }
 
+void BFS(int ix, int iy){
+    queue<pair<int,int>> q;
 
+    q.push(pair(ix,iy));
+    v[ix][iy] = true;
+    
+    while(!q.empty()){
+        pair<int,int> cur = q.front(); q.pop();
+        int x = cur.first;
+        int y = cur.second;
+
+        for(int f=0; f<4; ++f){
+            int nx = x + dx[f];
+            int ny = y + dy[f];
+            if (!isOut(nx,ny) && arr[nx][ny]==1 && !v[nx][ny]){ // 범위 내, 유효한 1, 미방문이면
+                q.push({nx,ny});
+                v[nx][ny] = true;
+
+            }
+        }
+
+
+    }
+
+}
 
 int main(){
-    int N,p;
-    int answer = 0;
-    vector<int> waitTime,accTime;
+    int T,K,ix,iy;
+    cin >> T;
 
+    for(int t=0; t<T; ++t){
+        cin >> M >> N >> K;
+        
+        // 새로운 밭에다가 애벌레 심기
+        clean();
+        answer = 0;
 
-    cin >> N;
-    for(int i=0; i<N; ++i){
-        cin >> p;
-        waitTime.push_back(p);
-        accTime.push_back(0);
+        for(int k=0; k<K; ++k){
+            cin >> iy >> ix;
+            arr[ix][iy] = 1;
+        }
+
+        //BFS 통해서 애벌레 수 세기
+        for(int x=0; x<N; ++x){
+            for(int y=0; y<M; ++y){
+                if(arr[x][y]==1 && !v[x][y]){
+                    BFS(x,y);
+                    answer += 1;
+                }
+            }
+        }
+
+        cout << answer << "\n";
+
     }
-
-    sort(waitTime.begin(),waitTime.end());
-
-    accTime[0] = waitTime[0];
-    for(int i=1; i<N; ++i){
-        accTime[i] = waitTime[i]+accTime[i-1];
-    }
-
-    for(int i=0; i<N; ++i){
-        answer += accTime[i];
-    }
-
-    cout << answer;
 
 
     return 0;
