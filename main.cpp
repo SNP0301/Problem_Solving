@@ -1,89 +1,55 @@
 /*
     긍정, 책임
-    8방인접 bfs
 
-    -1-1  -10  -11
-     0-1   00  >01<
-     1-1   10   11
+    X가 3으로 나누어 떨어지면, 3으로 나눈다.
+    X가 2로 나누어 떨어지면, 2로 나눈다.
+    1을 뺀다.
+
 */
 #include <iostream>
 #include <queue>
 using namespace std;
 
-const int ex[8] = {0,1,1,1,0,-1,-1,-1};
-const int ey[8] = {1,1,0,-1,-1,-1,0,1};
-const int MAXSIZE = 50+1;
-static int w,h;
-static int arr[MAXSIZE][MAXSIZE] = {{0}};
-static bool v[MAXSIZE][MAXSIZE] = {{false}};
-
-void clean(){
-    for(int x=0; x<MAXSIZE; ++x){
-        for(int y=0; y<MAXSIZE; ++y){
-            arr[x][y] = 0;
-            v[x][y] = false;
-        }
-    }
-}
-
-bool outofBound(int x, int y){
-    return (x<0 || x >= h || y<0 || y >= w);
-}
-
-void BFS(int x, int y){
-    queue<pair<int,int>> q;
-    q.push({x,y});
-    v[x][y] = true;
-
-    while(!q.empty()){
-        pair<int,int> cur = q.front(); q.pop();
-        int ix = cur.first;
-        int iy = cur.second;
-        for(int e=0; e<8; ++e){ // e for eight
-            int nx = ix + ex[e];
-            int ny = iy + ey[e];
-            if(!outofBound(nx,ny) && !v[nx][ny] && arr[nx][ny]==1){ // 범위 내, 미방문, 조건 만족하면
-                q.push({nx,ny});
-                v[nx][ny] = true;
-            }
-        }
-
-    }
-
-}
+const static int MAXN = 1'000'000+1;
+int arr[MAXN] = {MAXN};
+bool v[MAXN] = {false};
 
 int main(){
-    int num;
-    while (true){
-        clean();
-        cin >> w >> h;
-        if(w==0 && h==0) break; // 입력의 마지막에는 0이 2개 주어진다
+    int N;
+    cin >> N;
 
-        // 정답, 지도, 방문 배열 초기화
-        int answer = 0;
+    queue<int> q;
+    q.push(N);
 
+    arr[N] = 0;
+    v[N] = true;
 
-        for(int x=0; x<h; ++x){
-            for(int y=0; y<w; ++y){
-                cin >> num;
-                arr[x][y] = num;
-            }
+    while (!q.empty()){
+        int cur = q.front(); q.pop();
+
+        int curScore = arr[cur];
+        
+        if (cur == 1){ // 종료 조건
+            cout << arr[cur];
+            return 0;
         }
 
-        for(int x=0; x<h; ++x){
-            for(int y=0; y<w; ++y){
-                if(arr[x][y]==1 && !v[x][y]){
-                    BFS(x,y);
-                    answer += 1;
-                }
-            }
+        if(cur%3 == 0 && !v[cur/3]){
+            q.push(cur/3);
+            v[cur/3] = true;
+            arr[cur/3] = curScore + 1;
         }
-
-        cout << answer << "\n";
-
-
-
-
+        if (cur%2 == 0 && !v[cur/2]){
+            q.push(cur/2);
+            v[cur/2] = true;
+            arr[cur/2] = curScore + 1;
+        }
+        if (cur-1 >= 0 && !v[cur-1]){
+            q.push(cur-1);
+            v[cur-1] = true;
+            arr[cur-1] = curScore +1;
+        }
+        
     }
 
     return 0;
