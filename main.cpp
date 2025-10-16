@@ -1,52 +1,56 @@
 /*
     긍정, 책임
-    트리랑 친해지기
-    cur에서 nxt를 찾았다? 그럼 nxt의 부모가 cur인거임
+
+    단방향
+    비용 없음.
+    크기 비교를 간접적으로 할 수도 있음
+        [i][k] + [k][j] => [i][j]
 */
 #include <iostream>
-#include <queue>
-#include <vector>
+
 using namespace std;
 
-const int MAXN = 100'000 + 1; 
-vector<int> adj[MAXN];
-bool v[MAXN] = {false};
-static int answer[MAXN] = {0};
-static int N;
+const int MAXN = 500 + 1;
+const int INF = 500*500*500;
 
-void BFS(){
-    queue<int> q;
-    q.push(1);
-    v[1] = true;
+int dist[MAXN][MAXN] = {{INF}};
 
-    while(!q.empty()){
-        int cur = q.front(); q.pop();
-        for(int nxt: adj[cur]){
-            if(!v[nxt]){
-                answer[nxt] = cur;
-                q.push(nxt);
-                v[nxt] = true;
+int main(){
+    int N,M,s,e;
+    int answer = 0;
+    cin >> N >> M;
+
+    // 갈 수 있는지 없는지 확인
+    for(int i=0; i<M; ++i){
+        cin >> s >> e;
+        dist[s][e] = 1; // s에서 e가 1: s가 e보다 작다
+        dist[e][s] = -1; // e에서 s가 -1: e가 s보다 작지 않다
+    }
+
+
+    //Floyd-Warshall
+    for(int k=1; k<=N; ++k){
+        for(int i=1; i<=N; ++i){
+            for(int j=1; j<=N; ++j){ // i부터 j까지 갈건데, [i][k]+[k][j]가 [i][j]보다 짧니?
+                if (dist[i][k]==1 && dist[k][j]==1){
+                    dist[i][j] = 1;
+                    dist[j][i] = -1;
+                }
             }
         }
     }
 
-}
-
-int main(){
-    int s,e;
-    cin >> N;
-
-    for(int i=0; i<N; ++i){
-        cin >> s >> e;
-        adj[s].push_back(e);
-        adj[e].push_back(s);
+    for(int i=1; i<=N; ++i){
+        int smaller = 0;
+        int larger = 0;
+        for(int j=1; j<=N; ++j){
+            if(dist[i][j] == 1) ++smaller;
+            else if(dist[i][j] == -1) ++larger;
+        }
+        if(smaller+larger == N-1) ++answer;
     }
 
-    BFS();
-
-    for(int i=2; i<=N; ++i){
-        cout << answer[i] << "\n";
-    }
+    cout << answer;
 
 
     return 0;
