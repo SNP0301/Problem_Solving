@@ -1,50 +1,43 @@
 /*
     긍정, 책임
-    단방향, cost=1
 */
 #include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 #include <queue>
 using namespace std;
 
-bool adj[101][101] = {{false}};
-bool v[101] = {false};
-int cost[101] = {0};
-static int N;
-
-void BFS(int node){
-    queue<int> q;
-    q.push(node);
-    v[node] = true;
-
-    while(!q.empty()){
-        int cur = q.front(); q.pop();
-        for(int nxt=1; nxt<=N; ++nxt){
-            if(adj[cur][nxt] && !v[nxt]){
-                q.push(nxt);
-                v[nxt] = true;
-                cost[nxt] = cost[cur] + 1;
-            }
-        }
-    }
-}
+// const static int MAX = 1'000'000'000;
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int M,m,parent,child,start,end;
-    cin >> N >> start >> end >> M;
+    long A,B;
+    cin >> A >> B;
 
-    for(m=0; m<M; ++m){
-        cin >> parent >> child;
-        adj[child][parent] = true;
-        adj[parent][child] = true;
+    unordered_map<long,long> mp;
+    unordered_set<long> v;
+    queue<long> q;
+
+    mp[A] = 0;
+    q.push(A);
+    v.insert(A);
+
+    while(!q.empty()){
+        long cur = q.front(); q.pop();
+        if (cur == B) break;
+        long nxtArr[2] = {cur*2, cur*10+1};
+
+        for(long nxt: nxtArr){
+            if(v.find(nxt) == v.end() && nxt <= B){ // 못 찾았으면 = 간 적 없으면
+                q.push(nxt);
+                v.insert(nxt);
+                mp[nxt] = mp[cur]+1;
+            }
+        }
     }
-
-    cost[start] = 0;
-
-    BFS(start);
-
-    if(cost[end]==0) cout << -1;
-    else cout << cost[end];
+    
+    if(v.find(B) == v.end()) cout << -1;
+    else cout << mp[B]+1;
 
     return 0;
 }
