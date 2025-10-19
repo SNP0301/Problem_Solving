@@ -1,47 +1,61 @@
+/*
+    긍정, 책임
+*/
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <limits>
+#include <algorithm>
 using namespace std;
-
 using ll = long long;
-struct Edge { int to; ll w; };
 
-int main() {
+static int N;
+static ll mx = 0;
+static ll zero = 0;
+
+ll trees[1'000'000] = {0};
+
+ll cutTrees(ll h){
+    ll takeAway = 0;
+    for(int i=0; i<N; ++i){
+        takeAway += max(zero,trees[i]-h);
+    }
+    return takeAway;
+}
+
+int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    ll height,M,mid,res;
+    vector<ll> vc;
 
-    int N, M; 
     cin >> N >> M;
-    vector<vector<Edge>> adj(N + 1);
-    for (int i = 0; i < M; ++i) {
-        int A, B; ll C;
-        cin >> A >> B >> C;
-        adj[A].push_back({B, C});
-        adj[B].push_back({A, C});
+    for(int i=0; i<N; ++i){
+        cin >> height;
+        trees[i] = height;
+        if (mx < height) mx = height;
     }
-    int s, t; 
-    cin >> s >> t;
 
-    vector<ll> dist(N + 1, 0);
-    priority_queue<pair<ll,int>> pq;
-    dist[s] = numeric_limits<ll>::max();
+    ll left = 0;
+    ll right = mx;
 
-    pq.push({dist[s], s});
-
-    while (!pq.empty()) {
-        auto [cap, v] = pq.top(); pq.pop();
-        if (cap < dist[v]) continue;
-        if (v == t) break;
-
-        for (const auto& e : adj[v]) {
-            ll ncap = min(cap, e.w);
-            if (ncap > dist[e.to]) {
-                dist[e.to] = ncap;
-                pq.push({ncap, e.to});
-            }
+    while (left <= right){
+        mid = left+ (right-left)/2;
+        res = cutTrees(mid);
+        if (res < M) { // 부족하네 내려가자
+            right = mid - 1;
         }
+        else if (res > M){ // 남네 올라가자
+            left = mid + 1;
+            vc.push_back(mid);
+        }
+        else{
+            vc.push_back(mid);
+            break;
+        }
+
     }
 
-    cout << dist[t] << '\n';
+    sort(vc.begin(), vc.end());
+
+    cout << vc[(ll)vc.size()-1];
+
+
     return 0;
 }
