@@ -2,60 +2,48 @@
     긍정, 책임
 */
 #include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
-using ll = long long;
 
 static int N;
-static ll mx = 0;
-static ll zero = 0;
+static int cnt = 1;
+const static int MAXN = 100'001;
+vector<vector<int>> adj;
+bool v[MAXN]= {false};
+int answer[MAXN] = {0};
 
-ll trees[1'000'000] = {0};
-
-ll cutTrees(ll h){
-    ll takeAway = 0;
-    for(int i=0; i<N; ++i){
-        takeAway += max(zero,trees[i]-h);
+void DFS(int cur){
+    for(int i=0;i<(int)adj[cur].size(); ++i){
+        if(!v[adj[cur][i]]){
+            v[adj[cur][i]] = true;
+            answer[adj[cur][i]] = ++cnt;
+            DFS(adj[cur][i]);
+        }
     }
-    return takeAway;
 }
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    ll height,M,mid,res;
-    vector<ll> vc;
 
-    cin >> N >> M;
-    for(int i=0; i<N; ++i){
-        cin >> height;
-        trees[i] = height;
-        if (mx < height) mx = height;
+    int M,R,s,e;
+    cin >> N >> M >> R;
+    adj.resize(N+1);
+    for(int i=0; i<M; ++i){
+        cin >> s >> e;
+        adj[s].push_back(e);
+        adj[e].push_back(s);
     }
 
-    ll left = 0;
-    ll right = mx;
+    for (int i=1;i<=N;i++) sort(adj[i].begin(), adj[i].end());
 
-    while (left <= right){
-        mid = left+ (right-left)/2;
-        res = cutTrees(mid);
-        if (res < M) { // 부족하네 내려가자
-            right = mid - 1;
-        }
-        else if (res > M){ // 남네 올라가자
-            left = mid + 1;
-            vc.push_back(mid);
-        }
-        else{
-            vc.push_back(mid);
-            break;
-        }
+    answer[R] = 1;
+    v[R] = true;
+    DFS(R);
 
+    for(int i=1; i<=N; ++i){
+        cout << answer[i] << "\n";
     }
-
-    sort(vc.begin(), vc.end());
-
-    cout << vc[(ll)vc.size()-1];
-
 
     return 0;
 }
