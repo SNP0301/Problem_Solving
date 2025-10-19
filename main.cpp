@@ -20,7 +20,8 @@ void BFS(int n){
 
     while(!q.empty()){
         int cur = q.front(); q.pop();
-            for(const int& nxt: adj[cur]){
+            for(int i=(int)adj[cur].size()-1; i>=0; --i){
+                int nxt = adj[cur][i];
                 if(!v[nxt]){
                     q.push(nxt);
                     v[nxt] = true;
