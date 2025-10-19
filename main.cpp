@@ -2,60 +2,78 @@
     긍정, 책임
 */
 #include <iostream>
-#include <algorithm>
 #include <vector>
 #include <queue>
 using namespace std;
+using sheep = pair<int,int>;
 
-vector<vector<int>> adj;
-vector<bool> v;
-int answer[100'001] = {0,};
+static int H,W;
+vector<vector<char>> vc;
+vector<vector<bool>> v;
 
-static int cnt = 1;
-static int N;
+int fx[4] = {0,0,-1,1};
+int fy[4] = {-1,1,0,0};
 
-void BFS(int n){
-    queue<int> q;
-    q.push(n);
+bool outofBound(int ox, int oy){ return (ox<0 || ox>=H || oy<0 || oy>=W); }
+
+void BFS(int bx, int by){
+    queue<sheep> q;
+    q.push({bx,by});
+    v[bx][by] = true;
 
     while(!q.empty()){
-        int cur = q.front(); q.pop();
-            for(int i=(int)adj[cur].size()-1; i>=0; --i){
-                int nxt = adj[cur][i];
-                if(!v[nxt]){
-                    q.push(nxt);
-                    v[nxt] = true;
-                    answer[nxt] = ++cnt;
-                }
+        sheep sh = q.front(); q.pop();
+        int x = sh.first;
+        int y = sh.second;
+        for(int f=0; f<4; ++f){
+            int nx = x + fx[f];
+            int ny = y + fy[f];
+            if(!outofBound(nx,ny) && !v[nx][ny] && vc[nx][ny]=='#'){
+                q.push({nx,ny});
+                v[nx][ny] = true;
             }
+        }
     }
 
 }
 
+
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int M,R,s,e;
 
-    cin >> N >> M >> R;
+    int T,answer;
+    char c;
+    cin >> T;
+    for(int t=0; t<T; ++t){
+        cin >> H >> W;
 
-    adj.resize(N+1);
-    v.resize(N+1);
+        vc.resize(0);
+        v.resize(0);
 
-    for(int i=0; i<M; ++i){
-        cin >> s >> e;
-        adj[s].push_back(e);
-        adj[e].push_back(s);
-    }
+        vc.resize(H);
+        v.resize(H);
+        answer = 0;
 
-    answer[R] = cnt;
-    v[R] = true;
+        for(int h=0; h<H; ++h){
+            for(int w=0; w<W; ++w){
+                cin >> c;
+                vc[h].push_back(c);
+                v[h].push_back(false);
+            }
+        }
 
-    for(int i=1; i<=N; ++i) sort(adj[i].begin(), adj[i].end());
+        for(int x=0; x<H; ++x){
+            for(int y=0; y<W; ++y){
+                if(vc[x][y]=='#' && !v[x][y]){
+                    // cout << x << "," << y << "\n";
+                    BFS(x,y);
+                    ++answer;
+                }
+            }
+        }
 
-    BFS(R);
-
-    for(int i=1; i<=N; ++i){
-        cout << answer[i] << "\n";
+        cout << answer << "\n";
+        
     }
 
     return 0;
