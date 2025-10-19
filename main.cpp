@@ -14,7 +14,7 @@ bool v[MAXN]= {false};
 int answer[MAXN] = {0};
 
 void DFS(int cur){
-    for(int i=0;i<(int)adj[cur].size(); ++i){
+    for(int i=(int)adj[cur].size()-1; i>=0; --i){
         if(!v[adj[cur][i]]){
             v[adj[cur][i]] = true;
             answer[adj[cur][i]] = ++cnt;
