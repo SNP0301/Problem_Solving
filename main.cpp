@@ -1,41 +1,44 @@
 /*
     긍정, 책임
-
-    Map에 넣어두고, Key값을 NlgN으로 정렬 N 최대값은 1'000'000
-        -> 1'000'000 * lg 1'000'000 = 6'000'000
 */
 #include <iostream>
-#include <unordered_map>
-#include <algorithm>
+#include <queue>
 #include <vector>
-#include <set>
 using namespace std;
 
+const static int MAXN = 100'000;
+int arr[MAXN+1];
+int cost[MAXN+1];
+bool v[MAXN+1];
+
+vector<int> getNext(int n){ return {n-1,n+1,n*2}; }
+bool outofBound(int n) { return (n<0 || n > 100'000); }
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int N,num;
-    set<int> st;
-    vector<int> vc;
-    unordered_map<int, int> map;
+    int N, K;
+    queue<int> q;
+    cin >> N >> K;
+    
+    for(int i=0; i<MAXN+1; ++i){ arr[i] = MAXN*2; }
 
-    cin >> N;
-    int idx = 0;
-    for(int i=0; i<N; ++i){
-        cin >> num;
-        st.insert(num);
-        vc.push_back(num);
+    q.push(N);
+    v[N] = true;
+
+    while(!q.empty()){
+        int cur = q.front(); q.pop();
+        if (cur == K){
+            cout << cost[cur];
+            break;
+        }
+        for(const int &nxt: getNext(cur)){
+            if(!outofBound(nxt) && !v[nxt]){
+                q.push(nxt);
+                v[nxt] = true;
+                cost[nxt] = cost[cur] + 1;
+            }
+        }
     }
-
-    for(const int &e : st){
-        map[e] = idx++;
-    }
-
-    for(int i=0; i<N; ++i){
-        cout << map[vc[i]] << " ";
-    }
-
-
 
     return 0;
 }
