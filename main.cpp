@@ -1,72 +1,76 @@
 /*
     긍정, 책임
+
+    0이 하양, 1이 파랑 출력은 하얀 다음 파랑
+    128*128에 대해 완전탐색 7번
 */
 #include <iostream>
-#include <vector>
-#include <queue>
 using namespace std;
-using node = pair<int,int>;
 
-static int N,M;
-const static int MAXN = 1'000;
-
+const int MAXN = 128;
+static int N;
 int arr[MAXN][MAXN];
-int answer[MAXN][MAXN];
 bool v[MAXN][MAXN];
-int fx[4] = {0,0,-1,1};
-int fy[4] = {1,-1,0,0};
 
-bool outofBound(int ox, int oy){ return (ox<0 || ox>=N || oy<0 || oy>=M);}
+
+
+int pow(int n, int to){
+    int multiple = n;
+    for(int i=1; i<to; ++i){
+        n *= multiple;
+    }
+    return n;
+}
+
+bool outofBound(int x, int y){ return(x<0 || x>=N || y<0 || y>=N);}
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    
-    int cnt,sx,sy;
-    cin >> N >> M;
+    int num;
+    int white = 0; // 0이 하양
+    int blue = 0; // 1이 파랑
+    cin >> N;
 
-    //  입력 받기
-    for(int x=0; x<N; ++x){
-        for(int y=0; y<M; ++y){
-            cin >> cnt;
-            arr[x][y] = cnt;
-            if(arr[x][y]==2){
-                sx = x;
-                sy = y;
+    for(int i=0; i<N; ++i){
+        for(int j=0; j<N; ++j){
+            cin >> num;
+            arr[i][j] = num;
+        }
+    }
+
+    for(int sz=N; sz>0; sz/=2){ // 8 4 2 1
+        for(int x=0; x<N; ++x){
+            for(int y=0; y<N; ++y){
+                if(!v[x][y]){ // 아직 세지 않은 곳이면
+                    int cur = arr[x][y]; // 지금 색
+                    bool possible = true;
+                    for(int lx=0; lx<sz; ++lx){
+                        for(int ly=0; ly<sz; ++ly){
+                            if(arr[x+lx][y+ly]!=cur || v[x+lx][y+ly] || outofBound(x+lx,y+ly)){
+                                possible = false;
+                                break;
+                            }
+                        }
+                        if(!possible) break;
+                    }
+                    if (possible){
+                        int cnt = 0;
+                    for(int lx=0; lx<sz; ++lx){
+                        for(int ly=0; ly<sz; ++ly){
+                            ++cnt;
+                            v[x+lx][y+ly] = true;
+                        }
+                    }
+                    if (arr[x][y] == 0) white += cnt;
+                    else blue += cnt;
+                }
             }
         }
     }
 
 
-    // BFS
-    queue<node> q;
-    q.push({sx,sy});
-    v[sx][sy] = true;
-    answer[sx][sy] = 0;
-
-    while (!q.empty()){
-        node cur = q.front(); q.pop();
-        int x = cur.first;
-        int y = cur.second;
-        for(int f=0; f<4; ++f){
-            int nx = x + fx[f];
-            int ny = y + fy[f];
-            if(!v[nx][ny] && arr[nx][ny]==1 && !outofBound(nx,ny)){
-                q.push({nx,ny});
-                answer[nx][ny] = answer[x][y] + 1;
-                v[nx][ny] = true;
-            }
-        }
-    }
-
-    for(int x=0; x<N; ++x){
-        for(int y=0; y<M; ++y){
-            if(arr[x][y] == 1 && answer[x][y] == 0) cout << -1 << " ";
-            else cout << answer[x][y] << " ";
-        }
-        cout << "\n";
-    }
-
-
+    cout << white << "\n" << blue;
 
     return 0;
+}
 }
