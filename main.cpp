@@ -12,16 +12,6 @@ static int N;
 int arr[MAXN][MAXN];
 bool v[MAXN][MAXN];
 
-
-
-int pow(int n, int to){
-    int multiple = n;
-    for(int i=1; i<to; ++i){
-        n *= multiple;
-    }
-    return n;
-}
-
 bool outofBound(int x, int y){ return(x<0 || x>=N || y<0 || y>=N);}
 
 int main(){
@@ -39,11 +29,13 @@ int main(){
     }
 
     for(int sz=N; sz>0; sz/=2){ // 8 4 2 1
-        for(int x=0; x<N; ++x){
-            for(int y=0; y<N; ++y){
+        for(int x=0; x<N; x += sz){
+            for(int y=0; y<N; y += sz){
                 if(!v[x][y]){ // 아직 세지 않은 곳이면
                     int cur = arr[x][y]; // 지금 색
                     bool possible = true;
+
+                    // 한번이라도 다른 색이거나, 범위를 벗어나거나, 
                     for(int lx=0; lx<sz; ++lx){
                         for(int ly=0; ly<sz; ++ly){
                             if(arr[x+lx][y+ly]!=cur || v[x+lx][y+ly] || outofBound(x+lx,y+ly)){
@@ -53,24 +45,23 @@ int main(){
                         }
                         if(!possible) break;
                     }
+
                     if (possible){
-                        int cnt = 0;
+
                     for(int lx=0; lx<sz; ++lx){
                         for(int ly=0; ly<sz; ++ly){
-                            ++cnt;
                             v[x+lx][y+ly] = true;
                         }
                     }
-                    if (arr[x][y] == 0) white += cnt;
-                    else blue += cnt;
+                    if (arr[x][y] == 0) white += 1;
+                    else blue += 1;
                 }
             }
         }
     }
-
+    }
 
     cout << white << "\n" << blue;
 
     return 0;
-}
 }
