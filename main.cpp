@@ -1,42 +1,49 @@
 /*
     긍정, 책임
-    22:35 ~ 
-    순서대로 정렬했을 때, 내가 봤을 때, 나보다 바로 한 계층 작은 애 + 나?
+    23:08 ~ 
 */
 #include <iostream>
 #include <queue>
 #include <vector>
-#include <set>
 using namespace std;
-
-const int MAXN = 1'000 + 1; // 1based
-int dp[MAXN];
-
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int N,num;
-    int answer = -1;
+    int N, num;
+    int answer = 0;
     cin >> N;
     vector<int> vc;
-    vector<int> dp;
+    vector<int> fromLeft;
+    vector<int> fromRight;
 
     for(int i=0; i<N; ++i){
         cin >> num;
         vc.push_back(num);
-        dp.push_back(1);
+        fromLeft.push_back(1);
+        fromRight.push_back(1);
     }
 
     for(int i=0; i<N; ++i){
         for(int j=0; j<i; ++j){
-            if(vc[i] < vc[j] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
+            if(vc[i]>vc[j] && fromLeft[i] < fromLeft[j]+1) fromLeft[i] = fromLeft[j]+1;
         }
-        answer = max(answer, dp[i]);
     }
 
-    // for(auto num: dp){
-    //     cout << num << "\n";
-    // }
+    for(int i=N-1; i>=0; --i){
+        for(int j=i+1; j<N; ++j){
+            //cout << i << " " << j << "\n";
+            if(vc[i]>vc[j] && fromRight[i] < fromRight[j]+1) fromRight[i] = fromRight[j]+1;
+        }
+    }
+
+
+    for(int i=0; i<N; ++i){
+        answer = max(answer,fromRight[i]+fromLeft[i]-1);
+        //cout << fromRight[i] + fromLeft[i] << "\n";
+    }
+
     cout << answer;
+
+
     return 0;
 }
