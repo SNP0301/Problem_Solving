@@ -29,7 +29,7 @@ int main(){
 
     for(int i=0; i<N; ++i){
         for(int j=0; j<i; ++j){
-            if(vc[i] > vc[j] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
+            if(vc[i] < vc[j] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
         }
         answer = max(answer, dp[i]);
     }
