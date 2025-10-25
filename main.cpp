@@ -24,16 +24,19 @@ int main(){
     for(int i=0; i<N; ++i){
         cin >> num;
         vc.push_back(num);
-        dp.push_back(num);
+        dp.push_back(1);
     }
 
     for(int i=0; i<N; ++i){
         for(int j=0; j<i; ++j){
-            if(vc[i] > vc[j] && dp[i] < dp[j] + vc[i]) dp[i] = dp[j] + vc[i];
+            if(vc[i] > vc[j] && dp[i] < dp[j] + 1) dp[i] = dp[j] + 1;
         }
         answer = max(answer, dp[i]);
     }
 
+    // for(auto num: dp){
+    //     cout << num << "\n";
+    // }
     cout << answer;
     return 0;
 }
