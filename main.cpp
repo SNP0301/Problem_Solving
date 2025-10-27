@@ -1,48 +1,65 @@
 /*
     긍정, 책임
-    LIS O(LlgN)의 핵심.
-    LIS 길이가 결과적으로 L이라 할 때, L개 요소에 대해 각각 이분탐색 1번씩 실행하므로 L * lgN = LlgN
-        - LIS를 만드는게 아니라, LIS 누적표를 만든다 생각하자
-        - **길이 n짜리 증가 수열의 끝값
-    lower_bound가 end를 반환했으면 추가, 그렇지 않으면 갱신
-
-    * 함수에 vector를 인자로 건네주기
-        - const vector<int>& A의 경우
-            1) &: 복사하지 않고 참조(주소로 접근)하겠다
-
 */
 #include <iostream>
 #include <queue>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
-int getLisLength(const vector<int>& A){
-    vector<int> Lis;
+char arr[10'000][10+1];
 
-    for(auto x: A){
-        auto it = lower_bound(Lis.begin(),Lis.end(), x);
-        if(it == Lis.end()) Lis.push_back(x);
-        else *it = x;
+struct Trie{
+    bool endofWord;
+    Trie* children[10]; // 0부터 9까지 10자리
+
+    Trie(): endofWord(false), children{}{
     }
 
-    return (int)Lis.size();
-}
+    void insert(char* key){
+        if(*key == '\0') endofWord = true;
+        else{
+            int idx = *key - '0';
+            if(children[idx] == 0) children[idx] = new Trie();
+            children[idx]->insert(key+1);
+        }
+    }
 
+
+    bool find(char* key){
+        if(*key == '\0') return true;
+        if(endofWord) return false;
+        int idx = *key - '0';
+        return children[idx]->find(key+1);
+    }
+};
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+    int T, N;
+    cin >> T;
 
-    int N, num;
-    vector<int> vc;
+    for(int i=0; i<T; ++i){
+        Trie* root = new Trie();
+        cin >> N;
 
-    cin >> N;
-    for(int i=0; i<N; ++i){
-        cin >> num;
-        vc.push_back(num);
+        for(int j=0; j<N; ++j){
+            cin >> arr[j];
+            root -> insert(arr[j]);
+        }
+
+        bool isPossible = true;
+        for(int j=0; j<N; ++j){
+            if(root -> find(arr[j]) == false){
+                isPossible = false;
+                break;
+            }
+        }
+
+        if(isPossible) cout << "YES\n";
+        else cout << "NO\n";
+        delete root; // 에반데
     }
 
-    cout << getLisLength(vc);
 
     return 0;
 }
