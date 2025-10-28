@@ -1,52 +1,66 @@
 /*
     긍정, 책임
+    
 */
 #include <iostream>
-#include <string>
+#include <queue>
+#include <vector>
 using namespace std;
-string s;
 
-struct Trie{
-    bool endofWord;
-    int sameCnt;
-    Trie* children[26]; // 알파벳 소문자 26개
+int I;
+const int MAXI = 300;
+int arr[MAXI][MAXI];
+bool v[MAXI][MAXI];
 
-    Trie(): endofWord(false), sameCnt(0), children{}{
-    }
+int edx[] = {-2,-1,1,2,2,1,-1,-2};
+int edy[] = {1,2,2,1,-1,-2,-2,-1};
 
-    void insert(string& s, int idx, bool possible){
-
-        if(idx >= (int)s.length()){
-            sameCnt++;
-            if(sameCnt > 1) cout << sameCnt;
-            cout << "\n";
-            return;
-        }
-
-        int ctoi = s[idx] - 'a';
-        if(!possible) cout << s[idx];
-
-        if(!children[ctoi]){
-            children[ctoi] = new Trie();
-            possible = true; // 없네
-        }
-
-        children[ctoi]->insert(s,idx+1,possible);
-    
-    }
-};
+bool outofBound(int x, int y){ return(x<0 || x>=I || y<0 || y>=I);}
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int N;
-    cin >> N;
-    Trie* root = new Trie();
+    int T,sx,sy,ex,ey;
+    cin >> T;
+    for(int t=0; t<T; ++t){
+        cin >> I >> sx >> sy >> ex >> ey;
 
-    for(int i=0; i<N; ++i){
-        cin >> s;
-        root -> insert(s,0,false); // 모르니까
+
+        // 00. 초기화
+        for(int x=0; x<I; ++x){
+            for(int y=0; y<I; ++y){
+                arr[x][y] = 0;
+                v[x][y] = false;
+            }
+        }
+
+        // 01. 
+        queue<pair<int,int>> q;
+        q.push({sx,sy});
+        v[sx][sy] = true;
+
+        while(!q.empty()){
+            auto [x,y] = q.front(); q.pop();
+            if (x == ex && y == ey){
+                cout << 0 << "\n";
+                break;
+            }
+            for(int e=0; e<8; ++e){
+                int nx = x + edx[e];
+                int ny = y + edy[e];
+                if(!outofBound(nx,ny) && !v[nx][ny]){
+                    q.push({nx,ny});
+                    v[nx][ny] = true;
+                    arr[nx][ny] = arr[x][y] + 1;
+                    if(nx == ex && ny == ey){
+                        q = {};
+                        cout << arr[nx][ny] << "\n";
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
-    delete root;
     return 0;
 }
