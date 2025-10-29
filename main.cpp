@@ -1,71 +1,49 @@
 /*
     긍정, 책임
-    21:05 ~
-
-    구상
-    시작점과 도착점이 주어지고, 최소비용을 뽑아라.
-    도시 1<=N<=1'000개. 버스 1<=M<=100'000개.
-        - 단방향 (아마?)
-    갈 수 있는 경우만 주어진다.
-
-    다익스트라 핵심 2step
-        1. update estimates
-        2. choose next vertex
-
-    pq에서 뽑되, 더 좋게 갱신할 수 있으면 방문
-        v가 필요 없을 것 같은데?
 
 */
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<limits>
 using namespace std;
 
-priority_queue<pair<int,int>,vector<pair<int,int>>, greater<>> pq;
-vector<vector<pair<int,int>>> adj;
-int dist[1000+2];
+int dist[100'001];
 int INF = numeric_limits<int>::max();
+priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+
+bool outofBound(int x) {return(x<0 || x>100'000);}
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(nullptr), cout.tie(nullptr);
-    int N,M,sCity,eCity,w;
+    int start, end;
+    cin >> start >> end;
+    for(int i=0; i<=100'000; ++i) dist[i] = INF;
 
-    cin >> N >> M;
-    adj.assign(N+1,{});
 
-    for(int i=0; i<M; ++i){
-        cin >> sCity >> eCity >> w;
-        adj[sCity].push_back({eCity,w});
-    }
-
-    //  최종 목적지
-    cin >> sCity >> eCity;
-
-    const int INF = numeric_limits<int>::max();
-    vector<int>dist(N+1,INF);
-    dist[sCity] = 0;
-
-    pq.push({0,sCity});
+    pq.push({0,start});
+    dist[start] = 0;
 
     while(!pq.empty()){
-        auto[cost, nxt] = pq.top(); pq.pop();
+        auto[cost, cur] = pq.top(); pq.pop();
 
-        if(cost != dist[nxt]) continue; // 최신 정보가 아니니 거른다
-        if(nxt == eCity) break; // 도착
+        if(cost != dist[cur]) continue;
+        if(cur == end) break;
 
-        for(auto &[v,w]: adj[nxt]){
-            int nxtCost = cost + w;
-            if(nxtCost < dist[v]){
-                dist[v] = nxtCost;
-                pq.push({nxtCost,v});
+        int nxtVc[3] = {cur-1,cur+1,cur*2};
+        int nxtCost[3] = {1,1,0};
+
+        for(int i=0; i<3; ++i){
+            if(!outofBound(nxtVc[i]) && dist[cur]+nxtCost[i] < dist[nxtVc[i]]){
+                dist[nxtVc[i]] = dist[cur] + nxtCost[i];
+                pq.push({dist[nxtVc[i]],nxtVc[i]});
             }
         }
+   
     }
 
 
-    cout << dist[eCity];
-
-
+    cout << dist[end];
 
     return 0;
 }
