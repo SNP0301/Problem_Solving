@@ -8,42 +8,47 @@
 #include<limits>
 using namespace std;
 
-int dist[100'001];
-int INF = numeric_limits<int>::max();
+int dist[50'001];
+const int INF = numeric_limits<int>::max();
 priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
-
-bool outofBound(int x) {return(x<0 || x>100'000);}
+vector<vector<pair<int,int>>> adj;
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(nullptr), cout.tie(nullptr);
-    int start, end;
-    cin >> start >> end;
-    for(int i=0; i<=100'000; ++i) dist[i] = INF;
+    int N,M,s,e,w;
+    cin >> N >> M;
 
+    for(int i=1; i<=N; ++i) dist[i] = INF;
+    dist[1] = 0;
+    adj.assign(N+1,{});
 
-    pq.push({0,start});
-    dist[start] = 0;
+    for(int i=0; i<M; ++i){
+        cin >> s >> e >> w;
+        adj[s].push_back({w,e});
+        adj[e].push_back({w,s});
+    }
+    
+    pq.push({0,1}); // 현서는 1에 있고 찬홍이는 N에 있다.
 
     while(!pq.empty()){
         auto[cost, cur] = pq.top(); pq.pop();
 
-        if(cost != dist[cur]) continue;
-        if(cur == end) break;
+        if(cost != dist[cur]) continue; // outdated
+        if(cur == N) break; // 도착함
 
-        int nxtVc[3] = {cur-1,cur+1,cur*2};
-        int nxtCost[3] = {1,1,0};
+        for(auto edge: adj[cur]){
+            auto[nxtCost,nxt] = edge;
 
-        for(int i=0; i<3; ++i){
-            if(!outofBound(nxtVc[i]) && dist[cur]+nxtCost[i] < dist[nxtVc[i]]){
-                dist[nxtVc[i]] = dist[cur] + nxtCost[i];
-                pq.push({dist[nxtVc[i]],nxtVc[i]});
+            if(dist[cur]+nxtCost < dist[nxt]){
+                pq.push({dist[cur]+nxtCost,nxt});
+                dist[nxt] = dist[cur]+nxtCost;
             }
         }
-   
+
     }
 
 
-    cout << dist[end];
+    cout << dist[N];
 
     return 0;
 }
