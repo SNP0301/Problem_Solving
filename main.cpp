@@ -1,97 +1,74 @@
 /*
     긍정, 책임
-    100*100에 대해 완전탐색 100번 = 100만. 가능.
 
-    * 아무 지역도 물에 잠기지 않을 수도 있다.
+    두 정점을 반드시 경유해서 1부터 N까지 갈 것.
+    
+    아래와 같이 5번 Dijkstra
+    1,2: 1에서 v1, v2로 가는 루트
+    3: v1에서 v2 (v2에서 v1 가는 것과 동일)
+    4,5: v1,v2에서 N으로 가는 루트
+
 */
 #include<iostream>
 #include<vector>
 #include<queue>
-#include<set>
 using namespace std;
-const int MXN = 100;
-int arr[MXN][MXN];
-bool v[MXN][MXN];
-bool done[MXN][MXN];
-int N,h;
-int fx[4] = {0,0,-1,1};
-int fy[4] = {-1,1,0,0};
-priority_queue<int,vector<int>,greater<>> height;
+using pii = pair<int,int>;
+struct edge{
+    int weight;
+    int to;
+};
 
-bool outofBound(int x, int y){ return(x<0 || x>=N || y<0 || y>=N);}
+using pq = priority_queue<pii,vector<pii>,greater<pii>>;
 
-void resetV(){
-    for(int i=0; i<N; ++i){
-        for(int j=0; j<N; ++j){
-            v[i][j] = false;
-        }
-    }
-}
+vector<vector<edge>> adj; // {인접 노드 번호, 간선 가중치}
+int N;
+long INF = 1e9;
 
-void bfs(int x, int y){
-    queue<pair<int,int>> q;
-    q.push({x,y});
-    v[x][y] = true;
+long dijkstra(int start, int end){
+    pq pq;
+    vector<long> dist(801,INF);
+    dist[start] = 0;
+    if (start == end) return 0;
+    pq.push({0,start});
 
-    while(!q.empty()){
-        auto [x,y] = q.front(); q.pop();
-        for(int f=0; f<4; ++f){
-            int nx = x + fx[f];
-            int ny = y + fy[f];
-            if(!outofBound(nx,ny) && !v[nx][ny] && !done[nx][ny]){
-                v[nx][ny] = true;
-                q.push({nx,ny});
+    while(!pq.empty()){
+        auto [curDist, u] = pq.top(); pq.pop();
+        if(curDist > dist[u]) continue;
+
+        for (auto e: adj[u]){
+            int v = e.to;
+            int w = e.weight;
+
+            if(dist[v] > curDist + w){
+                dist[v] = curDist + w;
+                pq.push({dist[v],v});
             }
         }
     }
+    
+    return dist[end];
 }
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(nullptr), cout.tie(nullptr);
+    int N,E,u,v,w,v1,v2;
+    cin >> N >> E;
+    adj.resize(N+1);
 
-    set<int> st;
-    int mx = 1; // 모든 지역이 잠기지 않는 경우
-    cin >> N;
-    for(int i=0; i<N; ++i){
-        for(int j=0; j<N; ++j){
-            cin >> arr[i][j];
-            st.insert(arr[i][j]);
-        }
+    for(int i=0; i<E; ++i){
+        cin >> u >> v >> w;
+        adj[u].push_back({w,v});
+        adj[v].push_back({w,u});
     }
+    cin >> v1 >> v2;
 
-    for(auto e: st){
-        height.push(e);
-    }
-
-    while(!height.empty()){
-        h = height.top(); height.pop();
-
-        // 높이만큼 다 잠기게 만들고
-        for(int x=0; x<N; ++x){
-            for(int y=0; y<N; ++y){
-                if(h >= arr[x][y]) done[x][y] = true;
-            }
-        }
-
-        // BFS
-        int curCnt = 0;
-        resetV();
-        for(int x=0; x<N; ++x){
-            for(int y=0; y<N; ++y){
-                if(!v[x][y] && !done[x][y]){
-                    bfs(x,y);
-                    ++curCnt;
-                }
-            }
-        }
-
-        // 정답 갱신
-        if (mx < curCnt) mx = curCnt;
-
-    }
-
-    cout << mx;
-
+    long v1toV2 = dijkstra(1,v1) + dijkstra(v1,v2) + dijkstra(v2,N);
+    long v2toV1 = dijkstra(1,v2) + dijkstra(v1,v2) + dijkstra(v1,N);
+    // cout << v1toV2 << " " << v2toV1 << "\n";
+    long answer = min(v1toV2,v2toV1);
+    if(answer >= INF) cout << -1;
+    else cout << answer;
 
     return 0;
 }

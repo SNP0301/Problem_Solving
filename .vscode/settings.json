@@ -123,6 +123,7 @@
     "concepts": "cpp",
     "__tree": "cpp",
     "set": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "map": "cpp"
   }
 }
