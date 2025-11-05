@@ -1,74 +1,61 @@
 /*
     긍정, 책임
 
-    두 정점을 반드시 경유해서 1부터 N까지 갈 것.
-    
-    아래와 같이 5번 Dijkstra
-    1,2: 1에서 v1, v2로 가는 루트
-    3: v1에서 v2 (v2에서 v1 가는 것과 동일)
-    4,5: v1,v2에서 N으로 가는 루트
-
 */
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<tuple>
 using namespace std;
-using pii = pair<int,int>;
-struct edge{
-    int weight;
-    int to;
-};
 
-using pq = priority_queue<pii,vector<pii>,greater<pii>>;
+using p = tuple<int,int,int>;
+priority_queue<p,vector<p>,greater<p>> pq;
+const int MAXNM = 100;
+const int INF = 1e9;
+char arr[MAXNM][MAXNM];
+int dist[MAXNM][MAXNM];
+int N, M, cost;
 
-vector<vector<edge>> adj; // {인접 노드 번호, 간선 가중치}
-int N;
-long INF = 1e9;
+int fx[4] = {0,0,-1,1};
+int fy[4] = {-1,1,0,0};
 
-long dijkstra(int start, int end){
-    pq pq;
-    vector<long> dist(801,INF);
-    dist[start] = 0;
-    if (start == end) return 0;
-    pq.push({0,start});
-
-    while(!pq.empty()){
-        auto [curDist, u] = pq.top(); pq.pop();
-        if(curDist > dist[u]) continue;
-
-        for (auto e: adj[u]){
-            int v = e.to;
-            int w = e.weight;
-
-            if(dist[v] > curDist + w){
-                dist[v] = curDist + w;
-                pq.push({dist[v],v});
-            }
-        }
-    }
-    
-    return dist[end];
-}
+bool outofBound(int x, int y){return(x<0 || x>=N || y<0 || y>=M);}
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(nullptr), cout.tie(nullptr);
-    int N,E,u,v,w,v1,v2;
-    cin >> N >> E;
-    adj.resize(N+1);
 
-    for(int i=0; i<E; ++i){
-        cin >> u >> v >> w;
-        adj[u].push_back({w,v});
-        adj[v].push_back({w,u});
+    cin >> M >> N;
+
+    for(int i=0; i<N; ++i){
+        for(int j=0; j<M; ++j){
+            cin >> arr[i][j];
+            dist[i][j] = INF;
+        }
     }
-    cin >> v1 >> v2;
 
-    long v1toV2 = dijkstra(1,v1) + dijkstra(v1,v2) + dijkstra(v2,N);
-    long v2toV1 = dijkstra(1,v2) + dijkstra(v1,v2) + dijkstra(v1,N);
-    // cout << v1toV2 << " " << v2toV1 << "\n";
-    long answer = min(v1toV2,v2toV1);
-    if(answer >= INF) cout << -1;
-    else cout << answer;
+    dist[0][0] = 0;
+    pq.push({0,0,0}); // w,x,y 순서
 
+    while(!pq.empty()){
+        auto [w,x,y] = pq.top(); pq.pop();
+        if(dist[x][y] < w) continue; // 최신정보가 아니다
+
+        for(int f=0; f<4; ++f){
+            int nx = x + fx[f];
+            int ny = y + fy[f];
+            if(outofBound(nx,ny)) continue;
+
+            if (arr[nx][ny]=='1') cost = w+1;
+            else if (arr[nx][ny]=='0') cost = w;
+
+            if (dist[nx][ny] > cost){
+                dist[nx][ny] = cost;
+                pq.push({cost,nx,ny});
+            }
+        }
+    }
+
+
+    cout << dist[N-1][M-1];
     return 0;
 }
