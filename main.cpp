@@ -5,57 +5,86 @@
 #include<iostream>
 #include<vector>
 #include<queue>
-#include<tuple>
 using namespace std;
+using pii = pair<int,int>;
 
-using p = tuple<int,int,int>;
-priority_queue<p,vector<p>,greater<p>> pq;
-const int MAXNM = 100;
-const int INF = 1e9;
-char arr[MAXNM][MAXNM];
-int dist[MAXNM][MAXNM];
-int N, M, cost;
+const int INF = 2'100'000'000;
+const int MXN = 1'001;
+int dist[MXN];
+int answerArr[MXN];
+int N;
+vector<vector<pii>> adj;
 
-int fx[4] = {0,0,-1,1};
-int fy[4] = {-1,1,0,0};
+void clearDist() { for(int i=1; i<=N; ++i) dist[i] = INF;}
 
-bool outofBound(int x, int y){return(x<0 || x>=N || y<0 || y>=M);}
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(nullptr), cout.tie(nullptr);
+    int M,X;
+    int s,e,w;
+    cin >> N >> M >> X;
+    adj.resize(N+1);
 
-    cin >> M >> N;
-
-    for(int i=0; i<N; ++i){
-        for(int j=0; j<M; ++j){
-            cin >> arr[i][j];
-            dist[i][j] = INF;
-        }
+    for(int i=0; i<M; ++i){
+        cin >> s >> e >> w;
+        adj[s].push_back({w,e});
     }
 
-    dist[0][0] = 0;
-    pq.push({0,0,0}); // w,x,y 순서
+    // 자기 마을 -> 파티 마을
+    for(int i=1; i<=N; ++i){ 
+        priority_queue<pii,vector<pii>,greater<>> pq;
+        clearDist();
+        dist[i] = 0;
+        pq.push({0,i});
 
-    while(!pq.empty()){
-        auto [w,x,y] = pq.top(); pq.pop();
-        if(dist[x][y] < w) continue; // 최신정보가 아니다
-
-        for(int f=0; f<4; ++f){
-            int nx = x + fx[f];
-            int ny = y + fy[f];
-            if(outofBound(nx,ny)) continue;
-
-            if (arr[nx][ny]=='1') cost = w+1;
-            else if (arr[nx][ny]=='0') cost = w;
-
-            if (dist[nx][ny] > cost){
-                dist[nx][ny] = cost;
-                pq.push({cost,nx,ny});
+        while(!pq.empty()){
+            auto [cost,cur] = pq.top(); pq.pop(); // cur까지 오는데 cost만큼 걸렸다
+            if (cur == X) break;
+            for(auto nxt: adj[cur]){
+                int nxtCost = nxt.first;
+                int nxtVrtx = nxt.second;
+                if(dist[nxtVrtx] > dist[cur]+nxtCost){
+                    dist[nxtVrtx] = dist[cur]+nxtCost;
+                    pq.push({dist[nxtVrtx],nxtVrtx});
+                }
             }
         }
+
+        answerArr[i] += dist[X];
+    }
+
+    // 파티 마을 -> 자기 마을
+    for(int i=1; i<=N; ++i){ 
+        priority_queue<pii,vector<pii>,greater<>> pq;
+        clearDist();
+        dist[X] = 0;
+        pq.push({0,X});
+
+        while(!pq.empty()){
+            auto [cost,cur] = pq.top(); pq.pop(); // cur까지 오는데 cost만큼 걸렸다
+            if (cur == i) break;
+            for(auto nxt: adj[cur]){
+                int nxtCost = nxt.first;
+                int nxtVrtx = nxt.second;
+                if(dist[nxtVrtx] > dist[cur]+nxtCost){
+                    dist[nxtVrtx] = dist[cur]+nxtCost;
+                    pq.push({dist[nxtVrtx],nxtVrtx});
+                }
+            }
+        }
+
+        answerArr[i] += dist[i];
     }
 
 
-    cout << dist[N-1][M-1];
+
+    int answer = -1;
+    for(int i=1; i<=N; ++i){
+        if (answer < answerArr[i]) answer = answerArr[i];
+    }
+
+    cout << answer;
+
+
     return 0;
 }
